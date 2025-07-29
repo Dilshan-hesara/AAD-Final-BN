@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class AppointmentRequestDto {
-    private Long patientId; // This would be created on the backend for the logged-in user
-    private Long doctorId;
-    private Long branchId;
+
+
+    private Long patientId;
+    private Integer doctorId;
     private LocalDateTime appointmentDate;
-    private String reason;
 }
