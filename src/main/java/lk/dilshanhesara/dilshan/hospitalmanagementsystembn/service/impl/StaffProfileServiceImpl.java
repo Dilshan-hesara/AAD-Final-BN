@@ -8,6 +8,7 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.StaffProfileRepo
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.StaffProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -76,5 +77,16 @@ public class StaffProfileServiceImpl implements StaffProfileService {
         }
 
         return dto;
+    }
+
+
+
+    @Override
+    public StaffProfileDto getCurrentLoggedInStaffProfile() {
+        // Get the username of the currently logged-in user from Spring Security
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Use the existing method to find and return the profile
+        return findStaffByUsername(username);
     }
 }
