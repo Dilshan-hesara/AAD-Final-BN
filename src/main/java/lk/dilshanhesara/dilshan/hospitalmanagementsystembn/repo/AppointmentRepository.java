@@ -16,4 +16,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 
     long countByBranch_IdAndAppointmentDateBetween(Long branchId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+
+
+
+    /**
+     * Finds all appointments for a specific branch.
+     * @param branchId The ID of the branch.
+     * @return A list of appointments.
+     */
+    List<Appointment> findByBranch_Id(Long branchId);
+
+
 }
