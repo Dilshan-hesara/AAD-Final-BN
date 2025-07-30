@@ -4,6 +4,7 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentResponseDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.UpdateStatusRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.StaffProfileService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,17 @@ public class AppointmentApiController {
     public ResponseEntity<Void> createAppointment(@RequestBody AppointmentRequestDto dto) {
         StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
         appointmentService.createAppointment(dto, adminProfile.getBranchId());
+        return ResponseEntity.ok().build();
+    }
+
+
+
+    // This PATCH method for updating the status is also correct
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> updateStatus(
+            @PathVariable Long id,
+            @RequestBody UpdateStatusRequestDto requestDto) {
+        appointmentService.updateAppointmentStatus(id, requestDto.getStatus());
         return ResponseEntity.ok().build();
     }
 }
