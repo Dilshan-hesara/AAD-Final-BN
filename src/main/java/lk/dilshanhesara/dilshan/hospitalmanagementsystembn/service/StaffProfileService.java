@@ -17,4 +17,6 @@ public interface StaffProfileService {
 
     public void updateProfile(String username, StaffProfileDto profileDto);
 
+    public void changePassword(String username, PasswordChangeDto passwordDto) ;
+
 }
