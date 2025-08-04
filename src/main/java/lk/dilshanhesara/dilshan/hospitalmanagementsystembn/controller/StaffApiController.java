@@ -41,5 +41,10 @@ public class StaffApiController {
         return ResponseEntity.ok().build();
     }
 
-
+    @PostMapping("/my-profile/change-password")
+    public ResponseEntity<Void> changeMyPassword(@RequestBody PasswordChangeDto passwordDto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        staffProfileService.changePassword(username, passwordDto);
+        return ResponseEntity.ok().build();
+    }
 }
