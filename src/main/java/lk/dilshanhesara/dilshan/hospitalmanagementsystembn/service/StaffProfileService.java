@@ -1,6 +1,7 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service;
 
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.PasswordChangeDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
 
 public interface StaffProfileService {
@@ -10,4 +11,10 @@ public interface StaffProfileService {
 
     // --- ADD THIS NEW METHOD ---
     StaffProfileDto getCurrentLoggedInStaffProfile();
+
+
+
+
+    public void updateProfile(String username, StaffProfileDto profileDto);
+
 }
