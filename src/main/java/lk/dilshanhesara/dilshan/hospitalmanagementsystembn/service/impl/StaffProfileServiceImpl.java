@@ -114,4 +114,20 @@ public class StaffProfileServiceImpl implements StaffProfileService {
 
 
 
+
+    @Override
+    public void changePassword(String username, PasswordChangeDto passwordDto) {
+        UserAccount account = userAccountRepository.findByUsername(username).orElseThrow();
+
+        // Check if the current password is correct
+        if (!passwordEncoder.matches(passwordDto.getCurrentPassword(), account.getPassword())) {
+            throw new RuntimeException("Incorrect current password");
+        }
+
+        // Encode and set the new password
+        account.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+        userAccountRepository.save(account);
+    }
+
+
 }
