@@ -1,6 +1,7 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.PasswordChangeDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.StaffProfile;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
@@ -9,6 +10,7 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepos
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.StaffProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -47,6 +49,7 @@ public class StaffProfileServiceImpl implements StaffProfileService {
 
     private final UserAccountRepository userAccountRepository;
     private final StaffProfileRepository staffProfileRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public StaffProfileDto findStaffByUsername(String username) {
@@ -89,4 +92,26 @@ public class StaffProfileServiceImpl implements StaffProfileService {
         // Use the existing method to find and return the profile
         return findStaffByUsername(username);
     }
+
+
+
+
+
+
+
+
+    @Override
+    public void updateProfile(String username, StaffProfileDto profileDto) {
+        UserAccount account = userAccountRepository.findByUsername(username).orElseThrow();
+        StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElseThrow();
+
+        profile.setFullName(profileDto.getFullName());
+        profile.setEmail(profileDto.getEmail());
+        profile.setContactNumber(profileDto.getContactNumber());
+
+        staffProfileRepository.save(profile);
+    }
+
+
+
 }
