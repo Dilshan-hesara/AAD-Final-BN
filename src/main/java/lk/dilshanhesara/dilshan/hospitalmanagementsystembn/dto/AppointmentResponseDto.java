@@ -13,4 +13,7 @@ public class AppointmentResponseDto {
     private String doctorName;
     private LocalDateTime appointmentDate;
     private String status;
+
+    private String branchName;
+
 }
