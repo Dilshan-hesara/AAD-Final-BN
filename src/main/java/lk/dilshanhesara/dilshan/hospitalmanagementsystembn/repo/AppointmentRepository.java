@@ -3,6 +3,7 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,5 +28,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
      */
     List<Appointment> findByBranch_Id(Long branchId);
 
+
+
+    // --- ADD THIS NEW METHOD ---
+    @Query("SELECT a FROM Appointment a WHERE a.patient.linkedOnlineUser.username = :username")
+    List<Appointment> findAppointmentsByOnlineUsername(String username);
 
 }
