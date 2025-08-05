@@ -81,5 +81,25 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
 
+
+
+
+    // --- ADD THIS NEW METHOD IMPLEMENTATION ---
+    @Override
+    public List<AppointmentResponseDto> findAppointmentsByUsername(String username) {
+        // Use the new repository method to find appointments
+        return appointmentRepository.findAppointmentsByOnlineUsername(username).stream()
+                .map(app -> {
+                    // Convert each Appointment entity to a DTO
+                    AppointmentResponseDto dto = new AppointmentResponseDto();
+                    dto.setId(app.getId());
+                    dto.setPatientName(app.getPatient().getFullName());
+                    dto.setDoctorName(app.getDoctor().getFullName());
+                    dto.setBranchName(app.getBranch().getName());
+                    dto.setAppointmentDate(app.getAppointmentDate());
+                    dto.setStatus(app.getStatus());
+                    return dto;
+                }).collect(Collectors.toList());
+    }
 }
 
