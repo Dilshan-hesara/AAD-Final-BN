@@ -15,4 +15,9 @@ public interface AppointmentService {
 
 
     public void updateAppointmentStatus(Long appointmentId, String newStatus) ;
-    }
+
+
+
+    List<AppointmentResponseDto> findAppointmentsByUsername(String username);
+
+}
