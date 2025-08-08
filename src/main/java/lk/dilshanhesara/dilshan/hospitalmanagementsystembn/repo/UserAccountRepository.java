@@ -22,4 +22,7 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
 
     @Query("SELECT ua FROM UserAccount ua JOIN StaffProfile sp ON ua.userId = sp.userId WHERE ua.role = 'RECEPTIONIST' AND sp.branch.id = :branchId")
     List<UserAccount> findReceptionistsByBranch(Long branchId);
+
+
+
 }
