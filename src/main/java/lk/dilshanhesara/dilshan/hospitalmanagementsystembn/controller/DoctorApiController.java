@@ -40,4 +40,10 @@ public class DoctorApiController {
         doctorService.addDoctor(doctorDto);
         return ResponseEntity.ok().build();
     }
+
+    // --- ADD THIS NEW ENDPOINT ---
+    @GetMapping("/by-branch/{branchId}")
+    public ResponseEntity<List<DoctorDto>> getDoctorsByBranch(@PathVariable Long branchId) {
+        return ResponseEntity.ok(doctorService.findDoctorsByBranch(branchId));
+    }
 }
