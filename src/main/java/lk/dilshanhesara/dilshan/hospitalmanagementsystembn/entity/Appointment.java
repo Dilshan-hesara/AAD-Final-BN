@@ -33,5 +33,9 @@ public class Appointment {
     @Column(nullable = false)
     private String status;
 
+    // --- ADD THIS FIELD ---
+    @Lob // For longer text
+    private String reason;
+
     private BigDecimal fee;
 }
