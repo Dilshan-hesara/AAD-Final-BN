@@ -2,18 +2,14 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentResponseDto;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Doctor;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Patient;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.AppointmentRepository;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.BranchRepository;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.DoctorRepository;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.PatientRepository;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.*;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,5 +97,43 @@ public class AppointmentServiceImpl implements AppointmentService {
                     return dto;
                 }).collect(Collectors.toList());
     }
+
+
+
+
+
+    private final UserAccountRepository userAccountRepository;
+    private final PatientService patientService; // <-- Now this exists
+
+
+
+
+
+    @Override
+    @Transactional
+    public Appointment createAppointmentForOnlineUser(AppointmentRequestDto dto, String username) {
+        // ... (logic to get/create patient, doctor, branch)
+
+        Appointment appointment = new Appointment();
+        // ... (set patient, doctor, branch, etc.)
+        appointment.setReason(dto.getReason());
+
+        // Set initial status and a sample fee
+        appointment.setStatus("PENDING_PAYMENT");
+        appointment.setFee(new java.math.BigDecimal("2500.00")); // Example fee
+
+        return appointmentRepository.save(appointment); // Return the saved appointment
+    }
+
+    // --- ADD THIS NEW METHOD TO CONFIRM PAYMENT ---
+    @Override
+    public void confirmAppointmentPayment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+        appointment.setStatus("CONFIRMED");
+        appointmentRepository.save(appointment);
+    }
+
+
 }
 

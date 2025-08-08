@@ -1,6 +1,7 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo;
 
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,10 +29,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
      */
     List<Appointment> findByBranch_Id(Long branchId);
 
+    // --- ADD THIS NEW METHOD ---
+    // This JPQL query finds appointments by joining through Patient and UserAccount tables
 
 
     // --- ADD THIS NEW METHOD ---
     @Query("SELECT a FROM Appointment a WHERE a.patient.linkedOnlineUser.username = :username")
     List<Appointment> findAppointmentsByOnlineUsername(String username);
+
+
+
+
 
 }
