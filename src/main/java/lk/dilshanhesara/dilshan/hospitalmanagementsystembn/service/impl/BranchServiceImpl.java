@@ -1,5 +1,6 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.StaffProfile;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
@@ -7,9 +8,13 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.BranchRepository
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.StaffProfileRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.BranchService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BranchServiceImpl implements BranchService {
@@ -45,5 +50,23 @@ public class BranchServiceImpl implements BranchService {
         }
 
         return profile.getBranch().getId();
+    }
+
+
+    // ... other autowired repositories
+    @Autowired
+    private ModelMapper modelMapper;
+
+
+    // --- ADD THIS NEW METHOD IMPLEMENTATION ---
+    @Override
+    public List<BranchDto> getAllBranches() {
+        // Fetch all branch entities from the database
+        List<Branch> branches = branchRepository.findAll();
+
+        // Convert the list of entities to a list of DTOs
+        return branches.stream()
+                .map(branch -> modelMapper.map(branch, BranchDto.class))
+                .collect(Collectors.toList());
     }
 }
