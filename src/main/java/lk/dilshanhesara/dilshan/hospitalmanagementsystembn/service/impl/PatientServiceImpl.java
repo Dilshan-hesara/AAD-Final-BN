@@ -2,8 +2,11 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 
 
+import jakarta.transaction.Transactional;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.PatientDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.OnlineUserProfile;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Patient;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.OnlineUserProfileRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.PatientRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.PatientService;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +40,30 @@ public class PatientServiceImpl implements PatientService {
         List<Patient> patients = patientRepository.findAll();
         // Convert the list of entities to a list of DTOs
         return modelMapper.map(patients, new TypeToken<List<PatientDto>>() {}.getType());
+    }
+
+
+    private final OnlineUserProfileRepository onlineUserProfileRepository;
+
+    @Override
+    @Transactional
+    public Patient getOrCreatePatientForOnlineUser(Integer onlineUserId) {
+        // 1. Check if a patient record already exists for this online user
+        return patientRepository.findByLinkedOnlineUser_UserId(onlineUserId)
+                .orElseGet(() -> {
+                    // 2. If not, find their profile
+                    OnlineUserProfile profile = onlineUserProfileRepository.findById(onlineUserId)
+                            .orElseThrow(() -> new RuntimeException("Online user profile not found"));
+
+                    // 3. Create a new patient record using their profile info
+                    Patient newPatient = new Patient();
+                    newPatient.setFullName(profile.getFullName());
+                    newPatient.setContactNumber(profile.getContactNumber());
+                    newPatient.setEmail(profile.getEmail());
+                    newPatient.setLinkedOnlineUser(profile.getUserAccount());
+
+                    // 4. Save and return the new patient record
+                    return patientRepository.save(newPatient);
+                });
     }
 }
