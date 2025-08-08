@@ -3,7 +3,9 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AuthRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AuthResponseDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.RegistrationRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.security.JwtTokenProvider;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,8 @@ public class AuthApiController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
 
+    private final UserService userService; // Inject UserService
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthRequestDto loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -37,6 +41,17 @@ public class AuthApiController {
         String jwt = tokenProvider.generateToken(authentication);
         String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst().orElse(null);
         return ResponseEntity.ok(new AuthResponseDto(true, "Login Successful!", jwt, role));
+    }
+
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody RegistrationRequestDto registrationDto) {
+        try {
+            userService.registerOnlineUser(registrationDto);
+            return ResponseEntity.ok("User registered successfully!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 }
 
