@@ -10,4 +10,6 @@ public class AppointmentRequestDto {
     private Long patientId;
     private Integer doctorId;
     private LocalDateTime appointmentDate;
+    private String reason;
+
 }
