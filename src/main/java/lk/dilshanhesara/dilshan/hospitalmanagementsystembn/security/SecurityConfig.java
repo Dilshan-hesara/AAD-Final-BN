@@ -46,12 +46,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/branches").authenticated()
                         .requestMatchers("/api/doctors/by-branch/**").authenticated()
 
-                        // APIs for specific roles
-                        .requestMatchers("/api/doctors/**").hasAuthority("ROLE_BRANCH_ADMIN")
-                        .requestMatchers("/api/patients/**").hasAuthority("ROLE_BRANCH_ADMIN")
-                        .requestMatchers("/api/receptionists/**").hasAuthority("ROLE_BRANCH_ADMIN")
-                        .requestMatchers("/api/appointments/**").hasAuthority("ROLE_BRANCH_ADMIN")
-                        .requestMatchers("/api/user/**").hasAuthority("ROLE_ONLINEUSER")
+
+
+//                        // APIs for specific roles
+//                        .requestMatchers("/api/doctors/**").hasAuthority("ROLE_BRANCH_ADMIN")
+//                        .requestMatchers("/api/patients/**").hasAuthority("ROLE_BRANCH_ADMIN")
+//                        .requestMatchers("/api/receptionists/**").hasAuthority("ROLE_BRANCH_ADMIN")
+//                        .requestMatchers("/api/appointments/**").hasAuthority("ROLE_BRANCH_ADMIN")
+//                        .requestMatchers("/api/user/**").hasAuthority("ROLE_ONLINEUSER")
 
                         // All other requests must be authenticated
                         .anyRequest().authenticated()
