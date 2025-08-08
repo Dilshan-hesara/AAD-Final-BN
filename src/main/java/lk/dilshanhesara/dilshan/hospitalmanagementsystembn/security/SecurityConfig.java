@@ -38,11 +38,22 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Public APIs
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // APIs for ANY logged-in user (OnlineUser, Admin, etc.)
                         .requestMatchers("/api/staff/my-profile").authenticated()
+                        .requestMatchers("/api/branches").authenticated()
+                        .requestMatchers("/api/doctors/by-branch/**").authenticated()
 
+                        // APIs for specific roles
                         .requestMatchers("/api/doctors/**").hasAuthority("ROLE_BRANCH_ADMIN")
+                        .requestMatchers("/api/patients/**").hasAuthority("ROLE_BRANCH_ADMIN")
+                        .requestMatchers("/api/receptionists/**").hasAuthority("ROLE_BRANCH_ADMIN")
+                        .requestMatchers("/api/appointments/**").hasAuthority("ROLE_BRANCH_ADMIN")
+                        .requestMatchers("/api/user/**").hasAuthority("ROLE_ONLINEUSER")
 
+                        // All other requests must be authenticated
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
