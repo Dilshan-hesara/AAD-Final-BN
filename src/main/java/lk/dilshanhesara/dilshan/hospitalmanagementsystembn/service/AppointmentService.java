@@ -26,4 +26,6 @@ public interface AppointmentService {
 
 
     public void confirmAppointmentPayment(Long appointmentId) ;
+
+    public List<AppointmentResponseDto> findOnlineUserAppointmentsForToday(Long branchId) ;
     }

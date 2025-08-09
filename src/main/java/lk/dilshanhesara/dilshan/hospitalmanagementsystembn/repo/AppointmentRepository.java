@@ -39,6 +39,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 
 
-
+    // Add this method to find appointments for a branch made by online users within a time range
+    @Query("SELECT a FROM Appointment a WHERE a.branch.id = :branchId AND a.patient.linkedOnlineUser IS NOT NULL AND a.appointmentDate BETWEEN :startOfDay AND :endOfDay ORDER BY a.appointmentDate ASC")
+    List<Appointment> findOnlineUserAppointmentsForToday(Long branchId, LocalDateTime startOfDay, LocalDateTime endOfDay);
 
 }

@@ -45,4 +45,12 @@ public class AppointmentApiController {
         appointmentService.updateAppointmentStatus(id, requestDto.getStatus());
         return ResponseEntity.ok().build();
     }
+
+    // In AppointmentApiController.java
+    @GetMapping("/online-bookings/today")
+    public ResponseEntity<List<AppointmentResponseDto>> getTodaysOnlineBookings() {
+        StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        List<AppointmentResponseDto> appointments = appointmentService.findOnlineUserAppointmentsForToday(adminProfile.getBranchId());
+        return ResponseEntity.ok(appointments);
+    }
 }
