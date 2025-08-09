@@ -47,4 +47,20 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     // Counts appointments by branch, status, and within a date range
     long countByBranch_IdAndStatusAndAppointmentDateBetween(Long branchId, String status, LocalDateTime start, LocalDateTime end);
 
+
+
+    // In AppointmentRepository.java
+// Finds all appointments with a specific status for a branch within a date range
+    List<Appointment> findByBranch_IdAndStatusAndAppointmentDateBetween(Long branchId, String status, LocalDateTime start, LocalDateTime end);
+
+
+
+
+    // Counts appointments made by Online Users for today
+    @Query("SELECT count(a) FROM Appointment a WHERE a.branch.id = :branchId AND a.patient.linkedOnlineUser IS NOT NULL AND a.appointmentDate BETWEEN :startOfDay AND :endOfDay")
+    long countTodaysOnlineAppointments(Long branchId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    // Counts appointments made by patients WITHOUT a linked online account for today
+    @Query("SELECT count(a) FROM Appointment a WHERE a.branch.id = :branchId AND a.patient.linkedOnlineUser IS NULL AND a.appointmentDate BETWEEN :startOfDay AND :endOfDay")
+    long countTodaysWalkInAppointments(Long branchId, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }
