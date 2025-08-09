@@ -15,4 +15,10 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
     List<Doctor> findByBranch_Id(Long branchId);
 
+
+    // Add this method to find the count of ONLY active doctors
+    long countByBranch_IdAndStatus(Long branchId, String status);
+
+
+
 }
