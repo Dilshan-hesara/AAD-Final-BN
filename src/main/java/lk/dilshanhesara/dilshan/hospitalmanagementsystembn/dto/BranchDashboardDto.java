@@ -11,4 +11,17 @@ public class BranchDashboardDto {
     private Long patientCount;
     private Long doctorCount;
     private Long appointmentsToday;
+    private Long receptionistCount; //
+
+
+    public BranchDashboardDto(String name, String location, String contactNumber, Long receptionistCount, Long doctorCount, Long appointmentsToday) {
+
+        this.branchName = name;
+        this.location = location;
+        this.contactNumber = contactNumber;
+        this.receptionistCount = receptionistCount;
+        this.doctorCount = doctorCount;
+        this.appointmentsToday = appointmentsToday;
+
+    }
 }
