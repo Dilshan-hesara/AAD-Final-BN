@@ -13,6 +13,8 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.ReceptionistS
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,12 +42,33 @@ public class ReceptionistServiceImpl implements ReceptionistService {
                 }).collect(Collectors.toList());
     }
 
-    @Override
-    public void addReceptionist(StaffCreationRequestDto dto) {
-        Branch branch = branchRepository.findById(dto.getBranchId())
-                .orElseThrow(() -> new RuntimeException("Branch not found"));
+//    @Override
+//    public void addReceptionist(StaffCreationRequestDto dto) {
+//        Branch branch = branchRepository.findById(dto.getBranchId())
+//                .orElseThrow(() -> new RuntimeException("Branch not found"));
+//
+//        // Create the user account
+//        UserAccount account = new UserAccount();
+//        account.setUsername(dto.getUsername());
+//        account.setPassword(passwordEncoder.encode(dto.getPassword()));
+//        account.setRole(UserAccount.Role.RECEPTIONIST);
+//        account.setActive(true);
+//        account = userAccountRepository.save(account);
+//
+//        // Create the staff profile
+//        StaffProfile profile = new StaffProfile();
+//        profile.setUserAccount(account);
+//        profile.setFullName(dto.getFullName());
+//        profile.setBranch(branch);
+//        staffProfileRepository.save(profile);
+//    }
 
-        // Create the user account
+    @Override
+    @Transactional
+    public void addReceptionist(StaffCreationRequestDto dto) {
+        Branch branch = branchRepository.findById(dto.getBranchId()).orElseThrow();
+
+        // 1. Create the user account for login
         UserAccount account = new UserAccount();
         account.setUsername(dto.getUsername());
         account.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -53,10 +76,12 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         account.setActive(true);
         account = userAccountRepository.save(account);
 
-        // Create the staff profile
+        // 2. Create the staff profile with the extra details
         StaffProfile profile = new StaffProfile();
         profile.setUserAccount(account);
         profile.setFullName(dto.getFullName());
+        profile.setEmail(dto.getEmail());
+        profile.setContactNumber(dto.getContactNumber());
         profile.setBranch(branch);
         staffProfileRepository.save(profile);
     }
