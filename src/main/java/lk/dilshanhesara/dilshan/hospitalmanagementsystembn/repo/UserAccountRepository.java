@@ -24,5 +24,10 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     List<UserAccount> findReceptionistsByBranch(Long branchId);
 
 
+    // Add this method to find the count of receptionists for a branch
+    @Query("SELECT count(ua) FROM UserAccount ua JOIN StaffProfile sp ON ua.userId = sp.userId WHERE ua.role = 'RECEPTIONIST' AND sp.branch.id = :branchId")
+    long countReceptionistsByBranch(Long branchId);
+
+
 
 }
