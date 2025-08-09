@@ -11,6 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -134,6 +137,27 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+
+    @Override
+    public List<AppointmentResponseDto> findOnlineUserAppointmentsForToday(Long branchId) {
+        LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+        LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+
+        return appointmentRepository.findOnlineUserAppointmentsForToday(branchId, startOfDay, endOfDay)
+                .stream().map(app -> {
+                    // 1. Create a new DTO
+                    AppointmentResponseDto dto = new AppointmentResponseDto();
+                    dto.setId(app.getId());
+                    dto.setPatientName(app.getPatient().getFullName());
+                    dto.setDoctorName(app.getDoctor().getFullName());
+                    dto.setBranchName(app.getBranch().getName());
+                    dto.setAppointmentDate(app.getAppointmentDate());
+                    dto.setStatus(app.getStatus());
+
+                    // 2. CRITICAL: Return the created DTO
+                    return dto;
+                }).collect(Collectors.toList());
+    }
 
 }
 
