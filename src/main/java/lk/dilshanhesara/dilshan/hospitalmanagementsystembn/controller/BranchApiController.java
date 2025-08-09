@@ -27,6 +27,8 @@ public class BranchApiController {
     private final BranchService branchService;
     private final DashboardService dashboardService;
 
+
+    // In BranchApiController.java
     @GetMapping("/{id}/dashboard-details")
     public BranchDashboardDto getBranchDashboardDetails(@PathVariable Long id) {
         Branch branch = branchService.getBranchById(id);
@@ -36,7 +38,7 @@ public class BranchApiController {
                 branch.getName(),
                 branch.getLocation(),
                 branch.getContactNumber(),
-                stats.get("patientCount"),
+                stats.get("receptionistCount"), // NEW
                 stats.get("doctorCount"),
                 stats.get("appointmentsToday")
         );
@@ -48,4 +50,6 @@ public class BranchApiController {
         // You'll need a method in your BranchService to get all branches as DTOs
         return ResponseEntity.ok(branchService.getAllBranches());
     }
+
+
 }
