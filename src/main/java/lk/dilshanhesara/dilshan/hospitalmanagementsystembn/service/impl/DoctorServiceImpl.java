@@ -109,4 +109,9 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.save(doctor);
     }
 
+
+    public Page<DoctorDto> searchActiveDoctorsByNameAndBranch(String name, Long branchId, Pageable pageable) {
+        Page<Doctor> doctors = doctorRepository.findByBranch_IdAndStatusAndFullNameContainingIgnoreCase(branchId, "ACTIVE", name, pageable);
+        return doctors.map(doctor -> modelMapper.map(doctor, DoctorDto.class));
+    }
 }

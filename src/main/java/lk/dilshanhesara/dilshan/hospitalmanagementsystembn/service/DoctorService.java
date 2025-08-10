@@ -28,4 +28,7 @@ public interface DoctorService {
 
     public Page<DoctorDto> searchDoctors(Long branchId, String name, String specialization, Pageable pageable) ;
     public void updateDoctor(Integer doctorId, DoctorDto doctorDto) ;
+
+
+    public Page<DoctorDto> searchActiveDoctorsByNameAndBranch(String name, Long branchId, Pageable pageable) ;
 }
