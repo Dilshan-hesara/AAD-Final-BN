@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -202,6 +203,27 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
     private Specification<Appointment> isonDate(LocalDate date) {
         return (root, query, cb) -> cb.between(root.get("appointmentDate"), date.atStartOfDay(), date.atTime(LocalTime.MAX));
+    }
+
+
+
+    // pric adding booking appiment
+
+    private static final BigDecimal DEFAULT_APPOINTMENT_FEE = new BigDecimal("2500.00");
+
+    @Override
+    public Appointment createAppointmentForWalk(AppointmentRequestDto dto, String username) {
+        // ... your existing logic to get patient, doctor, etc.
+
+        Appointment appointment = new Appointment();
+        // ... set patient, doctor, date, etc.
+        appointment.setReason(dto.getReason());
+        appointment.setStatus("PENDING_PAYMENT");
+
+        // Set the default fee
+        appointment.setFee(DEFAULT_APPOINTMENT_FEE);
+
+        return appointmentRepository.save(appointment);
     }
 }
 

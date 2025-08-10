@@ -33,5 +33,5 @@ public interface AppointmentService {
     public Page<AppointmentResponseDto> searchAppointments(Long branchId, String patientName, String status, LocalDate date, Pageable pageable);
 
 
-
-}
+    public Appointment createAppointmentForWalk(AppointmentRequestDto dto, String username) ;
+    }
