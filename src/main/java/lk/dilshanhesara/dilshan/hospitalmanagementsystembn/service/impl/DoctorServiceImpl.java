@@ -10,6 +10,9 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.DoctorService
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -72,4 +75,38 @@ public class DoctorServiceImpl implements DoctorService {
         List<Doctor> inactiveDoctors = doctorRepository.findByBranch_IdAndStatus(branchId, "INACTIVE");
         return modelMapper.map(inactiveDoctors, new TypeToken<List<DoctorDto>>() {}.getType());
     }
+
+
+
+//    serch
+
+
+    public Page<DoctorDto> searchDoctors(Long branchId, String name, String specialization, Pageable pageable) {
+        // Build a dynamic query using Specifications
+        Specification<Doctor> spec = Specification.where((root, query, cb) -> cb.equal(root.get("branch").get("id"), branchId));
+
+        if (name != null && !name.isEmpty()) {
+            spec = spec.and((root, query, cb) -> cb.like(root.get("fullName"), "%" + name + "%"));
+        }
+        if (specialization != null && !specialization.isEmpty()) {
+            spec = spec.and((root, query, cb) -> cb.like(root.get("specialization"), "%" + specialization + "%"));
+        }
+
+        Page<Doctor> doctors = doctorRepository.findAll(spec, pageable);
+        return doctors.map(doctor -> modelMapper.map(doctor, DoctorDto.class));
+    }
+
+    @Override
+    public void updateDoctor(Integer doctorId, DoctorDto doctorDto) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        doctor.setFullName(doctorDto.getFullName());
+        doctor.setEmail(doctorDto.getEmail());
+        doctor.setContactNumber(doctorDto.getContactNumber());
+        doctor.setSpecialization(doctorDto.getSpecialization());
+
+        doctorRepository.save(doctor);
+    }
+
 }
