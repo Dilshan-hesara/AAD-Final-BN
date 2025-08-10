@@ -17,4 +17,7 @@ public interface DoctorService {
 
     public void deactivateDoctor(int id) ;
     public void activateDoctor(int id) ;
+
+
+    public List<DoctorDto> findInactiveDoctorsByBranch(Long branchId);
 }
