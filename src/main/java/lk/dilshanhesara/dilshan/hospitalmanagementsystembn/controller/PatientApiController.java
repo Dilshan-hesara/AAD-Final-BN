@@ -43,4 +43,12 @@ public class PatientApiController {
 
 
 
+    // In PatientApiController.java
+    @GetMapping("/search")
+    public ResponseEntity<Page<PatientDto>> searchPatients(
+            @RequestParam(defaultValue = "") String name,
+            Pageable pageable) {
+        return ResponseEntity.ok(patientService.searchPatientsByName(name, pageable));
+    }
+
 }
