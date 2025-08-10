@@ -74,4 +74,9 @@ public class PatientServiceImpl implements PatientService {
         Page<Patient> patients = patientRepository.findPatientsByBranch(branchId, pageable);
         return patients.map(patient -> modelMapper.map(patient, PatientDto.class));
     }
+    public Page<PatientDto> searchPatientsByName(String name, Pageable pageable) {
+        Page<Patient> patients = patientRepository.findByFullNameContainingIgnoreCase(name, pageable);
+        return patients.map(patient -> modelMapper.map(patient, PatientDto.class));
+
+    }
 }
