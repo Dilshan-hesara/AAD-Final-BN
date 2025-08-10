@@ -92,4 +92,17 @@ public ResponseEntity<List<DoctorDto>> getActiveDoctorsForCurrentBranch() {
         doctorService.addDoctor(doctorDto);
         return ResponseEntity.ok().build();
     }
+
+
+    @PatchMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateDoctor(@PathVariable int id) {
+        doctorService.deactivateDoctor(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/activate")
+    public ResponseEntity<Void> activateDoctor(@PathVariable int id) {
+        doctorService.activateDoctor(id);
+        return ResponseEntity.ok().build();
+    }
 }
