@@ -2,9 +2,14 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.PatientDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.PatientService;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.StaffProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +21,20 @@ public class PatientApiController {
 
     private final PatientService patientService;
 
+
+
+    private final StaffProfileService staffProfileService;
+
+
+    // It handles both simple fetching and pagination.
+    @GetMapping
+    public ResponseEntity<Page<PatientDto>> getPatientsForCurrentBranch(Pageable pageable) {
+        StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        Page<PatientDto> patients = patientService.findPatientsByBranch(adminProfile.getBranchId(), pageable);
+        return ResponseEntity.ok(patients);
+    }
+
+    // This POST method for creating a patient is correct
     @PostMapping
     public ResponseEntity<Void> addPatient(@RequestBody PatientDto patientDto) {
         patientService.addPatient(patientDto);
@@ -23,9 +42,5 @@ public class PatientApiController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<PatientDto>> getAllPatients() {
-        List<PatientDto> patients = patientService.getAllPatients();
-        return ResponseEntity.ok(patients);
-    }
+
 }
