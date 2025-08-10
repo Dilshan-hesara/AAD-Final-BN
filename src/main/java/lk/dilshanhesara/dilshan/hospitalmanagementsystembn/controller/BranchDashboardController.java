@@ -29,7 +29,7 @@ public class BranchDashboardController {
 
         Branch currentBranch = branchService.getBranchById(branchId);
 
-        Map<String, Long> stats = dashboardService.getBranchStatistics(branchId);
+        Map<String, Object> stats = dashboardService.getBranchStatistics(branchId);
 
         model.addAttribute("currentBranch", currentBranch);
         model.addAttribute("stats", stats);
