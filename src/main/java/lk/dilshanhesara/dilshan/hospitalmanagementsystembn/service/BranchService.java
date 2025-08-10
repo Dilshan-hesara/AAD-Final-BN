@@ -4,6 +4,7 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BranchService {
     Branch getBranchById(Long branchId);
@@ -14,4 +15,6 @@ public interface BranchService {
 
     // --- ADD THIS NEW METHOD ---
     List<BranchDto> getAllBranches();
-}
+
+
+    }

@@ -5,5 +5,6 @@ import java.util.Map;
 public interface DashboardService {
 
 
-    Map<String, Long> getBranchStatistics(Long branchId);
+    public Map<String, Object> getBranchStatistics(Long branchId) ;
+
 }
