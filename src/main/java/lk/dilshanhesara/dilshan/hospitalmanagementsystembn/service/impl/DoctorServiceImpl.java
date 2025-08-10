@@ -64,4 +64,12 @@ public class DoctorServiceImpl implements DoctorService {
         if (!doctorRepository.existsById(id)) { throw new RuntimeException("Doctor not found"); }
         doctorRepository.updateDoctorStatusToActive(id);
     }
+
+
+    @Override
+    public List<DoctorDto> findInactiveDoctorsByBranch(Long branchId) {
+        // Use the existing repository method to find "INACTIVE" doctors
+        List<Doctor> inactiveDoctors = doctorRepository.findByBranch_IdAndStatus(branchId, "INACTIVE");
+        return modelMapper.map(inactiveDoctors, new TypeToken<List<DoctorDto>>() {}.getType());
+    }
 }
