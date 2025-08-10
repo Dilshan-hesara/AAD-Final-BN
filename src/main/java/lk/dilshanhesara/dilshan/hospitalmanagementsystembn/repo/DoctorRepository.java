@@ -1,6 +1,8 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Doctor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -39,5 +41,6 @@ public interface DoctorRepository  extends JpaRepository<Doctor, Integer>, JpaSp
     @Query(value = "UPDATE doctors SET status='ACTIVE' WHERE id=?1", nativeQuery = true)
     void updateDoctorStatusToActive(int id);
 
-
+    // Finds active doctors in a specific branch where the name contains the search term
+    Page<Doctor> findByBranch_IdAndStatusAndFullNameContainingIgnoreCase(Long branchId, String status, String name, Pageable pageable);
 }
