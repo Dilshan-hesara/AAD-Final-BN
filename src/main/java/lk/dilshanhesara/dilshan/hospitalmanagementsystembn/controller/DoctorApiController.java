@@ -89,6 +89,20 @@ public class DoctorApiController {
         List<DoctorDto> activeDoctors = doctorService.findActiveDoctorsByBranch(adminProfile.getBranchId());
         return ResponseEntity.ok(activeDoctors);
     }
+
+
+
+
+
+
+    // In DoctorApiController.java
+    @GetMapping("/search")
+    public ResponseEntity<Page<DoctorDto>> searchDoctors(
+            @RequestParam(defaultValue = "") String name,
+            Pageable pageable) {
+        StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        return ResponseEntity.ok(doctorService.searchActiveDoctorsByNameAndBranch(name, adminProfile.getBranchId(), pageable));
+    }
 //    // This is now the ONLY method that handles GET /api/doctors
 //    @GetMapping
 //    public ResponseEntity<List<DoctorDto>> getActiveDoctorsForCurrentBranch() {
