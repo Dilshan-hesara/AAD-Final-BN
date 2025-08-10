@@ -105,4 +105,12 @@ public ResponseEntity<List<DoctorDto>> getActiveDoctorsForCurrentBranch() {
         doctorService.activateDoctor(id);
         return ResponseEntity.ok().build();
     }
+
+    // --- ADD THIS NEW ENDPOINT ---
+    @GetMapping("/inactive")
+    public ResponseEntity<List<DoctorDto>> getInactiveDoctorsForCurrentBranch() {
+        StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        List<DoctorDto> doctors = doctorService.findInactiveDoctorsByBranch(adminProfile.getBranchId());
+        return ResponseEntity.ok(doctors);
+    }
 }
