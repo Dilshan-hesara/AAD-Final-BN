@@ -37,4 +37,18 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setStatus("ACTIVE");
         doctorRepository.save(doctor);
     }
+
+
+    // In your DoctorServiceImpl.java file
+
+    @Override
+    public List<DoctorDto> findActiveDoctorsByBranch(Long branchId) {
+        // Use the repository method to find only the "ACTIVE" doctors
+        List<Doctor> activeDoctors = doctorRepository.findByBranch_IdAndStatus(branchId, "ACTIVE");
+
+        // CORRECTED: The variable name is now 'activeDoctors'
+        return modelMapper.map(activeDoctors, new TypeToken<List<DoctorDto>>() {}.getType());
+    }
+
+
 }
