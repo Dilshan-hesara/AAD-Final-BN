@@ -63,4 +63,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     // Counts appointments made by patients WITHOUT a linked online account for today
     @Query("SELECT count(a) FROM Appointment a WHERE a.branch.id = :branchId AND a.patient.linkedOnlineUser IS NULL AND a.appointmentDate BETWEEN :startOfDay AND :endOfDay")
     long countTodaysWalkInAppointments(Long branchId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+
+
+
 }
