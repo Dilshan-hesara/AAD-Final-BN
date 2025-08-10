@@ -29,27 +29,52 @@ public class BranchApiController {
 
 
     // In BranchApiController.java
+//    @GetMapping("/{id}/dashboard-details")
+//    public BranchDashboardDto getBranchDashboardDetails(@PathVariable Long id) {
+//        Branch branch = branchService.getBranchById(id);
+//        Map<String, Long> stats = dashboardService.getBranchStatistics(id);
+//
+//        return new BranchDashboardDto(
+//                branch.getName(),
+//                branch.getLocation(),
+//                branch.getContactNumber(),
+//                stats.get("receptionistCount"), // NEW
+//                stats.get("doctorCount"),
+//                stats.get("appointmentsToday"),
+//                stats.get("confirmedCount"),
+//                stats.get("completedCount"),
+//                stats.get("cancelledCount"),
+//                stats.get("totalAppointmentsToday")
+//        );
+//    }
+
+
+
     @GetMapping("/{id}/dashboard-details")
     public BranchDashboardDto getBranchDashboardDetails(@PathVariable Long id) {
         Branch branch = branchService.getBranchById(id);
-        Map<String, Long> stats = dashboardService.getBranchStatistics(id);
+        Map<String, Object> stats = dashboardService.getBranchStatistics(id);
 
         return new BranchDashboardDto(
                 branch.getName(),
                 branch.getLocation(),
                 branch.getContactNumber(),
-                stats.get("receptionistCount"), // NEW
-                stats.get("doctorCount"),
-                stats.get("appointmentsToday")
+                (Long) stats.get("receptionistCount"),
+                (Long) stats.get("doctorCount"),
+                (Long) stats.get("confirmedCount"),
+                (Long) stats.get("completedCount"),
+                (Long) stats.get("cancelledCount"),
+                (Long) stats.get("onlineAppointments"),
+                (Long) stats.get("walkInAppointments"),
+                (Double) stats.get("todaysEarnings")
         );
     }
-
-
     @GetMapping
     public ResponseEntity<List<BranchDto>> getAllBranches() {
         // You'll need a method in your BranchService to get all branches as DTOs
         return ResponseEntity.ok(branchService.getAllBranches());
     }
 
+    // In BranchApiController.java
 
 }
