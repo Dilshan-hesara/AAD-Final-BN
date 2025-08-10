@@ -8,6 +8,9 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentSe
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -159,5 +162,46 @@ public class AppointmentServiceImpl implements AppointmentService {
                 }).collect(Collectors.toList());
     }
 
+
+
+
+
+
+//    SERCH
+
+
+    public Page<AppointmentResponseDto> searchAppointments(Long branchId, String patientName, String status, LocalDate date, Pageable pageable) {
+        // Create a specification to build the dynamic query
+        Specification<Appointment> spec = Specification.where(hasBranchId(branchId));
+
+        if (patientName != null && !patientName.isEmpty()) {
+            spec = spec.and(patientNameContains(patientName));
+        }
+        if (status != null && !status.isEmpty()) {
+            spec = spec.and(hasStatus(status));
+        }
+        if (date != null) {
+            spec = spec.and(isonDate(date));
+        }
+
+        Page<Appointment> appointments = appointmentRepository.findAll(spec, pageable);
+
+        // Convert the Page of entities to a Page of DTOs
+        return appointments.map(app -> modelMapper.map(app, AppointmentResponseDto.class));
+    }
+
+    // --- Specification helper methods ---
+    private Specification<Appointment> hasBranchId(Long branchId) {
+        return (root, query, cb) -> cb.equal(root.get("branch").get("id"), branchId);
+    }
+    private Specification<Appointment> patientNameContains(String name) {
+        return (root, query, cb) -> cb.like(root.get("patient").get("fullName"), "%" + name + "%");
+    }
+    private Specification<Appointment> hasStatus(String status) {
+        return (root, query, cb) -> cb.equal(root.get("status"), status);
+    }
+    private Specification<Appointment> isonDate(LocalDate date) {
+        return (root, query, cb) -> cb.between(root.get("appointmentDate"), date.atStartOfDay(), date.atTime(LocalTime.MAX));
+    }
 }
 
