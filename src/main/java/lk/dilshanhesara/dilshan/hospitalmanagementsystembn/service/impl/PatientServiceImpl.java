@@ -12,6 +12,8 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.PatientServic
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -65,5 +67,11 @@ public class PatientServiceImpl implements PatientService {
                     // 4. Save and return the new patient record
                     return patientRepository.save(newPatient);
                 });
+    }
+
+
+    public Page<PatientDto> findPatientsByBranch(Long branchId, Pageable pageable) {
+        Page<Patient> patients = patientRepository.findPatientsByBranch(branchId, pageable);
+        return patients.map(patient -> modelMapper.map(patient, PatientDto.class));
     }
 }
