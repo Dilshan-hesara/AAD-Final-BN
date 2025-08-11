@@ -27,20 +27,20 @@ public class ReceptionistServiceImpl implements ReceptionistService {
     private final BranchRepository branchRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public List<StaffProfileDto> findReceptionistsByBranch(Long branchId) {
-        return userAccountRepository.findReceptionistsByBranch(branchId).stream()
-                .map(account -> {
-                    StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
-                    StaffProfileDto dto = new StaffProfileDto();
-                    dto.setUserId(account.getUserId());
-                    dto.setUsername(account.getUsername());
-                    dto.setRole(account.getRole().name());
-                    dto.setFullName(profile.getFullName());
-                    dto.setBranchName(profile.getBranch() != null ? profile.getBranch().getName() : null);
-                    return dto;
-                }).collect(Collectors.toList());
-    }
+//    @Override
+//    public List<StaffProfileDto> findReceptionistsByBranch(Long branchId) {
+//        return userAccountRepository.findReceptionistsByBranch(branchId).stream()
+//                .map(account -> {
+//                    StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
+//                    StaffProfileDto dto = new StaffProfileDto();
+//                    dto.setUserId(account.getUserId());
+//                    dto.setUsername(account.getUsername());
+//                    dto.setRole(account.getRole().name());
+//                    dto.setFullName(profile.getFullName());
+//                    dto.setBranchName(profile.getBranch() != null ? profile.getBranch().getName() : null);
+//                    return dto;
+//                }).collect(Collectors.toList());
+//    }
 
 //    @Override
 //    public void addReceptionist(StaffCreationRequestDto dto) {
@@ -84,5 +84,40 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         profile.setContactNumber(dto.getContactNumber());
         profile.setBranch(branch);
         staffProfileRepository.save(profile);
+    }
+
+
+
+
+    @Override
+    public List<StaffProfileDto> findReceptionistsByBranch(Long branchId) {
+        return userAccountRepository.findReceptionistsByBranch(branchId).stream()
+                .map(account -> {
+                    StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
+                    StaffProfileDto dto = new StaffProfileDto();
+                    dto.setUserId(account.getUserId());
+                    dto.setUsername(account.getUsername());
+                    dto.setRole(account.getRole().name());
+                    dto.setFullName(profile.getFullName());
+
+                    // --- GET THE STATUS FROM THE USER ACCOUNT ---
+                    dto.setActive(account.isActive());
+
+                    if (profile.getBranch() != null) {
+                        dto.setBranchName(profile.getBranch().getName());
+                    }
+                    return dto;
+                }).collect(Collectors.toList());
+    }
+
+
+
+    @Override
+    public void updateUserStatus(Integer userId, boolean isActive) {
+        UserAccount account = userAccountRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User account not found"));
+
+        account.setActive(isActive);
+        userAccountRepository.save(account);
     }
 }
