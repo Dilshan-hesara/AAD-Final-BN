@@ -36,4 +36,18 @@ public class ReceptionistApiController {
         receptionistService.addReceptionist(receptionistDto);
         return ResponseEntity.ok().build();
     }
+
+
+    // --- ADD THESE NEW ENDPOINTS ---
+    @PatchMapping("/{id}/activate")
+    public ResponseEntity<Void> activateReceptionist(@PathVariable Integer id) {
+        receptionistService.updateUserStatus(id, true);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateReceptionist(@PathVariable Integer id) {
+        receptionistService.updateUserStatus(id, false);
+        return ResponseEntity.ok().build();
+    }
 }
