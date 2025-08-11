@@ -37,5 +37,6 @@ public class Appointment {
     @Lob // For longer text
     private String reason;
 
+    @Column(precision = 10, scale = 2)
     private BigDecimal fee;
 }
