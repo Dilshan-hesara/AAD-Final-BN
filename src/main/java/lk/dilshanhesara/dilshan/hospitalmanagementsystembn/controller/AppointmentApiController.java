@@ -5,9 +5,11 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentReques
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentResponseDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.UpdateStatusRequestDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.StaffProfileService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,6 +26,7 @@ public class AppointmentApiController {
 
     private final AppointmentService appointmentService;
     private final StaffProfileService staffProfileService;
+    private final ModelMapper modelMapper;
 
 //    @GetMapping
 //    public ResponseEntity<List<AppointmentResponseDto>> getAppointmentsForBranch() {
@@ -124,6 +127,22 @@ public class AppointmentApiController {
             @RequestBody UpdateStatusRequestDto requestDto) {
         appointmentService.updateAppointmentStatus(id, requestDto.getStatus());
         return ResponseEntity.ok().build();
+    }
+
+
+
+
+
+    @PostMapping("/by-staff")
+    public ResponseEntity<AppointmentResponseDto> createAppointmentByStaff(@RequestBody AppointmentRequestDto dto) {
+        // Get the branch ID from the logged-in staff member
+        StaffProfileDto staffProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+
+        Appointment newAppointment = appointmentService.createAppointmentByStaff(dto, staffProfile.getBranchId());
+
+        // Return a DTO of the newly created appointment
+        AppointmentResponseDto responseDto = modelMapper.map(newAppointment, AppointmentResponseDto.class);
+        return ResponseEntity.ok(responseDto);
     }
 
 }
