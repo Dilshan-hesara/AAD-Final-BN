@@ -15,4 +15,6 @@ public class StaffProfileDto {
     private String email;
 
     private String contactNumber;
+    private boolean active;
+
 }
