@@ -34,4 +34,7 @@ public interface AppointmentService {
 
 
     public Appointment createAppointmentForWalk(AppointmentRequestDto dto, String username) ;
+
+
+    public Appointment createAppointmentByStaff(AppointmentRequestDto dto, Long branchId) ;
     }

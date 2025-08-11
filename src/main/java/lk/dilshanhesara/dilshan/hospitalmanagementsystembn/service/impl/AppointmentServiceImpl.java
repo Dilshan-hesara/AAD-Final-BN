@@ -6,6 +6,7 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.PatientService;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.SettingsService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -225,5 +226,36 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return appointmentRepository.save(appointment);
     }
+    private final SettingsService settingsService; // <-- INJECT THE SETTINGS SERVICE
+
+
+    @Override
+    @Transactional
+    public Appointment createAppointmentByStaff(AppointmentRequestDto dto, Long branchId) {
+        // Find the patient and doctor from the DTO
+        Patient patient = patientRepository.findById(dto.getPatientId())
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+        Doctor doctor = doctorRepository.findById(dto.getDoctorId())
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new RuntimeException("Branch not found"));
+
+        // Create the new appointment entity
+        Appointment appointment = new Appointment();
+        appointment.setPatient(patient);
+        appointment.setDoctor(doctor);
+        appointment.setBranch(branch);
+        appointment.setAppointmentDate(dto.getAppointmentDate());
+        appointment.setReason(dto.getReason());
+        appointment.setStatus("CONFIRMED"); // Staff bookings can be confirmed directly
+        appointment.setFee(settingsService.getAppointmentFee());
+
+        // Save and return the new appointment
+        return appointmentRepository.save(appointment);
+    }
+
+
+
+
 }
 
