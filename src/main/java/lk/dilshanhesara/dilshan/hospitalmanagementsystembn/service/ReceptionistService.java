@@ -10,4 +10,6 @@ public interface ReceptionistService {
 
     List<StaffProfileDto> findReceptionistsByBranch(Long branchId);
     void addReceptionist(StaffCreationRequestDto receptionistDto);
+
+    public void updateUserStatus(Integer userId, boolean isActive) ;
 }
