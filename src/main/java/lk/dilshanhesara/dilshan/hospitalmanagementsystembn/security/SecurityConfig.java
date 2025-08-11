@@ -39,10 +39,17 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // Login/Register
-                        .anyRequest().authenticated() // All other requests require a valid token
+                        .anyRequest().authenticated() // All
+                        // other requests require a valid token
+
+
                 )
+
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
+
+
 }
