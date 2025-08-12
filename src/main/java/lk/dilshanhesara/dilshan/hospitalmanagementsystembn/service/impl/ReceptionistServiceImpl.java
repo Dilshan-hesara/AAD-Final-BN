@@ -11,6 +11,9 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.StaffProfileRepo
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.ReceptionistService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,5 +122,71 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
         account.setActive(isActive);
         userAccountRepository.save(account);
+    }
+
+
+    public Page<StaffProfileDto> searchReceptionists(Long branchId, String name, Pageable pageable) {
+        // Specification to find users with RECEPTIONIST role in the given branch
+        Specification<UserAccount> spec = (root, query, cb) -> {
+            var staffProfileJoin = root.join("staffProfile");
+            return cb.and(
+                    cb.equal(root.get("role"), UserAccount.Role.RECEPTIONIST),
+                    cb.equal(staffProfileJoin.get("branch").get("id"), branchId)
+            );
+        };
+
+        // Add name search if provided
+        if (name != null && !name.isEmpty()) {
+            spec = spec.and((root, query, cb) -> {
+                var staffProfileJoin = root.join("staffProfile");
+                return cb.like(staffProfileJoin.get("fullName"), "%" + name + "%");
+            });
+        }
+
+        Page<UserAccount> accounts = userAccountRepository.findAll(spec, pageable);
+        return accounts.map(this::convertToStaffProfileDto); // Helper method to convert
+    }
+
+    @Override
+    public void updateReceptionist(Integer userId, StaffProfileDto dto) {
+        StaffProfile profile = staffProfileRepository.findById(userId).orElseThrow();
+        profile.setFullName(dto.getFullName());
+        profile.setEmail(dto.getEmail());
+        profile.setContactNumber(dto.getContactNumber());
+        staffProfileRepository.save(profile);
+    }
+
+    /**
+     * Helper method to convert a UserAccount entity to a StaffProfileDto.
+     * It fetches the linked StaffProfile to get details like full name and branch.
+     * @param account The UserAccount entity.
+     * @return A complete StaffProfileDto.
+     */
+    public StaffProfileDto convertToStaffProfileDto(UserAccount account) {
+        // 1. Find the corresponding StaffProfile. If not found, create an empty one to avoid null errors.
+        StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
+
+        // 2. Create a new DTO to send to the frontend.
+        StaffProfileDto dto = new StaffProfileDto();
+
+        // 3. Populate the DTO with data from the UserAccount.
+        dto.setUserId(account.getUserId());
+        dto.setUsername(account.getUsername());
+        dto.setRole(account.getRole().name());
+        dto.setActive(account.isActive());
+
+        // 4. Populate the DTO with data from the StaffProfile.
+        dto.setFullName(profile.getFullName());
+        dto.setEmail(profile.getEmail());
+        dto.setContactNumber(profile.getContactNumber());
+
+        // 5. Check if a branch is assigned before getting its details.
+        if (profile.getBranch() != null) {
+            dto.setBranchId(profile.getBranch().getId());
+            dto.setBranchName(profile.getBranch().getName());
+        }
+
+        // 6. Return the completed DTO.
+        return dto;
     }
 }
