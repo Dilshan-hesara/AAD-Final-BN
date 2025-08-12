@@ -32,18 +32,38 @@ public class AuthApiController {
 
     private final UserService userService; // Inject UserService
 
+//    @PostMapping("/login")
+//    public ResponseEntity<?> authenticateUser(@RequestBody AuthRequestDto loginRequest) {
+//        Authentication authentication = authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+//        );
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        String jwt = tokenProvider.generateToken(authentication);
+//        String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst().orElse(null);
+//        return ResponseEntity.ok(new AuthResponseDto(true, "Login Successful!", jwt, role));
+//    }
+
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody AuthRequestDto loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
-        String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst().orElse(null);
-        return ResponseEntity.ok(new AuthResponseDto(true, "Login Successful!", jwt, role));
+    public ResponseEntity<AuthResponseDto> authenticateUser(@RequestBody AuthRequestDto loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.generateToken(authentication);
+            String role = authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .findFirst().orElse(null);
+
+            // If login is successful, return a 200 OK response with the token and role
+            return ResponseEntity.ok(new AuthResponseDto(true, "Login Successful!", jwt, role));
+
+        } catch (BadCredentialsException e) {
+            // If login fails (wrong username/password), return a 401 Unauthorized response
+            return ResponseEntity.status(401).body(new AuthResponseDto(false, "Invalid username or password.", null, null));
+        }
     }
-
-
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegistrationRequestDto registrationDto) {
         try {
