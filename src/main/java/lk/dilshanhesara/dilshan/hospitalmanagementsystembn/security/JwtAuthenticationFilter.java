@@ -39,6 +39,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Log error
         }
         filterChain.doFilter(request, response);
+
+
     }
 
     private String getJWTFromRequest(HttpServletRequest request) {
@@ -48,5 +50,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
 
 }
