@@ -12,5 +12,7 @@ public class PatientDto {
     private String contactNumber;
     private LocalDate dateOfBirth;
     private String gender;
-    private Integer linkedOnlineUserId; // To know if they have an online account
+    private Integer linkedOnlineUserId;
+    private String address;
+    // To know if they have an online account
 }
