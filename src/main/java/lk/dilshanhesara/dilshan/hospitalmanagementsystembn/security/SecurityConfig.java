@@ -2,7 +2,6 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.security;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,10 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity // <-- ADD THIS ANNOTATION
+
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -35,22 +35,54 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> {})
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Set to stateless
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Allow everyone to access the login and registration APIs
+                        // Allow public access to login/register APIs
                         .requestMatchers("/api/auth/**").permitAll()
                         // All other requests must be authenticated
                         .anyRequest().authenticated()
                 )
-                // Add the JWT filter to the chain
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .cors(cors -> {})
+//                .csrf(csrf -> csrf.disable())
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/auth/**").permitAll() // Login/Register
+//                        .anyRequest().authenticated() // All
+//                        // other requests require a valid token
+//                        .requestMatchers("/api/staff/my-profile").authenticated()
+//                        .requestMatchers("/api/branches").authenticated()
+//                        .requestMatchers("/api/doctors/by-branch/**").authenticated()
+//
+//                        // =============================================================
+//                        // ADD THIS RULE: Allow Branch Admins to access the receptionists API
+//                        .requestMatchers("/api/receptionists/**").hasAuthority("ROLE_BRANCH_ADMIN")
+//                        // =============================================================
+//
+//                        .requestMatchers("/api/doctors/**").hasAuthority("ROLE_BRANCH_ADMIN")
+//                        .requestMatchers("/api/patients/**").hasAuthority("ROLE_BRANCH_ADMIN")
+//                        .requestMatchers("/api/appointments/**").hasAuthority("ROLE_BRANCH_ADMIN")
+//                        .requestMatchers("/api/user/**").hasAuthority("ROLE_ONLINEUSER")
+//
+//
+//                )
+//
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//
+//        return http.build();
+//    }
 
 }
