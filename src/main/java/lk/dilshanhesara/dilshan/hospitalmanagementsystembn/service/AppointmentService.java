@@ -2,6 +2,7 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentResponseDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,4 +38,10 @@ public interface AppointmentService {
 
 
     public Appointment createAppointmentByStaff(AppointmentRequestDto dto, Long branchId) ;
+
+
+    public AppointmentResponseDto findAppointmentById(Long appointmentId) ;
+
+
+    public List<BranchDto> getAllBranches() ;
     }
