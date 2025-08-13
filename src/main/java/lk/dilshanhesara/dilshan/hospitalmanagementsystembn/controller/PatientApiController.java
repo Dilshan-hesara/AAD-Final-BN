@@ -25,12 +25,35 @@ public class PatientApiController {
 
     private final StaffProfileService staffProfileService;
 
+//
 
-    // It handles both simple fetching and pagination.
-    @GetMapping
+
+    // In Patient load  karananva book   appoiment combobox eek ta adalai
+    @GetMapping("/search")
+    public ResponseEntity<Page<PatientDto>> searchPatients(
+            @RequestParam(defaultValue = "") String name,
+            Pageable pageable) {
+        return ResponseEntity.ok(patientService.searchPatientsByName(name, pageable));
+    }
+    @GetMapping("/branch")
     public ResponseEntity<Page<PatientDto>> getPatientsForCurrentBranch(Pageable pageable) {
         StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
         Page<PatientDto> patients = patientService.findPatientsByBranch(adminProfile.getBranchId(), pageable);
+        return ResponseEntity.ok(patients);
+    }
+//
+//
+//
+//
+//
+//
+////    metanai yata tika pagtion page ekta adali
+    @GetMapping
+    public ResponseEntity<Page<PatientDto>> searchPatientsPage(
+            @RequestParam(required = false) String keyword,
+            Pageable pageable) {
+        // We can reuse the same service method for both getting all and searching
+        Page<PatientDto> patients = patientService.searchPatientsPage(keyword, pageable);
         return ResponseEntity.ok(patients);
     }
 
@@ -41,14 +64,11 @@ public class PatientApiController {
         return ResponseEntity.ok().build();
     }
 
-
-
-    // In PatientApiController.java
-    @GetMapping("/search")
-    public ResponseEntity<Page<PatientDto>> searchPatients(
-            @RequestParam(defaultValue = "") String name,
-            Pageable pageable) {
-        return ResponseEntity.ok(patientService.searchPatientsByName(name, pageable));
+    // This PUT method is for updating an existing patient
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updatePatient(@PathVariable Long id, @RequestBody PatientDto patientDto) {
+        patientService.updatePatientPage(id, patientDto);
+        return ResponseEntity.ok().build();
     }
 
 }
