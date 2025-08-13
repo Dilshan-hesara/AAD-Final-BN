@@ -143,7 +143,14 @@ public class AppointmentApiController {
         // Return a DTO of the newly created appointment
         AppointmentResponseDto responseDto = modelMapper.map(newAppointment, AppointmentResponseDto.class);
         return ResponseEntity.ok(responseDto);
+
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AppointmentResponseDto> getAppointmentById(@PathVariable Long id) {
+        AppointmentResponseDto appointment = appointmentService.findAppointmentById(id);
+        return ResponseEntity.ok(appointment);
+    }
 }
 
