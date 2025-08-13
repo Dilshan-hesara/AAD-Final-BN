@@ -26,6 +26,10 @@ public class UserAccount {
     @Column(name = "is_active", columnDefinition = "boolean default false")
     private boolean isActive;
 
+    @OneToOne(mappedBy = "userAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private StaffProfile staffProfile;
+
+
     public enum Role {
         SUPER_ADMIN,
         BRANCH_ADMIN,
