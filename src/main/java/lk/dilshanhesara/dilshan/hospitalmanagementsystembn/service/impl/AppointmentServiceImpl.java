@@ -2,6 +2,7 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentResponseDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
@@ -257,5 +258,33 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
+//    bill mange
+
+
+
+    // --- ADD THIS NEW METHOD ---
+    @Override
+    public AppointmentResponseDto findAppointmentById(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        // Convert the entity to a DTO
+        return modelMapper.map(appointment, AppointmentResponseDto.class);
+    }
+
+
+
+
+
+
+
+    // In BranchServiceImpl.java
+    @Override
+    public List<BranchDto> getAllBranches() {
+        return branchRepository.findAll().stream()
+                .map(branch -> modelMapper.map(branch, BranchDto.class))
+                .collect(Collectors.toList());
+    }
 }
+
 
