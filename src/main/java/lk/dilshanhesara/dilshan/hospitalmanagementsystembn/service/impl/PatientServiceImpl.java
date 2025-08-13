@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -78,5 +79,38 @@ public class PatientServiceImpl implements PatientService {
         Page<Patient> patients = patientRepository.findByFullNameContainingIgnoreCase(name, pageable);
         return patients.map(patient -> modelMapper.map(patient, PatientDto.class));
 
+    }
+
+    @Override
+    public Page<PatientDto> searchPatientsPage(String keyword, Pageable pageable) {
+        // Create a specification for searching by full name or contact number
+        Specification<Patient> spec = (root, query, cb) -> {
+            if (keyword == null || keyword.isEmpty()) {
+                return cb.conjunction(); // Return all if no keyword
+            }
+            String pattern = "%" + keyword.toLowerCase() + "%";
+            return cb.or(
+                    cb.like(cb.lower(root.get("fullName")), pattern),
+                    cb.like(root.get("contactNumber"), pattern)
+            );
+        };
+
+        Page<Patient> patients = patientRepository.findAll(spec, pageable);
+        return patients.map(patient -> modelMapper.map(patient, PatientDto.class));
+    }
+
+    @Override
+    public void updatePatientPage(Long patientId, PatientDto patientDto) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+        patient.setFullName(patientDto.getFullName());
+        patient.setEmail(patientDto.getEmail());
+        patient.setContactNumber(patientDto.getContactNumber());
+        patient.setDateOfBirth(patientDto.getDateOfBirth());
+        patient.setGender(patientDto.getGender());
+        patient.setAddress(patientDto.getAddress());
+
+        patientRepository.save(patient);
     }
 }
