@@ -15,5 +15,8 @@ public class AppointmentResponseDto {
     private String status;
 
     private String branchName;
+    private String fee;
+    private  String reason;
+
 
 }
