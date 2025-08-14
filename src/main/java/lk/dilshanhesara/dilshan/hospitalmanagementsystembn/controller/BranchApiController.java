@@ -2,6 +2,7 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDashboardDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDetailDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.BranchService;
@@ -74,6 +75,7 @@ public class BranchApiController {
         // You'll need a method in your BranchService to get all branches as DTOs
         return ResponseEntity.ok(branchService.getAllBranches());
     }
+
 
     // In BranchApiController.java
 
