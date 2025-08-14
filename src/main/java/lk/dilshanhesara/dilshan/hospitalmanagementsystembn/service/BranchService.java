@@ -20,4 +20,9 @@ public interface BranchService {
 
     public List<BranchSummaryDto> getAllBranchSummaries() ;
     public Branch addBranch(BranchDto branchDto);
+
+
+    public void updateBranch(Long branchId, BranchDto branchDto) ;
+    public void deleteBranch(Long branchId) ;
+    public void updateBranchStatus(Long branchId, String status);
     }
