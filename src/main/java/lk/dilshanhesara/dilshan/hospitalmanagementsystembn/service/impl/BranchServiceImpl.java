@@ -1,18 +1,21 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDetailDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchSummaryDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.StaffProfile;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.BranchRepository;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.StaffProfileRepository;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.BranchService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,12 @@ public class BranchServiceImpl implements BranchService {
     private StaffProfileRepository staffProfileRepository;
     @Autowired
     private UserAccountRepository userAccountRepository;
+
+    @Autowired
+    private  PatientRepository patientRepository;
+
+    @Autowired
+    private  DoctorRepository doctorRepository;
 
     @Override
     public Branch getBranchById(Long branchId) {
@@ -68,5 +77,51 @@ public class BranchServiceImpl implements BranchService {
         return branches.stream()
                 .map(branch -> modelMapper.map(branch, BranchDto.class))
                 .collect(Collectors.toList());
+    }
+
+
+    //super admin
+
+//
+//    public List<BranchDetailDto> getAllBranchDetails() {
+//        List<Branch> branches = branchRepository.findAll();
+//
+//        return branches.stream().map(branch -> {
+//            // For each branch, get its statistics
+//            LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+//            LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+//
+//            // You need to implement these count methods in your repositories
+//            long patientCount = patientRepository.countByAppointments_Branch_Id(branch.getId());
+//            long doctorCount = doctorRepository.countByBranch_Id(branch.getId());
+//            long appointmentsToday = appointmentRepository.countByBranch_IdAndAppointmentDateBetween(branch.getId(), startOfDay, endOfDay);
+//
+//            // Create the DTO
+//            BranchDetailDto dto = new BranchDetailDto();
+//            dto.setId(branch.getId());
+//            dto.setName(branch.getName());
+//            dto.setLocation(branch.getLocation());
+//            dto.setPatientCount(patientCount);
+//            dto.setDoctorCount(doctorCount);
+//            dto.setAppointmentsTodayCount(appointmentsToday);
+//
+//            return dto;
+//        }).collect(Collectors.toList());
+//    }
+
+    @Override
+    public List<BranchSummaryDto> getAllBranchSummaries() {
+        return branchRepository.findAll().stream().map(branch -> {
+            BranchSummaryDto dto = modelMapper.map(branch, BranchSummaryDto.class);
+            // Logic to calculate patient and doctor counts for the branch
+            dto.setPatientCount(patientRepository.countByBranchId(branch.getId()));
+            dto.setDoctorCount(doctorRepository.countByBranch_Id(branch.getId()));
+            return dto;
+        }).collect(Collectors.toList());
+    }
+    @Override
+    public Branch addBranch(BranchDto branchDto) {
+        Branch branch = modelMapper.map(branchDto, Branch.class);
+        return branchRepository.save(branch);
     }
 }
