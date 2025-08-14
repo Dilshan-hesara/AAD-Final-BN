@@ -20,4 +20,9 @@ public class Branch {
 
     @Column(name = "contact_number")
     private String contactNumber;
+
+    private String status;
+
+    private String email;
+
 }
