@@ -9,5 +9,7 @@ public class BranchDto {
 
     private String location;
     private String contactNumber;
-    private String email; // Added email field
+    private String email;
+    private String status;
+// Added email field
 }
