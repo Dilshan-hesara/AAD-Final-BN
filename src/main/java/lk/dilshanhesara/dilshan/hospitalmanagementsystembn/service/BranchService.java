@@ -1,6 +1,8 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service;
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDetailDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchSummaryDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
 
 import java.util.List;
@@ -16,5 +18,6 @@ public interface BranchService {
     // --- ADD THIS NEW METHOD ---
     List<BranchDto> getAllBranches();
 
-
+    public List<BranchSummaryDto> getAllBranchSummaries() ;
+    public Branch addBranch(BranchDto branchDto);
     }
