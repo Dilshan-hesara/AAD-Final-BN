@@ -43,4 +43,8 @@ public interface DoctorRepository  extends JpaRepository<Doctor, Integer>, JpaSp
 
     // Finds active doctors in a specific branch where the name contains the search term
     Page<Doctor> findByBranch_IdAndStatusAndFullNameContainingIgnoreCase(Long branchId, String status, String name, Pageable pageable);
+
+
+
+
 }
