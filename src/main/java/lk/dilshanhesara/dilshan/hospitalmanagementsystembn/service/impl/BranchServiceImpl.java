@@ -124,4 +124,27 @@ public class BranchServiceImpl implements BranchService {
         Branch branch = modelMapper.map(branchDto, Branch.class);
         return branchRepository.save(branch);
     }
+
+
+    //mange super admin branch deatals
+
+    @Override
+    public void updateBranch(Long branchId, BranchDto branchDto) {
+        Branch branch = branchRepository.findById(branchId).orElseThrow();
+        branch.setName(branchDto.getName());
+        branch.setLocation(branchDto.getLocation());
+        branch.setContactNumber(branchDto.getContactNumber());
+        branch.setEmail(branchDto.getEmail());
+        branchRepository.save(branch);
+    }
+    @Override
+    public void deleteBranch(Long branchId) {
+        branchRepository.deleteById(branchId);
+    }
+    @Override
+    public void updateBranchStatus(Long branchId, String status) {
+        Branch branch = branchRepository.findById(branchId).orElseThrow();
+        branch.setStatus(status);
+        branchRepository.save(branch);
+    }
 }
