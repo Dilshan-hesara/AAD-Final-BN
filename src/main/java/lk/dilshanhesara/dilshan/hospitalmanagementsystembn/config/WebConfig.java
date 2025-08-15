@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
 //                .allowedHeaders("*");
 
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:63342") // frontend URL
+                .allowedOrigins("http://localhost:63342")
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .exposedHeaders("Authorization");
