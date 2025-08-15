@@ -40,6 +40,7 @@ public interface DoctorRepository  extends JpaRepository<Doctor, Integer>, JpaSp
     Page<Doctor> findByBranch_IdAndStatusAndFullNameContainingIgnoreCase(Long branchId, String status, String name, Pageable pageable);
 
 
+    long countByStatus(String status);
 
 
 }
