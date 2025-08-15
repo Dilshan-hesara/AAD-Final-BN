@@ -25,13 +25,13 @@ public interface DoctorRepository  extends JpaRepository<Doctor, Integer>, JpaSp
 
     long countByBranch_IdAndStatus(Long branchId, String status);
 
+    List<Doctor> findByBranch_IdAndStatus(Long branchId, String status);
 
 
     @Transactional
     @Modifying
     @Query(value = "UPDATE doctors SET status='INACTIVE' WHERE id=?1", nativeQuery = true)
     void updateDoctorStatusToInactive(int id);
-
     @Transactional
     @Modifying
     @Query(value = "UPDATE doctors SET status='ACTIVE' WHERE id=?1", nativeQuery = true)
