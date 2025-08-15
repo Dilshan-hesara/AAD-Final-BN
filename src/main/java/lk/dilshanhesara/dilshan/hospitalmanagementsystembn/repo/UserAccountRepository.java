@@ -42,4 +42,13 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     long countActiveReceptionistsByBranch(Long branchId);
 
 
+
+
+    // seper admin dash
+
+    long countByRole(UserAccount.Role role);
+    long countByRoleAndIsActive(UserAccount.Role role, boolean isActive);
+
+
+
 }
