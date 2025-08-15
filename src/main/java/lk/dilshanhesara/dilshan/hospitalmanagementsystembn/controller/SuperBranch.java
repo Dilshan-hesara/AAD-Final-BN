@@ -63,7 +63,6 @@ public class SuperBranch {
         return ResponseEntity.ok().build();
     }
 
-    // In BranchApiController.java
     @GetMapping("/summary")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<BranchSummaryDto>> getBranchSummaries() {
@@ -75,7 +74,6 @@ public class SuperBranch {
     //acti brna and in actve brnach
 
 
-    // --- ADD THESE TWO NEW ENDPOINTS ---
     @GetMapping("/active")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<BranchDto>> getActiveBranches() {

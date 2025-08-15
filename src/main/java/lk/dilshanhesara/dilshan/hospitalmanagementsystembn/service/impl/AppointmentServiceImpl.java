@@ -71,17 +71,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
-    // --- ADD THIS NEW METHOD ---
     @Override
     public void updateAppointmentStatus(Long appointmentId, String newStatus) {
-        // Find the appointment in the database
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + appointmentId));
 
-        // Update the status
         appointment.setStatus(newStatus);
 
-        // Save the changes
         appointmentRepository.save(appointment);
     }
 
@@ -89,13 +85,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
-    // --- ADD THIS NEW METHOD IMPLEMENTATION ---
     @Override
     public List<AppointmentResponseDto> findAppointmentsByUsername(String username) {
-        // Use the new repository method to find appointments
         return appointmentRepository.findAppointmentsByOnlineUsername(username).stream()
                 .map(app -> {
-                    // Convert each Appointment entity to a DTO
                     AppointmentResponseDto dto = new AppointmentResponseDto();
                     dto.setId(app.getId());
                     dto.setPatientName(app.getPatient().getFullName());
@@ -112,7 +105,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
     private final UserAccountRepository userAccountRepository;
-    private final PatientService patientService; // <-- Now this exists
+    private final PatientService patientService;
 
 
 
@@ -121,20 +114,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public Appointment createAppointmentForOnlineUser(AppointmentRequestDto dto, String username) {
-        // ... (logic to get/create patient, doctor, branch)
 
         Appointment appointment = new Appointment();
-        // ... (set patient, doctor, branch, etc.)
         appointment.setReason(dto.getReason());
 
-        // Set initial status and a sample fee
         appointment.setStatus("PENDING_PAYMENT");
-        appointment.setFee(new java.math.BigDecimal("2500.00")); // Example fee
+        appointment.setFee(new java.math.BigDecimal("2500.00"));
 
-        return appointmentRepository.save(appointment); // Return the saved appointment
+        return appointmentRepository.save(appointment);
     }
-
-    // --- ADD THIS NEW METHOD TO CONFIRM PAYMENT ---
     @Override
     public void confirmAppointmentPayment(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
@@ -151,7 +139,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return appointmentRepository.findOnlineUserAppointmentsForToday(branchId, startOfDay, endOfDay)
                 .stream().map(app -> {
-                    // 1. Create a new DTO
                     AppointmentResponseDto dto = new AppointmentResponseDto();
                     dto.setId(app.getId());
                     dto.setPatientName(app.getPatient().getFullName());
@@ -160,7 +147,6 @@ public class AppointmentServiceImpl implements AppointmentService {
                     dto.setAppointmentDate(app.getAppointmentDate());
                     dto.setStatus(app.getStatus());
 
-                    // 2. CRITICAL: Return the created DTO
                     return dto;
                 }).collect(Collectors.toList());
     }
@@ -174,7 +160,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
     public Page<AppointmentResponseDto> searchAppointments(Long branchId, String patientName, String status, LocalDate date, Pageable pageable) {
-        // Create a specification to build the dynamic query
         Specification<Appointment> spec = Specification.where(hasBranchId(branchId));
 
         if (patientName != null && !patientName.isEmpty()) {
@@ -189,11 +174,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Page<Appointment> appointments = appointmentRepository.findAll(spec, pageable);
 
-        // Convert the Page of entities to a Page of DTOs
         return appointments.map(app -> modelMapper.map(app, AppointmentResponseDto.class));
     }
 
-    // --- Specification helper methods ---
     private Specification<Appointment> hasBranchId(Long branchId) {
         return (root, query, cb) -> cb.equal(root.get("branch").get("id"), branchId);
     }
@@ -215,25 +198,21 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment createAppointmentForWalk(AppointmentRequestDto dto, String username) {
-        // ... your existing logic to get patient, doctor, etc.
 
         Appointment appointment = new Appointment();
-        // ... set patient, doctor, date, etc.
         appointment.setReason(dto.getReason());
         appointment.setStatus("PENDING_PAYMENT");
 
-        // Set the default fee
         appointment.setFee(DEFAULT_APPOINTMENT_FEE);
 
         return appointmentRepository.save(appointment);
     }
-    private final SettingsService settingsService; // <-- INJECT THE SETTINGS SERVICE
+    private final SettingsService settingsService;
 
 
     @Override
     @Transactional
     public Appointment createAppointmentByStaff(AppointmentRequestDto dto, Long branchId) {
-        // Find the patient and doctor from the DTO
         Patient patient = patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
         Doctor doctor = doctorRepository.findById(dto.getDoctorId())
@@ -241,17 +220,15 @@ public class AppointmentServiceImpl implements AppointmentService {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new RuntimeException("Branch not found"));
 
-        // Create the new appointment entity
         Appointment appointment = new Appointment();
         appointment.setPatient(patient);
         appointment.setDoctor(doctor);
         appointment.setBranch(branch);
         appointment.setAppointmentDate(dto.getAppointmentDate());
         appointment.setReason(dto.getReason());
-        appointment.setStatus("CONFIRMED"); // Staff bookings can be confirmed directly
+        appointment.setStatus("CONFIRMED");
         appointment.setFee(settingsService.getAppointmentFee());
 
-        // Save and return the new appointment
         return appointmentRepository.save(appointment);
     }
 
@@ -262,13 +239,11 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
-    // --- ADD THIS NEW METHOD ---
     @Override
     public AppointmentResponseDto findAppointmentById(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
-        // Convert the entity to a DTO
         return modelMapper.map(appointment, AppointmentResponseDto.class);
     }
 
@@ -276,9 +251,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
-
-
-    // In BranchServiceImpl.java
     @Override
     public List<BranchDto> getAllBranches() {
         return branchRepository.findAll().stream()

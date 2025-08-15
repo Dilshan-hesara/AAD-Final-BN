@@ -23,11 +23,8 @@ public interface DoctorRepository  extends JpaRepository<Doctor, Integer>, JpaSp
     List<Doctor> findByBranch_Id(Long branchId);
 
 
-    // Add this method to find the count of ONLY active doctors
     long countByBranch_IdAndStatus(Long branchId, String status);
 
-    // Finds all doctors for a specific branch who have a certain status
-    List<Doctor> findByBranch_IdAndStatus(Long branchId, String status);
 
 
     @Transactional
@@ -35,13 +32,11 @@ public interface DoctorRepository  extends JpaRepository<Doctor, Integer>, JpaSp
     @Query(value = "UPDATE doctors SET status='INACTIVE' WHERE id=?1", nativeQuery = true)
     void updateDoctorStatusToInactive(int id);
 
-    // --- ADD THIS NEW METHOD TO ACTIVATE ---
     @Transactional
     @Modifying
     @Query(value = "UPDATE doctors SET status='ACTIVE' WHERE id=?1", nativeQuery = true)
     void updateDoctorStatusToActive(int id);
 
-    // Finds active doctors in a specific branch where the name contains the search term
     Page<Doctor> findByBranch_IdAndStatusAndFullNameContainingIgnoreCase(Long branchId, String status, String name, Pageable pageable);
 
 

@@ -103,7 +103,6 @@ public class ReceptionistServiceImpl implements ReceptionistService {
                     dto.setRole(account.getRole().name());
                     dto.setFullName(profile.getFullName());
 
-                    // --- GET THE STATUS FROM THE USER ACCOUNT ---
                     dto.setActive(account.isActive());
 
                     if (profile.getBranch() != null) {
@@ -135,7 +134,6 @@ public class ReceptionistServiceImpl implements ReceptionistService {
             );
         };
 
-        // Add name search if provided
         if (name != null && !name.isEmpty()) {
             spec = spec.and((root, query, cb) -> {
                 var staffProfileJoin = root.join("staffProfile");
@@ -156,12 +154,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         staffProfileRepository.save(profile);
     }
 
-    /**
-     * Helper method to convert a UserAccount entity to a StaffProfileDto.
-     * It fetches the linked StaffProfile to get details like full name and branch.
-     * @param account The UserAccount entity.
-     * @return A complete StaffProfileDto.
-     */
+
     public StaffProfileDto convertToStaffProfileDto(UserAccount account) {
         // 1. Find the corresponding StaffProfile. If not found, create an empty one to avoid null errors.
         StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
@@ -186,7 +179,6 @@ public class ReceptionistServiceImpl implements ReceptionistService {
             dto.setBranchName(profile.getBranch().getName());
         }
 
-        // 6. Return the completed DTO.
         return dto;
     }
 }

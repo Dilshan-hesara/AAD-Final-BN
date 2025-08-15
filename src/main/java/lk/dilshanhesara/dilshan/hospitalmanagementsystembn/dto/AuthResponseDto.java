@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor // Lombok constructor for all fields
+@AllArgsConstructor
 public class AuthResponseDto {
     private boolean success;
     private String message;
     private String redirectUrl;
-    private String role; // <-- අලුතින් එකතු කළ කොටස
+    private String role;
 
 }

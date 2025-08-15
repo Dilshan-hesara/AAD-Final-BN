@@ -25,7 +25,6 @@ public class PatientApiController {
 
     private final StaffProfileService staffProfileService;
 
-//
 
 
     // In Patient load  karananva book   appoiment combobox eek ta adalai
@@ -41,30 +40,22 @@ public class PatientApiController {
         Page<PatientDto> patients = patientService.findPatientsByBranch(adminProfile.getBranchId(), pageable);
         return ResponseEntity.ok(patients);
     }
-//
-//
-//
-//
-//
-//
+
 ////    metanai yata tika pagtion page ekta adali
     @GetMapping
     public ResponseEntity<Page<PatientDto>> searchPatientsPage(
             @RequestParam(required = false) String keyword,
             Pageable pageable) {
-        // We can reuse the same service method for both getting all and searching
         Page<PatientDto> patients = patientService.searchPatientsPage(keyword, pageable);
         return ResponseEntity.ok(patients);
     }
 
-    // This POST method for creating a patient is correct
     @PostMapping
     public ResponseEntity<Void> addPatient(@RequestBody PatientDto patientDto) {
         patientService.addPatient(patientDto);
         return ResponseEntity.ok().build();
     }
 
-    // This PUT method is for updating an existing patient
     @PutMapping("/{id}")
     public ResponseEntity<Void> updatePatient(@PathVariable Long id, @RequestBody PatientDto patientDto) {
         patientService.updatePatientPage(id, patientDto);

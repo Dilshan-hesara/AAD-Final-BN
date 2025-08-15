@@ -40,7 +40,6 @@ public class OnlineUserApiController {
 
 
 
-    // In OnlineUserApiController.java
     @PostMapping("/book-appointment")
     public ResponseEntity<?> bookAppointment(@RequestBody AppointmentRequestDto dto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -50,13 +49,11 @@ public class OnlineUserApiController {
 
     private final BranchService branchService;
     private final DoctorService doctorService;
-    // In BranchApiController.java
     @GetMapping
     public ResponseEntity<List<BranchDto>> getAllBranches() {
         return ResponseEntity.ok(branchService.getAllBranches());
     }
 
-    // In DoctorApiController.java
     @GetMapping("/by-branch/{branchId}")
     public ResponseEntity<List<DoctorDto>> getDoctorsByBranch(@PathVariable Long branchId) {
         return ResponseEntity.ok(doctorService.findActiveDoctorsByBranch(branchId));

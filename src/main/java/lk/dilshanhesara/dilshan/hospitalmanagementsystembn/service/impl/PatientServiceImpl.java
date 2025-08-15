@@ -29,10 +29,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void addPatient(PatientDto patientDto) {
-        // Convert the DTO to an Entity
         Patient patient = modelMapper.map(patientDto, Patient.class);
 
-        // Save the new patient record to the database
         patientRepository.save(patient);
     }
 
@@ -41,7 +39,6 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<PatientDto> getAllPatients() {
         List<Patient> patients = patientRepository.findAll();
-        // Convert the list of entities to a list of DTOs
         return modelMapper.map(patients, new TypeToken<List<PatientDto>>() {}.getType());
     }
 

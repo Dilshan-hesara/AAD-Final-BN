@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class SettingsServiceImpl implements SettingsService {
 
-    // In a real app, this value would be loaded from a database table.
     private final AppSettingsRepository settingsRepository;
     private final String FEE_KEY = "APPOINTMENT_FEE";
 
@@ -20,7 +19,7 @@ public class SettingsServiceImpl implements SettingsService {
     public BigDecimal getAppointmentFee() {
         return settingsRepository.findById(FEE_KEY)
                 .map(setting -> new BigDecimal(setting.getSettingValue()))
-                .orElse(new BigDecimal("2500.00")); // Fallback default
+                .orElse(new BigDecimal("2500.00"));
     }
 
     @Override

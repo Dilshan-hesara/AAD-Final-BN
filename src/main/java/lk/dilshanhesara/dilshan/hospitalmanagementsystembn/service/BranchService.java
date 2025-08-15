@@ -14,8 +14,6 @@ public interface BranchService {
     Long getCurrentAdminBranchId();
 
 
-
-    // --- ADD THIS NEW METHOD ---
     List<BranchDto> getAllBranches();
 
     public List<BranchSummaryDto> getAllBranchSummaries() ;

@@ -22,8 +22,6 @@ public class DoctorApiController {
     private final StaffProfileService staffProfileService; // To get the admin's branch
 
 
-    // --- MAPPING 1: GET /api/doctors (Handles searching and pagination) ---
-    // This is the ONLY method that handles the base GET request.
     @GetMapping
     public ResponseEntity<Page<DoctorDto>> searchDoctors(
             @RequestParam(required = false) String name,
@@ -35,14 +33,12 @@ public class DoctorApiController {
         return ResponseEntity.ok(results);
     }
 
-    // --- MAPPING 2: GET /api/doctors/by-branch/{branchId} (For dropdowns) ---
     @GetMapping("/by-branch/{branchId}")
     public ResponseEntity<List<DoctorDto>> getDoctorsByBranch(@PathVariable Long branchId) {
         List<DoctorDto> doctors = doctorService.findActiveDoctorsByBranch(branchId);
         return ResponseEntity.ok(doctors);
     }
 
-    // --- MAPPING 3: GET /api/doctors/inactive (For the inactive doctors table) ---
     @GetMapping("/inactive")
     public ResponseEntity<List<DoctorDto>> getInactiveDoctorsForCurrentBranch() {
         StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
@@ -50,7 +46,6 @@ public class DoctorApiController {
         return ResponseEntity.ok(doctors);
     }
 
-    // --- MAPPING 4: POST /api/doctors (To create a new doctor) ---
     @PostMapping
     public ResponseEntity<Void> addDoctor(@RequestBody DoctorDto doctorDto) {
         StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
@@ -59,21 +54,18 @@ public class DoctorApiController {
         return ResponseEntity.ok().build();
     }
 
-    // --- MAPPING 5: PUT /api/doctors/{id} (To update a doctor's details) ---
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateDoctor(@PathVariable Integer id, @RequestBody DoctorDto doctorDto) {
         doctorService.updateDoctor(id, doctorDto);
         return ResponseEntity.ok().build();
     }
 
-    // --- MAPPING 6: PATCH /api/doctors/{id}/deactivate ---
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivateDoctor(@PathVariable int id) {
         doctorService.deactivateDoctor(id);
         return ResponseEntity.ok().build();
     }
 
-    // --- MAPPING 7: PATCH /api/doctors/{id}/activate ---
     @PatchMapping("/{id}/activate")
     public ResponseEntity<Void> activateDoctor(@PathVariable int id) {
         doctorService.activateDoctor(id);
@@ -82,7 +74,6 @@ public class DoctorApiController {
 
 
 
-    // --- THIS IS THE ENDPOINT FOR "DOCTORS ON DUTY" ---
     @GetMapping("/active-list")
     public ResponseEntity<List<DoctorDto>> getActiveDoctorListForDashboard() {
         StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
@@ -95,7 +86,6 @@ public class DoctorApiController {
 
 
 
-    // In DoctorApiController.java
     @GetMapping("/search")
     public ResponseEntity<Page<DoctorDto>> searchDoctors(
             @RequestParam(defaultValue = "") String name,

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class PatientDto {
-    private Long id; // This is the patient record ID
+    private Long id;
     private String fullName;
     private String email;
     private String contactNumber;
@@ -14,5 +14,4 @@ public class PatientDto {
     private String gender;
     private Integer linkedOnlineUserId;
     private String address;
-    // To know if they have an online account
 }

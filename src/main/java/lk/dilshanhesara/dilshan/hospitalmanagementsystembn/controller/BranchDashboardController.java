@@ -20,7 +20,7 @@ public class BranchDashboardController {
     private DashboardService dashboardService;
 
     @Autowired
-    private BranchService branchService; // Service to get branch details
+    private BranchService branchService;
 
     @GetMapping("/dashboard")
     public String showBranchDashboard(Model model) {

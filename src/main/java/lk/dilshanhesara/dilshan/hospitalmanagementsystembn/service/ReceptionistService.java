@@ -21,7 +21,6 @@ public interface ReceptionistService {
     public Page<StaffProfileDto> searchReceptionists(Long branchId, String name, Pageable pageable) ;
     public void updateReceptionist(Integer userId, StaffProfileDto dto);
 
-    // Helper method to convert UserAccount to StaffProfileDto
      StaffProfileDto convertToStaffProfileDto(UserAccount account) ;
 
 }

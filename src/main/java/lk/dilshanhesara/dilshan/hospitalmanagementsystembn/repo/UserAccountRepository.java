@@ -34,17 +34,10 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     List<UserAccount> findReceptionistsByBranch(Long branchId);
 
 
-    /**
-     * ✅ UPDATED QUERY ✅
-     * Counts only the receptionists where the user account's 'isActive' flag is true.
-     * This is the method your dashboard service should call to get the correct count.
-     * @param branchId The ID of the branch to count receptionists for.
-     * @return The number of active receptionists in that branch.
-     */
+
     @Query("SELECT count(ua) FROM UserAccount ua JOIN ua.staffProfile sp WHERE ua.role = 'RECEPTIONIST' AND sp.branch.id = :branchId AND ua.isActive = true")
     long countReceptionistsByBranch(Long branchId);
 
-    // --- ADD THIS NEW METHOD ---
     @Query("SELECT count(ua) FROM UserAccount ua JOIN StaffProfile sp ON ua.userId = sp.userId WHERE ua.role = 'RECEPTIONIST' AND sp.branch.id = :branchId AND ua.isActive = true")
     long countActiveReceptionistsByBranch(Long branchId);
 

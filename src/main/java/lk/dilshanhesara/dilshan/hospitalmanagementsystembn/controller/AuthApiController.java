@@ -30,7 +30,7 @@ public class AuthApiController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
 
-    private final UserService userService; // Inject UserService
+    private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthRequestDto loginRequest) {
@@ -39,13 +39,12 @@ public class AuthApiController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String redirectUrl = tokenProvider.generateToken(authentication); // Generate the token
+        String redirectUrl = tokenProvider.generateToken(authentication);
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElse(null);
 
-        // Create the response DTO and include the 'jwt' token
         return ResponseEntity.ok(new AuthResponseDto(true, "Login Successful!", redirectUrl, role));
     }
 

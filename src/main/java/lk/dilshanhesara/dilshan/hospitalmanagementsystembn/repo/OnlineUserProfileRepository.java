@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OnlineUserProfileRepository extends JpaRepository<OnlineUserProfile, Integer> {
-    // Spring Data JPA will automatically handle methods like findById()
 }

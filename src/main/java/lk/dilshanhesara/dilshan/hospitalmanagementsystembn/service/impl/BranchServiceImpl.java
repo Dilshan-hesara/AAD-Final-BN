@@ -65,18 +65,14 @@ public class BranchServiceImpl implements BranchService {
     }
 
 
-    // ... other autowired repositories
     @Autowired
     private ModelMapper modelMapper;
 
 
-    // --- ADD THIS NEW METHOD IMPLEMENTATION ---
     @Override
     public List<BranchDto> getAllBranches() {
-        // Fetch all branch entities from the database
         List<Branch> branches = branchRepository.findAll();
 
-        // Convert the list of entities to a list of DTOs
         return branches.stream()
                 .map(branch -> modelMapper.map(branch, BranchDto.class))
                 .collect(Collectors.toList());
@@ -162,7 +158,6 @@ public class BranchServiceImpl implements BranchService {
         return branchRepository.findAll().stream().map(branch -> {
             BranchSummaryDto dto = modelMapper.map(branch, BranchSummaryDto.class);
 
-            // Fetch all required counts
             dto.setTotalPatientCount(patientRepository.countTotalPatientsByBranch(branch.getId()));
             dto.setActiveDoctorCount(doctorRepository.countByBranch_IdAndStatus(branch.getId(), "ACTIVE"));
             dto.setTotalAppointmentCount(appointmentRepository.countByBranch_Id(branch.getId()));

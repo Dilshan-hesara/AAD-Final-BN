@@ -9,6 +9,6 @@ public class DoctorDto {
     private String email;
     private String contactNumber;
     private String specialization;
-    private Long branchId; // Used when creating/updating
+    private Long branchId;
     private String status;
 }

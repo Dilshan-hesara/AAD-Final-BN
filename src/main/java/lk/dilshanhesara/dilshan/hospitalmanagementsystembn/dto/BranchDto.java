@@ -11,5 +11,4 @@ public class BranchDto {
     private String contactNumber;
     private String email;
     private String status;
-// Added email field
 }

@@ -42,14 +42,11 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
 
-    // In your DoctorServiceImpl.java file
 
     @Override
     public List<DoctorDto> findActiveDoctorsByBranch(Long branchId) {
-        // Use the repository method to find only the "ACTIVE" doctors
         List<Doctor> activeDoctors = doctorRepository.findByBranch_IdAndStatus(branchId, "ACTIVE");
 
-        // CORRECTED: The variable name is now 'activeDoctors'
         return modelMapper.map(activeDoctors, new TypeToken<List<DoctorDto>>() {}.getType());
     }
 
@@ -61,7 +58,6 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.updateDoctorStatusToInactive(id);
     }
 
-    // --- ADD THIS NEW METHOD ---
     @Override
     public void activateDoctor(int id) {
         if (!doctorRepository.existsById(id)) { throw new RuntimeException("Doctor not found"); }
@@ -71,7 +67,6 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<DoctorDto> findInactiveDoctorsByBranch(Long branchId) {
-        // Use the existing repository method to find "INACTIVE" doctors
         List<Doctor> inactiveDoctors = doctorRepository.findByBranch_IdAndStatus(branchId, "INACTIVE");
         return modelMapper.map(inactiveDoctors, new TypeToken<List<DoctorDto>>() {}.getType());
     }
@@ -82,7 +77,6 @@ public class DoctorServiceImpl implements DoctorService {
 
 
     public Page<DoctorDto> searchDoctors(Long branchId, String name, String specialization, Pageable pageable) {
-        // Build a dynamic query using Specifications
         Specification<Doctor> spec = Specification.where((root, query, cb) -> cb.equal(root.get("branch").get("id"), branchId));
 
         if (name != null && !name.isEmpty()) {

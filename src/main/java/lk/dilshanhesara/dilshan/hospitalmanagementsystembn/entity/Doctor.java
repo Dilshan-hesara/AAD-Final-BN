@@ -18,8 +18,6 @@ public class Doctor {
     private String email;
     private String contactNumber;
     private String specialization;
-
-    // --- ADD THIS LINE ---
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -20,7 +20,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long>, JpaSpec
     Page<Patient> findPatientsByBranch(Long branchId, Pageable pageable);
 
 
-    // --- ADD THIS NEW METHOD ---
     // Finds patients where the full name contains the search term (case-insensitive)
     Page<Patient> findByFullNameContainingIgnoreCase(String name, Pageable pageable);
 

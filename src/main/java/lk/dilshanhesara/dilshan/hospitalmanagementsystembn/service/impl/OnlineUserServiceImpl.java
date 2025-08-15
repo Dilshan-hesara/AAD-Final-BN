@@ -18,15 +18,12 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 
     @Override
     public UserProfileDto findProfileByUsername(String username) {
-        // Find the main user account by username
         UserAccount account = userAccountRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User account not found for username: " + username));
 
-        // Find the linked online user profile using the user_id
         OnlineUserProfile profile = onlineUserProfileRepository.findById(account.getUserId())
                 .orElseThrow(() -> new RuntimeException("Online user profile not found for user ID: " + account.getUserId()));
 
-        // Create a DTO to send the combined data to the frontend
         UserProfileDto dto = new UserProfileDto();
         dto.setUserId(account.getUserId());
         dto.setUsername(account.getUsername());

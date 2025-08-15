@@ -9,7 +9,6 @@ public interface StaffProfileService {
 
 
 
-    // --- ADD THIS NEW METHOD ---
     StaffProfileDto getCurrentLoggedInStaffProfile();
 
 

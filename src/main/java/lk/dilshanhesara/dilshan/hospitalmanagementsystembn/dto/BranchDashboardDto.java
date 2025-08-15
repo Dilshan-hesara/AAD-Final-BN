@@ -11,7 +11,7 @@ public class BranchDashboardDto {
     private Long patientCount;
     private Long doctorCount;
     private Long appointmentsToday;
-    private Long receptionistCount; //
+    private Long receptionistCount;
     private Long confirmedCount;
     private Long completedCount;
     private Long cancelledCount;

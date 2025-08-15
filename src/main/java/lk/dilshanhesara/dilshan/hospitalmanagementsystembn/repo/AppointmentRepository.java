@@ -22,19 +22,11 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
 
 
 
-
-    /**
-     * Finds all appointments for a specific branch.
-     * @param branchId The ID of the branch.
-     * @return A list of appointments.
-     */
     List<Appointment> findByBranch_Id(Long branchId);
 
-    // --- ADD THIS NEW METHOD ---
     // This JPQL query finds appointments by joining through Patient and UserAccount tables
 
 
-    // --- ADD THIS NEW METHOD ---
     @Query("SELECT a FROM Appointment a WHERE a.patient.linkedOnlineUser.username = :username")
     List<Appointment> findAppointmentsByOnlineUsername(String username);
 
@@ -44,13 +36,11 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
     @Query("SELECT a FROM Appointment a WHERE a.branch.id = :branchId AND a.patient.linkedOnlineUser IS NOT NULL AND a.appointmentDate BETWEEN :startOfDay AND :endOfDay ORDER BY a.appointmentDate ASC")
     List<Appointment> findOnlineUserAppointmentsForToday(Long branchId, LocalDateTime startOfDay, LocalDateTime endOfDay);
 
-    // --- ADD THIS NEW METHOD ---
     // Counts appointments by branch, status, and within a date range
     long countByBranch_IdAndStatusAndAppointmentDateBetween(Long branchId, String status, LocalDateTime start, LocalDateTime end);
 
 
 
-    // In AppointmentRepository.java
 // Finds all appointments with a specific status for a branch within a date range
     List<Appointment> findByBranch_IdAndStatusAndAppointmentDateBetween(Long branchId, String status, LocalDateTime start, LocalDateTime end);
 

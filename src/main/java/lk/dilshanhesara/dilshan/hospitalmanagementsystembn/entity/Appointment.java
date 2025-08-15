@@ -33,8 +33,7 @@ public class Appointment {
     @Column(nullable = false)
     private String status;
 
-    // --- ADD THIS FIELD ---
-    @Lob // For longer text
+    @Lob
     private String reason;
 
     @Column(precision = 10, scale = 2)

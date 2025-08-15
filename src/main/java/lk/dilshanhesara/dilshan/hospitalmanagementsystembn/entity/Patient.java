@@ -31,5 +31,5 @@ public class Patient {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "linked_online_user_id", referencedColumnName = "user_id")
-    private UserAccount linkedOnlineUser; // Optional link to an online account
+    private UserAccount linkedOnlineUser;
 }

@@ -90,7 +90,6 @@ public class AppointmentApiController {
 
 
 
-    // This is the single, correct GET method that handles searching and pagination
     @GetMapping
     public ResponseEntity<Page<AppointmentResponseDto>> searchAppointments(
             @RequestParam(required = false) String patientName,
@@ -104,7 +103,6 @@ public class AppointmentApiController {
         return ResponseEntity.ok(results);
     }
 
-    // Endpoint for online user's appointments
     @GetMapping("/online-bookings/today")
     public ResponseEntity<List<AppointmentResponseDto>> getTodaysOnlineBookings() {
         StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
@@ -112,7 +110,6 @@ public class AppointmentApiController {
         return ResponseEntity.ok(appointments);
     }
 
-    // POST method for creating appointments
     @PostMapping
     public ResponseEntity<Void> createAppointment(@RequestBody AppointmentRequestDto dto) {
         StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
@@ -120,7 +117,6 @@ public class AppointmentApiController {
         return ResponseEntity.ok().build();
     }
 
-    // PATCH method for updating the status
     @PatchMapping("/{id}/status")
     public ResponseEntity<Void> updateStatus(
             @PathVariable Long id,
@@ -135,12 +131,10 @@ public class AppointmentApiController {
 
     @PostMapping("/by-staff")
     public ResponseEntity<AppointmentResponseDto> createAppointmentByStaff(@RequestBody AppointmentRequestDto dto) {
-        // Get the branch ID from the logged-in staff member
         StaffProfileDto staffProfile = staffProfileService.getCurrentLoggedInStaffProfile();
 
         Appointment newAppointment = appointmentService.createAppointmentByStaff(dto, staffProfile.getBranchId());
 
-        // Return a DTO of the newly created appointment
         AppointmentResponseDto responseDto = modelMapper.map(newAppointment, AppointmentResponseDto.class);
         return ResponseEntity.ok(responseDto);
 

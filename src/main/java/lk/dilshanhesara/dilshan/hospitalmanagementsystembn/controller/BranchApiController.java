@@ -72,11 +72,9 @@ public class BranchApiController {
     }
     @GetMapping
     public ResponseEntity<List<BranchDto>> getAllBranches() {
-        // You'll need a method in your BranchService to get all branches as DTOs
         return ResponseEntity.ok(branchService.getAllBranches());
     }
 
 
-    // In BranchApiController.java
 
 }

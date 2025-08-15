@@ -86,10 +86,8 @@ public class StaffProfileServiceImpl implements StaffProfileService {
 
     @Override
     public StaffProfileDto getCurrentLoggedInStaffProfile() {
-        // Get the username of the currently logged-in user from Spring Security
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // Use the existing method to find and return the profile
         return findStaffByUsername(username);
     }
 
@@ -119,12 +117,10 @@ public class StaffProfileServiceImpl implements StaffProfileService {
     public void changePassword(String username, PasswordChangeDto passwordDto) {
         UserAccount account = userAccountRepository.findByUsername(username).orElseThrow();
 
-        // Check if the current password is correct
         if (!passwordEncoder.matches(passwordDto.getCurrentPassword(), account.getPassword())) {
             throw new RuntimeException("Incorrect current password");
         }
 
-        // Encode and set the new password
         account.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
         userAccountRepository.save(account);
     }

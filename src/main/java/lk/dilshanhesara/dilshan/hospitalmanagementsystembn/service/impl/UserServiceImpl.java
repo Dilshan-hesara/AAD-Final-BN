@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Username already exists");
         }
 
-        // 1. Create and save the UserAccount
+        // save user acc
         UserAccount account = new UserAccount();
         account.setUsername(dto.getUsername());
         account.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         account.setActive(true); // Or false until OTP verification
         account = userAccountRepository.save(account);
 
-        // 2. Create and save the OnlineUserProfile, linking the account
+        // onlinn user linking profile
         OnlineUserProfile profile = new OnlineUserProfile();
         profile.setUserAccount(account);
         profile.setFullName(dto.getFullName());
