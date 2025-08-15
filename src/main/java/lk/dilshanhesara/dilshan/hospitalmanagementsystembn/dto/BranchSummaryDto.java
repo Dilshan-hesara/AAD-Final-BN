@@ -4,6 +4,10 @@ import lombok.Data;
 
 @Data
 public class BranchSummaryDto extends BranchDto {
-    private long patientCount;
-    private long doctorCount;
+    private long totalPatientCount;
+    private long activeDoctorCount;
+    private long totalAppointmentCount;
+    private long todaysAppointmentCount;
+    private long activeReceptionistCount;
+
 }
