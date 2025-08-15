@@ -25,4 +25,9 @@ public interface BranchService {
     public void updateBranch(Long branchId, BranchDto branchDto) ;
     public void deleteBranch(Long branchId) ;
     public void updateBranchStatus(Long branchId, String status);
-    }
+
+
+
+    public List<BranchDto> getActiveBranches() ;
+    public List<BranchDto> getInactiveBranches() ;
+}
