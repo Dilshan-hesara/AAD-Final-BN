@@ -23,11 +23,11 @@ public class SuperBranch {
     private final BranchService branchService;
     private final DashboardService dashboardService;
 
-    @GetMapping("/summary")
-    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<List<BranchSummaryDto>> getBranchSummaries() {
-        return ResponseEntity.ok(branchService.getAllBranchSummaries());
-    }
+//    @GetMapping("/summary")
+//    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+//    public ResponseEntity<List<BranchSummaryDto>> getBranchSummaries() {
+//        return ResponseEntity.ok(branchService.getAllBranchSummaries());
+//    }
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
@@ -61,5 +61,30 @@ public class SuperBranch {
     public ResponseEntity<Void> updateBranchStatus(@PathVariable Long id, @RequestBody Map<String, String> payload) {
         branchService.updateBranchStatus(id, payload.get("status"));
         return ResponseEntity.ok().build();
+    }
+
+    // In BranchApiController.java
+    @GetMapping("/summary")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<List<BranchSummaryDto>> getBranchSummaries() {
+        return ResponseEntity.ok(branchService.getAllBranchSummaries());
+    }
+
+
+
+    //acti brna and in actve brnach
+
+
+    // --- ADD THESE TWO NEW ENDPOINTS ---
+    @GetMapping("/active")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<List<BranchDto>> getActiveBranches() {
+        return ResponseEntity.ok(branchService.getActiveBranches());
+    }
+
+    @GetMapping("/inactive")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<List<BranchDto>> getInactiveBranches() {
+        return ResponseEntity.ok(branchService.getInactiveBranches());
     }
 }
