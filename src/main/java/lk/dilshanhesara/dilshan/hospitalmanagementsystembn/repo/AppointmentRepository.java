@@ -62,4 +62,13 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
     // Add this method to count today's appointments for a branch
 
 
+
+
+    // Add these methods to your AppointmentRepository interface
+    long countByAppointmentDateBetween(LocalDateTime start, LocalDateTime end);
+
+    @Query("SELECT count(a) FROM Appointment a WHERE a.patient.linkedOnlineUser IS NOT NULL AND a.appointmentDate BETWEEN :start AND :end")
+    long countOnlineAppointmentsBetween(LocalDateTime start, LocalDateTime end);
+
+    long countByStatusAndAppointmentDateBetween(String status, LocalDateTime start, LocalDateTime end);
 }
