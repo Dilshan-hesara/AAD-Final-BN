@@ -35,6 +35,9 @@ public class BranchServiceImpl implements BranchService {
     @Autowired
     private  DoctorRepository doctorRepository;
 
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
     @Override
     public Branch getBranchById(Long branchId) {
         return branchRepository.findById(branchId)
@@ -109,16 +112,16 @@ public class BranchServiceImpl implements BranchService {
 //        }).collect(Collectors.toList());
 //    }
 
-    @Override
-    public List<BranchSummaryDto> getAllBranchSummaries() {
-        return branchRepository.findAll().stream().map(branch -> {
-            BranchSummaryDto dto = modelMapper.map(branch, BranchSummaryDto.class);
-            // Logic to calculate patient and doctor counts for the branch
-            dto.setPatientCount(patientRepository.countByBranchId(branch.getId()));
-            dto.setDoctorCount(doctorRepository.countByBranch_Id(branch.getId()));
-            return dto;
-        }).collect(Collectors.toList());
-    }
+//    @Override
+//    public List<BranchSummaryDto> getAllBranchSummaries() {
+//        return branchRepository.findAll().stream().map(branch -> {
+//            BranchSummaryDto dto = modelMapper.map(branch, BranchSummaryDto.class);
+//            // Logic to calculate patient and doctor counts for the branch
+//            dto.(patientRepository.countByBranchId(branch.getId()));
+//            dto.setDoctorCount(doctorRepository.countByBranch_Id(branch.getId()));
+//            return dto;
+//        }).collect(Collectors.toList());
+//    }
     @Override
     public Branch addBranch(BranchDto branchDto) {
         Branch branch = modelMapper.map(branchDto, Branch.class);
@@ -146,5 +149,44 @@ public class BranchServiceImpl implements BranchService {
         Branch branch = branchRepository.findById(branchId).orElseThrow();
         branch.setStatus(status);
         branchRepository.save(branch);
+    }
+
+
+
+
+    @Override
+    public List<BranchSummaryDto> getAllBranchSummaries() {
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+
+        return branchRepository.findAll().stream().map(branch -> {
+            BranchSummaryDto dto = modelMapper.map(branch, BranchSummaryDto.class);
+
+            // Fetch all required counts
+            dto.setTotalPatientCount(patientRepository.countTotalPatientsByBranch(branch.getId()));
+            dto.setActiveDoctorCount(doctorRepository.countByBranch_IdAndStatus(branch.getId(), "ACTIVE"));
+            dto.setTotalAppointmentCount(appointmentRepository.countByBranch_Id(branch.getId()));
+            dto.setTodaysAppointmentCount(appointmentRepository.countByBranch_IdAndAppointmentDateBetween(branch.getId(), startOfDay, endOfDay));
+            dto.setActiveReceptionistCount(userAccountRepository.countActiveReceptionistsByBranch(branch.getId()));
+
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+
+    // act and incavte brnach
+
+    @Override
+    public List<BranchDto> getActiveBranches() {
+        return branchRepository.findByStatus("ACTIVE").stream()
+                .map(branch -> modelMapper.map(branch, BranchDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BranchDto> getInactiveBranches() {
+        return branchRepository.findByStatus("INACTIVE").stream()
+                .map(branch -> modelMapper.map(branch, BranchDto.class))
+                .collect(Collectors.toList());
     }
 }
