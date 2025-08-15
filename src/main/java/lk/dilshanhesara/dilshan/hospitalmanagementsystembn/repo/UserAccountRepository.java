@@ -44,4 +44,9 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     @Query("SELECT count(ua) FROM UserAccount ua JOIN ua.staffProfile sp WHERE ua.role = 'RECEPTIONIST' AND sp.branch.id = :branchId AND ua.isActive = true")
     long countReceptionistsByBranch(Long branchId);
 
+    // --- ADD THIS NEW METHOD ---
+    @Query("SELECT count(ua) FROM UserAccount ua JOIN StaffProfile sp ON ua.userId = sp.userId WHERE ua.role = 'RECEPTIONIST' AND sp.branch.id = :branchId AND ua.isActive = true")
+    long countActiveReceptionistsByBranch(Long branchId);
+
+
 }
