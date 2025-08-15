@@ -67,5 +67,9 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
 
 
 
+    // Add this method to count all appointments ever for a branch
+    long countByBranch_Id(Long branchId);
+    // Add this method to count today's appointments for a branch
+
 
 }
