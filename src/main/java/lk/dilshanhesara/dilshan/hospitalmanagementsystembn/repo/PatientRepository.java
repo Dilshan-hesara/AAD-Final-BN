@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,5 +31,9 @@ public interface PatientRepository extends JpaRepository<Patient, Long>, JpaSpec
     // Add this method to count all patients linked to a branch via appointments
     @Query("SELECT COUNT(DISTINCT a.patient.id) FROM Appointment a WHERE a.branch.id = :branchId")
     long countTotalPatientsByBranch(Long branchId);
+
+
+    @Query("SELECT COUNT(p) FROM Patient p JOIN Appointment a ON p.id = a.patient.id WHERE a.branch.id = :branchId AND p.createdAt BETWEEN :startDate AND :endDate")
+    long countNewPatientsByBranchAndDateRange(Long branchId, LocalDateTime startDate, LocalDateTime endDate);
 
 }
