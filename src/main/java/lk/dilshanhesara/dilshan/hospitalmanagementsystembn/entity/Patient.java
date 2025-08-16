@@ -4,6 +4,7 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -32,4 +33,8 @@ public class Patient {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "linked_online_user_id", referencedColumnName = "user_id")
     private UserAccount linkedOnlineUser;
+
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now(); // Aut
 }
