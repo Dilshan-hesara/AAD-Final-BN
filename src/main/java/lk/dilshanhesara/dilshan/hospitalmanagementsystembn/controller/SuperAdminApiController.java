@@ -9,10 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/super-admin")
@@ -37,4 +34,11 @@ public class SuperAdminApiController {
         return ResponseEntity.ok(patients);
     }
 
+
+
+    @GetMapping("/patients/{id}")
+    public ResponseEntity<PatientDto> getPatientById(@PathVariable Long id) {
+        PatientDto patient = patientService.findPatientById(id);
+        return ResponseEntity.ok(patient);
+    }
 }
