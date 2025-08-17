@@ -62,4 +62,15 @@ public class PatientApiController {
         return ResponseEntity.ok().build();
     }
 
+//
+//    @GetMapping("/all-patients")
+//    public ResponseEntity<Page<PatientDto>> getAllPatients(
+//            @RequestParam(required = false) String keyword,
+//            @RequestParam(required = false) Long branchId,
+//            Pageable pageable) {
+//        Page<PatientDto> patients = patientService.searchAllPatients(keyword, branchId, pageable);
+//        return ResponseEntity.ok(patients);
+//    }
+
+
 }
