@@ -2,6 +2,7 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 
 
+import jakarta.persistence.criteria.JoinType;
 import jakarta.transaction.Transactional;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.PatientDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.OnlineUserProfile;
@@ -109,5 +110,35 @@ public class PatientServiceImpl implements PatientService {
         patient.setAddress(patientDto.getAddress());
 
         patientRepository.save(patient);
+    }
+
+
+
+
+    // --- ADD THIS NEW METHOD ---
+    public Page<PatientDto> searchAllPatients(String keyword, Long branchId, Pageable pageable) {
+        // Specification to build a dynamic query
+        Specification<Patient> spec = Specification.where(null);
+
+        if (keyword != null && !keyword.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.or(
+                            cb.like(root.get("fullName"), "%" + keyword + "%"),
+                            cb.like(root.get("contactNumber"), "%" + keyword + "%")
+                    )
+            );
+        }
+
+        if (branchId != null) {
+            // This requires a join through the Appointment table
+            spec = spec.and((root, query, cb) -> {
+                query.distinct(true);
+                var appointmentJoin = root.join("appointments", JoinType.LEFT);
+                return cb.equal(appointmentJoin.get("branch").get("id"), branchId);
+            });
+        }
+
+        Page<Patient> patients = patientRepository.findAll(spec, pageable);
+        return patients.map(patient -> modelMapper.map(patient, PatientDto.class));
     }
 }
