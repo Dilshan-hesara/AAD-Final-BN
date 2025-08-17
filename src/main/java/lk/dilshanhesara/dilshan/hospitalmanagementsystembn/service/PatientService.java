@@ -22,5 +22,9 @@ public interface PatientService {
 
     public Page<PatientDto> searchPatientsPage(String keyword, Pageable pageable) ;
     public void updatePatientPage(Long patientId, PatientDto patientDto) ;
+
+
+
+    public Page<PatientDto> searchAllPatients(String keyword, Long branchId, Pageable pageable) ;
     }
 
