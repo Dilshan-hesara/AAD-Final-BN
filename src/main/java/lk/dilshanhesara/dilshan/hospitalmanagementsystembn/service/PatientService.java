@@ -27,7 +27,7 @@ public interface PatientService {
 
     public Page<PatientDto> searchAllPatients(String keyword, Long branchId, Pageable pageable) ;
 
-
+    public PatientDto findPatientById(Long patientId) ;
 
     }
 
