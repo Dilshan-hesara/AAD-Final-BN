@@ -155,4 +155,24 @@ public class PatientServiceImpl implements PatientService {
         });
     }
 
+
+
+
+    @Override
+    public PatientDto findPatientById(Long patientId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient not found with id: " + patientId));
+
+        PatientDto dto = modelMapper.map(patient, PatientDto.class);
+
+        // Add the branch name from the most recent appointment
+        appointmentRepository.findTopByPatientIdOrderByAppointmentDateDesc(patient.getId())
+                .ifPresent(latestAppointment -> {
+                    if (latestAppointment.getBranch() != null) {
+                        dto.setBranchName(latestAppointment.getBranch().getName());
+                    }
+                });
+
+        return dto;
+    }
 }
