@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AppointmentRepository  extends JpaRepository<Appointment, Long>, JpaSpecificationExecutor<Appointment> {
@@ -111,5 +112,8 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
             "GROUP BY DATE_FORMAT(a.appointment_date, '%Y-%m-%d')",
             nativeQuery = true)
     List<Object[]> findDailyAppointmentStats(Long branchId, LocalDateTime startDate, LocalDateTime endDate);
+
+
+    Optional<Appointment> findTopByPatientIdOrderByAppointmentDateDesc(Long patientId);
 
 }
