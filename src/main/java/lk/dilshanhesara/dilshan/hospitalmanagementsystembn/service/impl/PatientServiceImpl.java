@@ -2,9 +2,11 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 
 
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.transaction.Transactional;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.PatientDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.OnlineUserProfile;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Patient;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.OnlineUserProfileRepository;
@@ -114,11 +116,14 @@ public class PatientServiceImpl implements PatientService {
 
 
 
-
-    // --- ADD THIS NEW METHOD ---
+    @Override
     public Page<PatientDto> searchAllPatients(String keyword, Long branchId, Pageable pageable) {
-        // Specification to build a dynamic query
-        Specification<Patient> spec = Specification.where(null);
+        // Create a specification to build the dynamic query
+        Specification<Patient> spec = (root, query, cb) -> {
+            // This ensures we don't get duplicate patients
+            query.distinct(true);
+            return null;
+        };
 
         if (keyword != null && !keyword.isEmpty()) {
             spec = spec.and((root, query, cb) ->
@@ -129,11 +134,12 @@ public class PatientServiceImpl implements PatientService {
             );
         }
 
+        // --- CRITICAL FIX: Add the logic to filter by branchId ---
         if (branchId != null) {
-            // This requires a join through the Appointment table
             spec = spec.and((root, query, cb) -> {
-                query.distinct(true);
-                var appointmentJoin = root.join("appointments", JoinType.LEFT);
+                // We join the Patient entity with the Appointment entity
+                Join<Patient, Appointment> appointmentJoin = root.join("appointments", JoinType.INNER);
+                // Then we filter where the branch ID in the appointment matches
                 return cb.equal(appointmentJoin.get("branch").get("id"), branchId);
             });
         }
