@@ -14,4 +14,6 @@ public class PatientDto {
     private String gender;
     private Integer linkedOnlineUserId;
     private String address;
+    private String branchName;
+
 }
