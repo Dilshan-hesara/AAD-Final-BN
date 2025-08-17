@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -37,4 +38,9 @@ public class Patient {
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now(); // Aut
+
+
+    // This links a patient to all of their appointments
+    @OneToMany(mappedBy = "patient")
+    private List<Appointment> appointments;
 }
