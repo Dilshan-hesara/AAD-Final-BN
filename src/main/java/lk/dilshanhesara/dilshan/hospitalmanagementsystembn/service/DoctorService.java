@@ -33,4 +33,7 @@ public interface DoctorService {
     public Page<DoctorDto> searchActiveDoctorsByNameAndBranch(String name, Long branchId, Pageable pageable) ;
 
     public Page<DoctorDto> searchAllDoctors(String keyword, Long branchId, Pageable pageable) ;
+
+    public DoctorDto findDoctorById(Integer id) ;
+
     }
