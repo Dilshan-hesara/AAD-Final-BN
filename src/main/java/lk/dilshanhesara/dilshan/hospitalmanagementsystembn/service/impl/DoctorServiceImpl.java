@@ -141,4 +141,18 @@ public class DoctorServiceImpl implements DoctorService {
             return dto;
         });
     }
+
+
+
+    @Override
+    public DoctorDto findDoctorById(Integer id) {
+        Doctor doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Doctor not found with id: " + id));
+
+        DoctorDto dto = modelMapper.map(doctor, DoctorDto.class);
+        if (doctor.getBranch() != null) {
+            dto.setBranchName(doctor.getBranch().getName());
+        }
+        return dto;
+    }
 }
