@@ -261,22 +261,32 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
-
+    @Override
     public Page<AppointmentResponseDto> searchAllAppointments(String patientKeyword, String doctorKeyword, Long branchId, String status, LocalDate date, Pageable pageable) {
 
-        Specification<Appointment> spec = Specification.where(null);
+        Specification<Appointment> spec = (root, query, cb) -> {
+            query.distinct(true);
+            return cb.conjunction();
+        };
 
         if (patientKeyword != null && !patientKeyword.isEmpty()) {
             spec = spec.and((root, query, cb) -> {
                 Join<Appointment, Patient> patientJoin = root.join("patient");
-                return cb.like(patientJoin.get("fullName"), "%" + patientKeyword + "%");
+                return cb.or(
+                        cb.like(patientJoin.get("fullName"), "%" + patientKeyword + "%"),
+                        cb.like(patientJoin.get("contactNumber"), "%" + patientKeyword + "%")
+                );
             });
         }
 
         if (doctorKeyword != null && !doctorKeyword.isEmpty()) {
             spec = spec.and((root, query, cb) -> {
                 Join<Appointment, Doctor> doctorJoin = root.join("doctor");
-                return cb.like(doctorJoin.get("fullName"), "%" + doctorKeyword + "%");
+                return cb.or(
+                        cb.like(doctorJoin.get("fullName"), "%" + doctorKeyword + "%"),
+                        cb.like(doctorJoin.get("specialization"), "%" + doctorKeyword + "%"),
+                        cb.like(doctorJoin.get("contactNumber"), "%" + doctorKeyword + "%")
+                );
             });
         }
 
