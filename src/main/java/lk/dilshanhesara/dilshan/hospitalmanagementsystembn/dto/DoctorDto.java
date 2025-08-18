@@ -11,4 +11,5 @@ public class DoctorDto {
     private String specialization;
     private Long branchId;
     private String status;
+    private String branchName;
 }
