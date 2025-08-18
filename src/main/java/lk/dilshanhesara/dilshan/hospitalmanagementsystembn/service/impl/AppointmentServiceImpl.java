@@ -305,6 +305,24 @@ public class AppointmentServiceImpl implements AppointmentService {
         Page<Appointment> appointments = appointmentRepository.findAll(spec, pageable);
         return appointments.map(app -> modelMapper.map(app, AppointmentResponseDto.class));
     }
+
+
+
+
+    @Override
+    public AppointmentResponseDto findAppointmentByIdSperAD(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + appointmentId));
+
+        // Entity එක DTO එකක් බවට පත් කිරීම
+        AppointmentResponseDto dto = modelMapper.map(appointment, AppointmentResponseDto.class);
+        // අමතරව අවශ්‍ය දත්ත DTO එකට එක් කිරීම
+        dto.setPatientName(appointment.getPatient().getFullName());
+        dto.setDoctorName(appointment.getDoctor().getFullName());
+        dto.setBranchName(appointment.getBranch().getName());
+
+        return dto;
+    }
 }
 
 
