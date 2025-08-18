@@ -1,5 +1,6 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
+import jakarta.persistence.criteria.Join;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentResponseDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
@@ -256,6 +257,43 @@ public class AppointmentServiceImpl implements AppointmentService {
         return branchRepository.findAll().stream()
                 .map(branch -> modelMapper.map(branch, BranchDto.class))
                 .collect(Collectors.toList());
+    }
+
+
+
+
+    public Page<AppointmentResponseDto> searchAllAppointments(String patientKeyword, String doctorKeyword, Long branchId, String status, LocalDate date, Pageable pageable) {
+
+        Specification<Appointment> spec = Specification.where(null);
+
+        if (patientKeyword != null && !patientKeyword.isEmpty()) {
+            spec = spec.and((root, query, cb) -> {
+                Join<Appointment, Patient> patientJoin = root.join("patient");
+                return cb.like(patientJoin.get("fullName"), "%" + patientKeyword + "%");
+            });
+        }
+
+        if (doctorKeyword != null && !doctorKeyword.isEmpty()) {
+            spec = spec.and((root, query, cb) -> {
+                Join<Appointment, Doctor> doctorJoin = root.join("doctor");
+                return cb.like(doctorJoin.get("fullName"), "%" + doctorKeyword + "%");
+            });
+        }
+
+        if (branchId != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("branch").get("id"), branchId));
+        }
+
+        if (status != null && !status.isEmpty()) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
+        }
+
+        if (date != null) {
+            spec = spec.and((root, query, cb) -> cb.between(root.get("appointmentDate"), date.atStartOfDay(), date.atTime(LocalTime.MAX)));
+        }
+
+        Page<Appointment> appointments = appointmentRepository.findAll(spec, pageable);
+        return appointments.map(app -> modelMapper.map(app, AppointmentResponseDto.class));
     }
 }
 
