@@ -109,4 +109,36 @@ public class DoctorServiceImpl implements DoctorService {
         Page<Doctor> doctors = doctorRepository.findByBranch_IdAndStatusAndFullNameContainingIgnoreCase(branchId, "ACTIVE", name, pageable);
         return doctors.map(doctor -> modelMapper.map(doctor, DoctorDto.class));
     }
+
+
+
+
+
+    public Page<DoctorDto> searchAllDoctors(String keyword, Long branchId, Pageable pageable) {
+        // Specification to build a dynamic query
+        Specification<Doctor> spec = Specification.where(null);
+
+        if (keyword != null && !keyword.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.or(
+                            cb.like(root.get("fullName"), "%" + keyword + "%"),
+                            cb.like(root.get("specialization"), "%" + keyword + "%"),
+                            cb.like(root.get("contactNumber"), "%" + keyword + "%")
+                    )
+            );
+        }
+
+        if (branchId != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("branch").get("id"), branchId));
+        }
+
+        Page<Doctor> doctors = doctorRepository.findAll(spec, pageable);
+        return doctors.map(doctor -> {
+            DoctorDto dto = modelMapper.map(doctor, DoctorDto.class);
+            if (doctor.getBranch() != null) {
+                dto.setBranchName(doctor.getBranch().getName());
+            }
+            return dto;
+        });
+    }
 }
