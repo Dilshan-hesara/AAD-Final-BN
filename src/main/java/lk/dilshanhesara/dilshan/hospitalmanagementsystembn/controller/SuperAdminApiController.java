@@ -85,4 +85,11 @@ public class SuperAdminApiController {
         );
         return ResponseEntity.ok(appointments);
     }
+
+
+    @GetMapping("/all-appointments/{id}")
+    public ResponseEntity<AppointmentResponseDto> getAppointmentById(@PathVariable Long id) {
+        AppointmentResponseDto appointment = appointmentService.findAppointmentById(id);
+        return ResponseEntity.ok(appointment);
+    }
 }
