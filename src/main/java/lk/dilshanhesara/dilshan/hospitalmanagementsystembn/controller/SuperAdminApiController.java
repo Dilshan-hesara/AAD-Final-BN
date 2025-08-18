@@ -56,10 +56,10 @@ public class SuperAdminApiController {
         return ResponseEntity.ok(doctors);
     }
 
-//    @GetMapping("/doctors/{id}")
-//    public ResponseEntity<DoctorDto> getDoctorById(@PathVariable Integer id) {
-//        // You will need to create a findDoctorById service method
-////        DoctorDto doctor = doctorService.findDoctorById(id);
-//        return ResponseEntity.ok(doctor);
-//    }
+    @GetMapping("/doctors/{id}")
+    public ResponseEntity<DoctorDto> getDoctorById(@PathVariable Integer id) {
+        // You will need to create a findDoctorById service method
+        DoctorDto doctor = doctorService.findDoctorById(id);
+        return ResponseEntity.ok(doctor);
+    }
 }
