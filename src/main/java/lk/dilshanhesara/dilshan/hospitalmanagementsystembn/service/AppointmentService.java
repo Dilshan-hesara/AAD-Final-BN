@@ -44,4 +44,7 @@ public interface AppointmentService {
 
 
     public List<BranchDto> getAllBranches() ;
+
+
+    public Page<AppointmentResponseDto> searchAllAppointments(String patientKeyword, String doctorKeyword, Long branchId, String status, LocalDate date, Pageable pageable) ;
     }
