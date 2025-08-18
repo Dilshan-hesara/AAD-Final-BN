@@ -47,4 +47,7 @@ public interface AppointmentService {
 
 
     public Page<AppointmentResponseDto> searchAllAppointments(String patientKeyword, String doctorKeyword, Long branchId, String status, LocalDate date, Pageable pageable) ;
+
+
+    public AppointmentResponseDto findAppointmentByIdSperAD(Long appointmentId) ;
     }
