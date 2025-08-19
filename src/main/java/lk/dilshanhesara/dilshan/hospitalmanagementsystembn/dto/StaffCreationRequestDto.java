@@ -12,4 +12,6 @@ public class StaffCreationRequestDto {
     private Long branchId;
     private String email;
     private String contactNumber;
+
+
 }
