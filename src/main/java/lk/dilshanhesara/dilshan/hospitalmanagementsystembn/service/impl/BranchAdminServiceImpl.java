@@ -11,7 +11,9 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepos
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.BranchAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +28,11 @@ public class BranchAdminServiceImpl implements BranchAdminService {
     private final PasswordEncoder passwordEncoder;
 
 
-    @Override
-    public Page<StaffProfileDto> getAllBranchAdmins(Pageable pageable) {
-        Page<UserAccount> accounts = userAccountRepository.findByRoleWithProfile(UserAccount.Role.BRANCH_ADMIN, pageable);
-        return accounts.map(this::convertToStaffProfileDto);
-    }
+//    @Override
+//    public Page<StaffProfileDto> getAllBranchAdmins(Pageable pageable) {
+//        Page<UserAccount> accounts = userAccountRepository.findByRoleWithProfile(UserAccount.Role.BRANCH_ADMIN, pageable);
+//        return accounts.map(this::convertToStaffProfileDto);
+//    }
     @Override
     @Transactional
     public void addBranchAdmin(StaffCreationRequestDto dto) {
@@ -72,5 +74,20 @@ public class BranchAdminServiceImpl implements BranchAdminService {
             dto.setBranchName(profile.getBranch().getName());
         }
         return dto;
+    }
+
+
+    @Override
+    public Page<StaffProfileDto> getAllBranchAdmins(Pageable pageable) {
+        // --- FIX: Correct the sort property ---
+        // We read the sort parameter and change 'fullName' to 'staffProfile.fullName'
+        Sort.Order order = pageable.getSort().getOrderFor("fullName");
+        if (order != null) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by(order.getDirection(), "staffProfile.fullName"));
+        }
+
+        Page<UserAccount> accounts = userAccountRepository.findByRoleWithProfile(UserAccount.Role.BRANCH_ADMIN, pageable);
+        return accounts.map(this::convertToStaffProfileDto);
     }
 }
