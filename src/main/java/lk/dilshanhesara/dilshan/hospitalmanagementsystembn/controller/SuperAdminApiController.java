@@ -104,10 +104,11 @@ public class SuperAdminApiController {
     }
 
     @PutMapping("/branch-admins/{id}")
-    public ResponseEntity<Void> updateBranchAdmin(@PathVariable Integer id, @RequestBody StaffProfileDto dto) {
+    public ResponseEntity<Void> updateBranchAdmin(@PathVariable Integer id, @RequestBody AdminUpdateRequestDto dto) {
         branchAdminService.updateBranchAdmin(id, dto);
         return ResponseEntity.ok().build();
     }
+
 
     @DeleteMapping("/branch-admins/{id}")
     public ResponseEntity<Void> deleteBranchAdmin(@PathVariable Integer id) {
