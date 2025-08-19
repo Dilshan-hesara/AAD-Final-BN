@@ -55,6 +55,14 @@ public class BranchAdminServiceImpl implements BranchAdminService {
         profile.setContactNumber(dto.getContactNumber());
         staffProfileRepository.save(profile);
     }
+
+    @Override
+    public Page<StaffProfileDto> getAllBranchAdmins(Pageable pageable) {
+        // Use the new repository method that supports sorting by name
+        Page<UserAccount> accounts = userAccountRepository.findBranchAdmins(pageable);
+        return accounts.map(this::convertToStaffProfileDto);
+    }
+
     @Override
     @Transactional
     public void updateBranchAdmin(Integer userId, AdminUpdateRequestDto dto) {
@@ -86,6 +94,13 @@ public class BranchAdminServiceImpl implements BranchAdminService {
     public void deleteBranchAdmin(Integer userId) {
         userAccountRepository.deleteById(userId);
     }
+    @Override
+    public void updateUserStatus(Integer userId, boolean isActive) {
+        UserAccount account = userAccountRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User account not found"));
+        account.setActive(isActive);
+        userAccountRepository.save(account);
+    }
 
     private StaffProfileDto convertToStaffProfileDto(UserAccount account) {
         StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
@@ -93,24 +108,10 @@ public class BranchAdminServiceImpl implements BranchAdminService {
         dto.setUserId(account.getUserId());
         dto.setUsername(account.getUsername());
         dto.setFullName(profile.getFullName());
+        dto.setActive(account.isActive());
         if (profile.getBranch() != null) {
             dto.setBranchName(profile.getBranch().getName());
         }
         return dto;
-    }
-
-
-    @Override
-    public Page<StaffProfileDto> getAllBranchAdmins(Pageable pageable) {
-        // --- FIX: Correct the sort property ---
-        // We read the sort parameter and change 'fullName' to 'staffProfile.fullName'
-        Sort.Order order = pageable.getSort().getOrderFor("fullName");
-        if (order != null) {
-            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                    Sort.by(order.getDirection(), "staffProfile.fullName"));
-        }
-
-        Page<UserAccount> accounts = userAccountRepository.findByRoleWithProfile(UserAccount.Role.BRANCH_ADMIN, pageable);
-        return accounts.map(this::convertToStaffProfileDto);
     }
 }
