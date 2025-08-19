@@ -1,5 +1,6 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AdminUpdateRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffCreationRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
@@ -45,19 +46,41 @@ public class BranchAdminServiceImpl implements BranchAdminService {
         account.setActive(true);
         account = userAccountRepository.save(account);
 
+
         StaffProfile profile = new StaffProfile();
         profile.setUserAccount(account);
         profile.setFullName(dto.getFullName());
         profile.setBranch(branch);
+        profile.setEmail(dto.getEmail());
+        profile.setContactNumber(dto.getContactNumber());
         staffProfileRepository.save(profile);
+    }
+    @Override
+    @Transactional
+    public void updateBranchAdmin(Integer userId, AdminUpdateRequestDto dto) {
+        UserAccount account = userAccountRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User account not found"));
+
+        StaffProfile profile = staffProfileRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Staff profile not found"));
+
+        // Update details in StaffProfile
+        profile.setFullName(dto.getFullName());
+        profile.setEmail(dto.getEmail());
+        profile.setContactNumber(dto.getContactNumber());
+
+        // Update details in UserAccount
+        account.setUsername(dto.getUsername());
+
+        // Only update the password if a new one is provided
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            account.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        staffProfileRepository.save(profile);
+        userAccountRepository.save(account);
     }
 
-    @Override
-    public void updateBranchAdmin(Integer userId, StaffProfileDto dto) {
-        StaffProfile profile = staffProfileRepository.findById(userId).orElseThrow(() -> new RuntimeException("Admin not found"));
-        profile.setFullName(dto.getFullName());
-        staffProfileRepository.save(profile);
-    }
 
     @Override
     public void deleteBranchAdmin(Integer userId) {
