@@ -116,4 +116,17 @@ public class SuperAdminApiController {
         return ResponseEntity.ok().build();
     }
 
+
+    // --- ADD THESE NEW ENDPOINTS ---
+    @PatchMapping("/branch-admins/{id}/activate")
+    public ResponseEntity<Void> activateBranchAdmin(@PathVariable Integer id) {
+        branchAdminService.updateUserStatus(id, true);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/branch-admins/{id}/deactivate")
+    public ResponseEntity<Void> deactivateBranchAdmin(@PathVariable Integer id) {
+        branchAdminService.updateUserStatus(id, false);
+        return ResponseEntity.ok().build();
+    }
 }
