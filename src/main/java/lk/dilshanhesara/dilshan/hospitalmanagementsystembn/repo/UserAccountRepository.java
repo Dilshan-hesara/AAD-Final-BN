@@ -1,6 +1,8 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -50,5 +52,10 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     long countByRoleAndIsActive(UserAccount.Role role, boolean isActive);
 
 
+    Page<UserAccount> findByRole(UserAccount.Role role, Pageable pageable);
 
+
+
+    @Query("SELECT ua FROM UserAccount ua JOIN ua.staffProfile sp WHERE ua.role = :role")
+    Page<UserAccount> findByRoleWithProfile(UserAccount.Role role, Pageable pageable);
 }
