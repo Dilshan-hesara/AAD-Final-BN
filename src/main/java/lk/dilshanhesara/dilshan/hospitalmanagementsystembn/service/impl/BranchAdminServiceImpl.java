@@ -25,12 +25,12 @@ public class BranchAdminServiceImpl implements BranchAdminService {
     private final BranchRepository branchRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     @Override
-        public Page<StaffProfileDto> getAllBranchAdmins(Pageable pageable) {
-        Page<UserAccount> accounts = userAccountRepository.findByRole(UserAccount.Role.BRANCH_ADMIN, pageable);
+    public Page<StaffProfileDto> getAllBranchAdmins(Pageable pageable) {
+        Page<UserAccount> accounts = userAccountRepository.findByRoleWithProfile(UserAccount.Role.BRANCH_ADMIN, pageable);
         return accounts.map(this::convertToStaffProfileDto);
     }
-
     @Override
     @Transactional
     public void addBranchAdmin(StaffCreationRequestDto dto) {
