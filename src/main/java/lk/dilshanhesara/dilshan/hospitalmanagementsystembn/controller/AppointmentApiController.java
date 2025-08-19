@@ -146,5 +146,6 @@ public class AppointmentApiController {
         AppointmentResponseDto appointment = appointmentService.findAppointmentById(id);
         return ResponseEntity.ok(appointment);
     }
+
 }
 
