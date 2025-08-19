@@ -1,13 +1,7 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentResponseDto;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.DoctorDto;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.PatientDto;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.SuperAdminDashboardDto;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.DoctorService;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.PatientService;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.SuperAdminDashboardService;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.*;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -92,4 +86,33 @@ public class SuperAdminApiController {
         AppointmentResponseDto appointment = appointmentService.findAppointmentById(id);
         return ResponseEntity.ok(appointment);
     }
+
+
+
+    private final BranchAdminService branchAdminService;
+    // ... your other services
+
+    @GetMapping("/branch-admins")
+    public ResponseEntity<Page<StaffProfileDto>> getAllBranchAdmins(Pageable pageable) {
+        return ResponseEntity.ok(branchAdminService.getAllBranchAdmins(pageable));
+    }
+
+    @PostMapping("/branch-admins")
+    public ResponseEntity<Void> addBranchAdmin(@RequestBody StaffCreationRequestDto dto) {
+        branchAdminService.addBranchAdmin(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/branch-admins/{id}")
+    public ResponseEntity<Void> updateBranchAdmin(@PathVariable Integer id, @RequestBody StaffProfileDto dto) {
+        branchAdminService.updateBranchAdmin(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/branch-admins/{id}")
+    public ResponseEntity<Void> deleteBranchAdmin(@PathVariable Integer id) {
+        branchAdminService.deleteBranchAdmin(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
