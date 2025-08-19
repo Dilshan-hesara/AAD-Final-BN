@@ -52,6 +52,6 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     long countByRoleAndIsActive(UserAccount.Role role, boolean isActive);
 
 
-    Page<UserAccount> findByRole(UserAccount.Role role, Pageable pageable);
-
+    @Query("SELECT ua FROM UserAccount ua JOIN ua.staffProfile sp WHERE ua.role = :role")
+    Page<UserAccount> findByRoleWithProfile(UserAccount.Role role, Pageable pageable);
 }
