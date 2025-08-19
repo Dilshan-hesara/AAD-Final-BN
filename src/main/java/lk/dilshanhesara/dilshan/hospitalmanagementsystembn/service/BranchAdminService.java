@@ -13,4 +13,6 @@ public interface BranchAdminService {
     void addBranchAdmin(StaffCreationRequestDto dto);
     public void updateBranchAdmin(Integer userId, AdminUpdateRequestDto dto) ;
     void deleteBranchAdmin(Integer userId);
-}
+
+    public void updateUserStatus(Integer userId, boolean isActive) ;
+    }
