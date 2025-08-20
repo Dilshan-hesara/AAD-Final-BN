@@ -157,5 +157,9 @@ public class SuperAdminApiController {
         return ResponseEntity.ok().build();
     }
 
-
+    @PatchMapping("/all-receptionists/{id}/deactivate")
+    public ResponseEntity<Void> deactivateReceptionist(@PathVariable Integer id) {
+        receptionistService.updateUserStatus(id, false);
+        return ResponseEntity.ok().build();
+    }
 }
