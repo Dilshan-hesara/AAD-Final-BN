@@ -26,5 +26,6 @@ public interface ReceptionistService {
 
     public Page<StaffProfileDto> searchAllReceptionists(String keyword, Long branchId, Pageable pageable) ;
 
+    StaffProfileDto findReceptionistById(Integer id);
 
     }
