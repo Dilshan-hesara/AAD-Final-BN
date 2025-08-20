@@ -267,4 +267,14 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         return dto;
     }
 
+
+    @Override
+    public StaffProfileDto findReceptionistById(Integer id) {
+        // Find the user account by the provided ID
+        UserAccount account = userAccountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Receptionist not found with ID: " + id));
+
+        // Use the existing helper method to convert the entity to a DTO
+        return convertToStaffProfileDto(account);
+    }
 }
