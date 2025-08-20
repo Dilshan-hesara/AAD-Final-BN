@@ -23,4 +23,8 @@ public interface ReceptionistService {
 
      StaffProfileDto convertToStaffProfileDto(UserAccount account) ;
 
-}
+
+    public Page<StaffProfileDto> searchAllReceptionists(String keyword, Long branchId, Pageable pageable) ;
+
+
+    }
