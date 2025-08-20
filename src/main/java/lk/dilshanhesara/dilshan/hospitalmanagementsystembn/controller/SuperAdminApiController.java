@@ -150,5 +150,12 @@ public class SuperAdminApiController {
         return ResponseEntity.ok(receptionist);
     }
 
+    @PatchMapping("/all-receptionists/{id}/activate")
+    public ResponseEntity<Void> activateReceptionist(@PathVariable Integer id) {
+        // This reuses the service method we already created
+        receptionistService.updateUserStatus(id, true);
+        return ResponseEntity.ok().build();
+    }
+
 
 }
