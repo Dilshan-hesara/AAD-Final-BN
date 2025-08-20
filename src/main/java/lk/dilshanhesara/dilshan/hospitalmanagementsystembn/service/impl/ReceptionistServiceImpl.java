@@ -13,7 +13,9 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepos
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.ReceptionistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -155,48 +157,85 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         staffProfileRepository.save(profile);
     }
 
+//
+//    public StaffProfileDto convertToStaffProfileDto(UserAccount account) {
+//        // 1. Find the corresponding StaffProfile. If not found, create an empty one to avoid null errors.
+//        StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
+//
+//        // 2. Create a new DTO to send to the frontend.
+//        StaffProfileDto dto = new StaffProfileDto();
+//
+//        // 3. Populate the DTO with data from the UserAccount.
+//        dto.setUserId(account.getUserId());
+//        dto.setUsername(account.getUsername());
+//        dto.setRole(account.getRole().name());
+//        dto.setActive(account.isActive());
+//
+//        // 4. Populate the DTO with data from the StaffProfile.
+//        dto.setFullName(profile.getFullName());
+//        dto.setEmail(profile.getEmail());
+//        dto.setContactNumber(profile.getContactNumber());
+//
+//        // 5. Check if a branch is assigned before getting its details.
+//        if (profile.getBranch() != null) {
+//            dto.setBranchId(profile.getBranch().getId());
+//            dto.setBranchName(profile.getBranch().getName());
+//        }
+//
+//        return dto;
+//    }
 
-    public StaffProfileDto convertToStaffProfileDto(UserAccount account) {
-        // 1. Find the corresponding StaffProfile. If not found, create an empty one to avoid null errors.
-        StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
 
-        // 2. Create a new DTO to send to the frontend.
-        StaffProfileDto dto = new StaffProfileDto();
 
-        // 3. Populate the DTO with data from the UserAccount.
-        dto.setUserId(account.getUserId());
-        dto.setUsername(account.getUsername());
-        dto.setRole(account.getRole().name());
-        dto.setActive(account.isActive());
-
-        // 4. Populate the DTO with data from the StaffProfile.
-        dto.setFullName(profile.getFullName());
-        dto.setEmail(profile.getEmail());
-        dto.setContactNumber(profile.getContactNumber());
-
-        // 5. Check if a branch is assigned before getting its details.
-        if (profile.getBranch() != null) {
-            dto.setBranchId(profile.getBranch().getId());
-            dto.setBranchName(profile.getBranch().getName());
-        }
-
-        return dto;
-    }
-
+//
+//    @Override
+//    public Page<StaffProfileDto> searchAllReceptionists(String keyword, Long branchId, Pageable pageable) {
+//        // Specification to build a dynamic query
+//        Specification<UserAccount> spec = (root, query, cb) -> {
+//            // Join UserAccount with StaffProfile to access details like fullName and branch
+//            Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
+//            // Filter only for users with the RECEPTIONIST role
+//            return cb.equal(root.get("role"), UserAccount.Role.RECEPTIONIST);
+//        };
+//
+//        // Add keyword search for name if provided
+//        if (keyword != null && !keyword.isEmpty()) {
+//            spec = spec.and((root, query, cb) -> {
+//                Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
+//                return cb.like(profileJoin.get("fullName"), "%" + keyword + "%");
+//            });
+//        }
+//
+//        // Add filter by branchId if provided
+//        if (branchId != null) {
+//            spec = spec.and((root, query, cb) -> {
+//                Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
+//                return cb.equal(profileJoin.get("branch").get("id"), branchId);
+//            });
+//        }
+//
+//        Page<UserAccount> accounts = userAccountRepository.findAll(spec, pageable);
+//        return accounts.map(this::convertToStaffProfileDto);
+//    }
 
 
 
     @Override
     public Page<StaffProfileDto> searchAllReceptionists(String keyword, Long branchId, Pageable pageable) {
+
+        // --- CRITICAL FIX: Correct the sort property for joined table ---
+        Sort.Order sortOrder = pageable.getSort().getOrderFor("fullName");
+        if (sortOrder != null) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by(sortOrder.getDirection(), "staffProfile.fullName"));
+        }
+
         // Specification to build a dynamic query
         Specification<UserAccount> spec = (root, query, cb) -> {
-            // Join UserAccount with StaffProfile to access details like fullName and branch
             Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
-            // Filter only for users with the RECEPTIONIST role
             return cb.equal(root.get("role"), UserAccount.Role.RECEPTIONIST);
         };
 
-        // Add keyword search for name if provided
         if (keyword != null && !keyword.isEmpty()) {
             spec = spec.and((root, query, cb) -> {
                 Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
@@ -204,7 +243,6 @@ public class ReceptionistServiceImpl implements ReceptionistService {
             });
         }
 
-        // Add filter by branchId if provided
         if (branchId != null) {
             spec = spec.and((root, query, cb) -> {
                 Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
@@ -215,4 +253,18 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         Page<UserAccount> accounts = userAccountRepository.findAll(spec, pageable);
         return accounts.map(this::convertToStaffProfileDto);
     }
+
+    public StaffProfileDto convertToStaffProfileDto(UserAccount account) {
+        StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
+        StaffProfileDto dto = new StaffProfileDto();
+        dto.setUserId(account.getUserId());
+        dto.setUsername(account.getUsername());
+        dto.setFullName(profile.getFullName());
+        dto.setActive(account.isActive());
+        if (profile.getBranch() != null) {
+            dto.setBranchName(profile.getBranch().getName());
+        }
+        return dto;
+    }
+
 }
