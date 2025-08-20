@@ -1,6 +1,7 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 
+import jakarta.persistence.criteria.Join;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffCreationRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
@@ -184,4 +185,34 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
 
 
+
+    @Override
+    public Page<StaffProfileDto> searchAllReceptionists(String keyword, Long branchId, Pageable pageable) {
+        // Specification to build a dynamic query
+        Specification<UserAccount> spec = (root, query, cb) -> {
+            // Join UserAccount with StaffProfile to access details like fullName and branch
+            Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
+            // Filter only for users with the RECEPTIONIST role
+            return cb.equal(root.get("role"), UserAccount.Role.RECEPTIONIST);
+        };
+
+        // Add keyword search for name if provided
+        if (keyword != null && !keyword.isEmpty()) {
+            spec = spec.and((root, query, cb) -> {
+                Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
+                return cb.like(profileJoin.get("fullName"), "%" + keyword + "%");
+            });
+        }
+
+        // Add filter by branchId if provided
+        if (branchId != null) {
+            spec = spec.and((root, query, cb) -> {
+                Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
+                return cb.equal(profileJoin.get("branch").get("id"), branchId);
+            });
+        }
+
+        Page<UserAccount> accounts = userAccountRepository.findAll(spec, pageable);
+        return accounts.map(this::convertToStaffProfileDto);
+    }
 }
