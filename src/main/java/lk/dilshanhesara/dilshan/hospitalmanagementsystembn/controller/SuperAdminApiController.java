@@ -21,6 +21,7 @@ public class SuperAdminApiController {
     private final PatientService patientService;
     private final DoctorService doctorService;
     private final AppointmentService appointmentService;
+    private final ReceptionistService receptionistService;
 
     @GetMapping("/dashboard-summary")
     public ResponseEntity<SuperAdminDashboardDto> getSummary() {
@@ -128,5 +129,16 @@ public class SuperAdminApiController {
     public ResponseEntity<Void> deactivateBranchAdmin(@PathVariable Integer id) {
         branchAdminService.updateUserStatus(id, false);
         return ResponseEntity.ok().build();
+    }
+
+
+    // --- ADD THIS NEW ENDPOINT ---
+    @GetMapping("/all-receptionists")
+    public ResponseEntity<Page<StaffProfileDto>> getAllReceptionists(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long branchId,
+            Pageable pageable) {
+        Page<StaffProfileDto> receptionists = receptionistService.searchAllReceptionists(keyword, branchId, pageable);
+        return ResponseEntity.ok(receptionists);
     }
 }
