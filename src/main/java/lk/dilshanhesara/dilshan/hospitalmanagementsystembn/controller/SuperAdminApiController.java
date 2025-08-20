@@ -141,4 +141,14 @@ public class SuperAdminApiController {
         Page<StaffProfileDto> receptionists = receptionistService.searchAllReceptionists(keyword, branchId, pageable);
         return ResponseEntity.ok(receptionists);
     }
+
+
+    @GetMapping("/all-receptionists/{id}")
+    public ResponseEntity<StaffProfileDto> getReceptionistById(@PathVariable Integer id) {
+        // You'll need a findById method in your service
+        StaffProfileDto receptionist = receptionistService.findReceptionistById(id);
+        return ResponseEntity.ok(receptionist);
+    }
+
+
 }
