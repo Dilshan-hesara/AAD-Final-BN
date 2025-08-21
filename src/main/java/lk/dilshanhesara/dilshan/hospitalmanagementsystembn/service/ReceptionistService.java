@@ -1,5 +1,6 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service;
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AdminUpdateRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffCreationRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
@@ -28,4 +29,8 @@ public interface ReceptionistService {
 
     StaffProfileDto findReceptionistById(Integer id);
 
+
+
+    public void updateReceptionist(Integer userId, AdminUpdateRequestDto dto) ;
+    public void deleteReceptionist(Integer userId);
     }
