@@ -45,9 +45,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // ADD THIS RULE: Allow public access to the uploads folder
+                        .requestMatchers("/uploads/**").permitAll()
+                        // =========================================================
+
+                        // All other requests must be authenticated
                         .anyRequest().authenticated()
-
-
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
