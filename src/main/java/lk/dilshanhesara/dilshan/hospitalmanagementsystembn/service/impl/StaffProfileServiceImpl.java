@@ -128,5 +128,30 @@ public class StaffProfileServiceImpl implements StaffProfileService {
 
 
 
+    public StaffProfileDto convertToStaffProfileDto(UserAccount account) {
+        StaffProfile profile = staffProfileRepository.findById(account.getUserId())
+                .orElse(new StaffProfile()); // Find the linked profile
 
+        StaffProfileDto dto = new StaffProfileDto();
+
+        // Data from UserAccount
+        dto.setUserId(account.getUserId());
+        dto.setUsername(account.getUsername());
+        dto.setActive(account.isActive());
+        dto.setRole(account.getRole().name());
+
+        // Data from StaffProfile
+        dto.setFullName(profile.getFullName());
+        dto.setEmail(profile.getEmail());
+        dto.setContactNumber(profile.getContactNumber());
+
+        // --- CRITICAL FIX: Add the profile picture URL to the DTO ---
+        dto.setProfilePictureUrl(profile.getProfilePictureUrl());
+
+        if (profile.getBranch() != null) {
+            dto.setBranchName(profile.getBranch().getName());
+        }
+
+        return dto;
+    }
 }
