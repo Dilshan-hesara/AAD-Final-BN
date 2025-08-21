@@ -2,6 +2,7 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 
 import jakarta.persistence.criteria.Join;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AdminUpdateRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffCreationRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
@@ -277,4 +278,13 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         // Use the existing helper method to convert the entity to a DTO
         return convertToStaffProfileDto(account);
     }
+
+
+
+    @Override
+    public void deleteReceptionist(Integer userId) {
+        userAccountRepository.deleteById(userId);
+    }
+
+
 }
