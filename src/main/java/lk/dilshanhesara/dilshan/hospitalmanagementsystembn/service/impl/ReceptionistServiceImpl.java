@@ -282,6 +282,25 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
 
     @Override
+    @Transactional
+    public void updateReceptionist(Integer userId, AdminUpdateRequestDto dto) {
+        UserAccount account = userAccountRepository.findById(userId).orElseThrow();
+        StaffProfile profile = staffProfileRepository.findById(userId).orElseThrow();
+
+        account.setUsername(dto.getUsername());
+        profile.setFullName(dto.getFullName());
+        profile.setEmail(dto.getEmail());
+        profile.setContactNumber(dto.getContactNumber());
+
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            account.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        userAccountRepository.save(account);
+        staffProfileRepository.save(profile);
+    }
+
+    @Override
     public void deleteReceptionist(Integer userId) {
         userAccountRepository.deleteById(userId);
     }
