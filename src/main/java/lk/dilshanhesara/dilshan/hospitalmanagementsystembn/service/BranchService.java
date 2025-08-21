@@ -28,4 +28,7 @@ public interface BranchService {
 
     public List<BranchDto> getActiveBranches() ;
     public List<BranchDto> getInactiveBranches() ;
+
+
+
 }
