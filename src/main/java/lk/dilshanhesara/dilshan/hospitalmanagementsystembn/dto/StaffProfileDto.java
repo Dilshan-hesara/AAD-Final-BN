@@ -13,6 +13,7 @@ public class StaffProfileDto {
     private Long branchId;
     private String branchName;
     private String email;
+    private String profilePictureUrl;
 
     private String contactNumber;
     private boolean active;
