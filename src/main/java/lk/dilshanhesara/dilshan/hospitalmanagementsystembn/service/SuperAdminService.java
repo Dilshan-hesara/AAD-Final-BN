@@ -22,5 +22,8 @@ public interface SuperAdminService {
 
     public void updateProfilePicture(String username, MultipartFile file) ;
 
+    StaffProfileDto findSuperAdminByUsername(String username);
+
+
 
     }
