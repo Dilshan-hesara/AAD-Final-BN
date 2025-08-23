@@ -14,4 +14,6 @@ public interface SuperAdminService {
     void updateSuperAdmin(Integer userId, AdminUpdateRequestDto dto);
     void deleteSuperAdmin(Integer userId, String currentUsername);
 
+    void updateUserStatus(Integer userId, boolean isActive, String currentUsername);
+ 
     }
