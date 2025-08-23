@@ -12,5 +12,6 @@ public interface SuperAdminService {
     void addSuperAdmin(StaffCreationRequestDto dto);
 
     void updateSuperAdmin(Integer userId, AdminUpdateRequestDto dto);
+    void deleteSuperAdmin(Integer userId, String currentUsername);
 
     }
