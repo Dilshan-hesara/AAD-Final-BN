@@ -25,5 +25,6 @@ public interface SuperAdminService {
     StaffProfileDto findSuperAdminByUsername(String username);
 
 
+    public void updateMyProfile(String username, AdminUpdateRequestDto dto) ;
 
     }
