@@ -18,13 +18,10 @@ public interface SuperAdminService {
 
     StaffProfileDto findSuperAdminById(Integer userId);
 
-
-
     public void updateProfilePicture(String username, MultipartFile file) ;
 
     StaffProfileDto findSuperAdminByUsername(String username);
-
-
+    
     public void updateMyProfile(String username, AdminUpdateRequestDto dto) ;
 
     }
