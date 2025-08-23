@@ -1,6 +1,8 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.*;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -8,9 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/super-admin")
@@ -162,4 +167,131 @@ public class SuperAdminApiController {
         receptionistService.updateUserStatus(id, false);
         return ResponseEntity.ok().build();
     }
+
+
+
+    @PostMapping("/all-receptionists")
+    public ResponseEntity<Void> addReceptionist(@RequestBody StaffCreationRequestDto dto) {
+        receptionistService.addReceptionist(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/all-receptionists/{id}")
+    public ResponseEntity<Void> updateReceptionist(@PathVariable Integer id, @RequestBody AdminUpdateRequestDto dto) {
+        receptionistService.updateReceptionist(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/all-receptionists/{id}")
+    public ResponseEntity<Void> deleteReceptionist(@PathVariable Integer id) {
+        receptionistService.deleteReceptionist(id);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+    private final SuperAdminService superAdminService;
+
+
+
+
+
+    @GetMapping("/manage-admins")
+    public ResponseEntity<Page<StaffProfileDto>> searchSuperAdmins(@RequestParam(required=false) String keyword, Pageable pageable) {
+        return ResponseEntity.ok(superAdminService.searchSuperAdmins(keyword, pageable));
+    }
+    @GetMapping("/manage-admins/{id}")
+    public ResponseEntity<StaffProfileDto> getSuperAdminById(@PathVariable Integer id) {
+        return ResponseEntity.ok(superAdminService.findSuperAdminById(id));
+    }
+    @PostMapping("/manage-admins")
+    public ResponseEntity<Void> addSuperAdmin(@RequestBody StaffCreationRequestDto dto) {
+        superAdminService.addSuperAdmin(dto);
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("/manage-admins/{id}")
+    public ResponseEntity<Void> updateSuperAdmin(@PathVariable Integer id, @RequestBody AdminUpdateRequestDto dto) {
+        superAdminService.updateSuperAdmin(id, dto);
+        return ResponseEntity.ok().build();
+    }
+    @DeleteMapping("/manage-admins/{id}")
+    public ResponseEntity<Void> deleteSuperAdmin(@PathVariable Integer id) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        superAdminService.deleteSuperAdmin(id, currentUsername);
+        return ResponseEntity.ok().build();
+    }
+    @PatchMapping("/manage-admins/{id}/status")
+    public ResponseEntity<Void> updateSuperAdminStatus(@PathVariable Integer id, @RequestBody Map<String, Boolean> payload) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        superAdminService.updateUserStatus(id, payload.get("isActive"), currentUsername);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private final UserAccountRepository userAccountRepository;
+//
+//    @GetMapping("/my-profile")
+//    public ResponseEntity<StaffProfileDto> getMyProfile() {
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//        return ResponseEntity.ok(superAdminService.findSuperAdminByUsername(username)); // You'll need this service method
+//    }
+//    @PostMapping("/my-profile/update")
+//    public ResponseEntity<Void> updateMyProfile(@RequestBody AdminUpdateRequestDto dto) {
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//
+//        // --- 2. FIND THE USER'S ID FROM THE USERNAME ---
+//        UserAccount account = userAccountRepository.findByUsername(username)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//        Integer userId = account.getUserId();
+//
+//        // --- 3. CALL THE SERVICE METHOD CORRECTLY ---
+//        superAdminService.updateSuperAdmin(userId, dto);
+//
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @PostMapping("/my-profile/upload-picture")
+//    public ResponseEntity<Void> uploadProfilePicture(@RequestParam("file") MultipartFile file) {
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//        superAdminService.updateProfilePicture(username, file);
+//        return ResponseEntity.ok().build();
+//    }
+
+
+
+    @GetMapping("/my-profile")
+    public ResponseEntity<StaffProfileDto> getMyProfile() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(superAdminService.findSuperAdminByUsername(username));
+    }
+
+    @PostMapping("/my-profile/update")
+    public ResponseEntity<Void> updateMyProfile(@RequestBody AdminUpdateRequestDto dto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        superAdminService.updateMyProfile(username, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/my-profile/upload-picture")
+    public ResponseEntity<Void> uploadProfilePicture(@RequestParam("file") MultipartFile file) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        superAdminService.updateProfilePicture(username, file);
+        return ResponseEntity.ok().build();
+    }
+
+
 }
