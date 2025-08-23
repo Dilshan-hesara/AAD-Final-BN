@@ -1,0 +1,13 @@
+package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service;
+
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AdminUpdateRequestDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffCreationRequestDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+public interface SuperAdminService {
+    Page<StaffProfileDto> searchSuperAdmins(String keyword, Pageable pageable);
+
+    }
