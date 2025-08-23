@@ -11,4 +11,6 @@ public interface SuperAdminService {
     Page<StaffProfileDto> searchSuperAdmins(String keyword, Pageable pageable);
     void addSuperAdmin(StaffCreationRequestDto dto);
 
+    void updateSuperAdmin(Integer userId, AdminUpdateRequestDto dto);
+
     }
