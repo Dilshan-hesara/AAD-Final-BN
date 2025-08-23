@@ -9,5 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface SuperAdminService {
     Page<StaffProfileDto> searchSuperAdmins(String keyword, Pageable pageable);
+    void addSuperAdmin(StaffCreationRequestDto dto);
 
     }
