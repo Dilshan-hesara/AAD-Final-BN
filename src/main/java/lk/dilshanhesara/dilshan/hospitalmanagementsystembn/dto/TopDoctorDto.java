@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor // <-- ADD THIS ANNOTATION
+@NoArgsConstructor
 
 public class TopDoctorDto {
     private String doctorName;
