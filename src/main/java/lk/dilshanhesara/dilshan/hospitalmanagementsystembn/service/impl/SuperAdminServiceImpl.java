@@ -30,13 +30,11 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     @Override
     public Page<StaffProfileDto> searchSuperAdmins(String keyword, Pageable pageable) {
         Specification<UserAccount> spec = (root, query, cb) -> {
-            // Filter only for users with the SUPER_ADMIN role
             return cb.equal(root.get("role"), UserAccount.Role.SUPER_ADMIN);
         };
 
         if (keyword != null && !keyword.isEmpty()) {
             spec = spec.and((root, query, cb) -> {
-                // Join to StaffProfile to search by full name
                 Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
                 return cb.like(profileJoin.get("fullName"), "%" + keyword + "%");
             });
@@ -111,11 +109,10 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
         StaffProfile profile = new StaffProfile();
         profile.setUserAccount(account);
-        // --- CRITICAL FIX: Ensure fullName is set ---
         profile.setFullName(dto.getFullName());
         profile.setEmail(dto.getEmail());
         profile.setContactNumber(dto.getContactNumber());
-        profile.setBranch(null); // Super Admins have no branch
+        profile.setBranch(null);
         staffProfileRepository.save(profile);
     }
 
@@ -174,17 +171,15 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
         StaffProfileDto dto = new StaffProfileDto();
 
-        // Data from UserAccount
         dto.setUserId(account.getUserId());
         dto.setUsername(account.getUsername());
         dto.setRole(account.getRole().name());
         dto.setActive(account.isActive());
 
-        // Data from StaffProfile
         dto.setFullName(profile.getFullName());
         dto.setEmail(profile.getEmail());
         dto.setContactNumber(profile.getContactNumber());
-        dto.setProfilePictureUrl(profile.getProfilePictureUrl()); // This is now included
+        dto.setProfilePictureUrl(profile.getProfilePictureUrl());
 
         return dto;
     }
