@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 @Data
-@NoArgsConstructor // <-- ADD THIS ANNOTATION
+@NoArgsConstructor
 @AllArgsConstructor
 public class AdvancedBranchDashboardDto {
     private double revenue;
@@ -15,8 +15,8 @@ public class AdvancedBranchDashboardDto {
     private long completedAppointments;
     private long onlineBookings;
     private long walkInBookings;
-    private List<TopDoctorDto> topDoctors; // New DTO for top doctors
-    private List<DailyAppointmentStatDto> appointmentTrend; // New DTO for line chart
+    private List<TopDoctorDto> topDoctors;
+    private List<DailyAppointmentStatDto> appointmentTrend;
 
 
 
