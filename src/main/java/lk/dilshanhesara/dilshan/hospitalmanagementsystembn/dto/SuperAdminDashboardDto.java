@@ -9,24 +9,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SuperAdminDashboardDto {
-    // User Counts
     private long totalPatients;
     private long totalDoctors;
     private long totalReceptionists;
     private long totalBranchAdmins;
     private long totalSuperAdmins;
 
-    // Active User Counts
     private long activeDoctors;
     private long activeReceptionists;
     private long activeBranchAdmins;
 
-    // Monthly Appointment Counts
     private long appointmentsThisMonth;
     private long onlineAppointmentsThisMonth;
     private long cancelledAppointmentsThisMonth;
 
-    // Financials
     private double revenueThisMonth;
 
 
