@@ -37,10 +37,9 @@ public class Patient {
 
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now(); // Aut
+    private LocalDateTime createdAt = LocalDateTime.now();
 
 
-    // This links a patient to all of their appointments
     @OneToMany(mappedBy = "patient")
     private List<Appointment> appointments;
 }
