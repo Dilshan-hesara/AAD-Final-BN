@@ -53,47 +53,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         return convertToStaffProfileDto(account);
     }
 
-//    @Override
-//    @Transactional
-//    public void addSuperAdmin(StaffCreationRequestDto dto) {
-//        if (userAccountRepository.findByUsername(dto.getUsername()).isPresent()) {
-//            throw new RuntimeException("Username already exists");
-//        }
-//
-//        UserAccount account = new UserAccount();
-//        account.setUsername(dto.getUsername());
-//        account.setPassword(passwordEncoder.encode(dto.getPassword()));
-//        account.setRole(UserAccount.Role.SUPER_ADMIN);
-//        account.setActive(true);
-//        account = userAccountRepository.save(account);
-//
-//        StaffProfile profile = new StaffProfile();
-//        profile.setUserAccount(account);
-//        profile.setFullName(dto.getFullName());
-//        profile.setEmail(dto.getEmail());
-//        profile.setContactNumber(dto.getContactNumber());
-//        profile.setBranch(null); // Super Admins are not assigned to a branch
-//        staffProfileRepository.save(profile);
-//    }
 
-//    @Override
-//    @Transactional
-//    public void updateSuperAdmin(Integer userId, AdminUpdateRequestDto dto) {
-//        UserAccount account = userAccountRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-//        StaffProfile profile = staffProfileRepository.findById(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
-//
-//        account.setUsername(dto.getUsername());
-//        profile.setFullName(dto.getFullName());
-//        profile.setEmail(dto.getEmail());
-//        profile.setContactNumber(dto.getContactNumber());
-//
-//        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-//            account.setPassword(passwordEncoder.encode(dto.getPassword()));
-//        }
-//
-//        userAccountRepository.save(account);
-//        staffProfileRepository.save(profile);
-//    }
 
     @Override
     public void deleteSuperAdmin(Integer userId, String currentUsername) {
