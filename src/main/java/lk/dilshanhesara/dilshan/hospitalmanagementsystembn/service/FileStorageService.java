@@ -26,7 +26,7 @@ public class FileStorageService {
     }
 
     public String storeFile(MultipartFile file) {
-        // 1. Original file name එක ලබාගන්නවා
+
         String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         try {
@@ -34,21 +34,17 @@ public class FileStorageService {
                 throw new RuntimeException("Sorry! Filename contains invalid path sequence " + originalFileName);
             }
 
-            // 2. File extension එක වෙන් කරලා ගන්නවා (උදා: ".png")
             String fileExtension = "";
             int dotIndex = originalFileName.lastIndexOf('.');
             if (dotIndex > 0) {
                 fileExtension = originalFileName.substring(dotIndex);
             }
 
-            // 3. අලුත් unique නම හදද්දී extension එකත් එකතු කරනවා
             String newFileName = UUID.randomUUID().toString() + fileExtension;
 
-            // 4. File එක save කරනවා
             Path targetLocation = this.fileStorageLocation.resolve(newFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            // 5. Frontend එකට පාවිච්චි කරන්න පුළුවන් path එක return කරනවා
             return "/uploads/" + newFileName;
 
         } catch (IOException ex) {
