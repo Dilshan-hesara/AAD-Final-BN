@@ -9,11 +9,7 @@ public interface StaffProfileService {
     StaffProfileDto findStaffByUsername(String username);
 
 
-
     StaffProfileDto getCurrentLoggedInStaffProfile();
-
-
-
 
     public void updateProfile(String username, StaffProfileDto profileDto);
 
