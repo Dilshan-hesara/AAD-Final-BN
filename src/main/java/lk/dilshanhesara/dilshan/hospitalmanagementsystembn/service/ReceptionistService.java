@@ -30,7 +30,6 @@ public interface ReceptionistService {
     StaffProfileDto findReceptionistById(Integer id);
 
 
-
     public void updateReceptionist(Integer userId, AdminUpdateRequestDto dto) ;
     public void deleteReceptionist(Integer userId);
     }
