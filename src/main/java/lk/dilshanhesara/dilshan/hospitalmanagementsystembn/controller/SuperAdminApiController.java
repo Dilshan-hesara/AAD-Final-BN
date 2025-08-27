@@ -95,13 +95,15 @@ public class SuperAdminApiController {
 
 
 
+
+
     private final BranchAdminService branchAdminService;
     // ... your other services
 
-    @GetMapping("/branch-admins")
-    public ResponseEntity<Page<StaffProfileDto>> getAllBranchAdmins(Pageable pageable) {
-        return ResponseEntity.ok(branchAdminService.getAllBranchAdmins(pageable));
-    }
+//    @GetMapping("/branch-admins")
+//    public ResponseEntity<Page<StaffProfileDto>> getAllBranchAdmins(Pageable pageable) {
+//        return ResponseEntity.ok(branchAdminService.getAllBranchAdmins(pageable));
+//    }
 
     @PostMapping("/branch-admins")
     public ResponseEntity<Void> addBranchAdmin(@RequestBody StaffCreationRequestDto dto) {
@@ -116,25 +118,25 @@ public class SuperAdminApiController {
     }
 
 
-    @DeleteMapping("/branch-admins/{id}")
-    public ResponseEntity<Void> deleteBranchAdmin(@PathVariable Integer id) {
-        branchAdminService.deleteBranchAdmin(id);
-        return ResponseEntity.ok().build();
-    }
+//    @DeleteMapping("/branch-admins/{id}")
+//    public ResponseEntity<Void> deleteBranchAdmin(@PathVariable Integer id) {
+//        branchAdminService.deleteBranchAdmin(id);
+//        return ResponseEntity.ok().build();
+//    }
 
 
     // --- ADD THESE NEW ENDPOINTS ---
-    @PatchMapping("/branch-admins/{id}/activate")
-    public ResponseEntity<Void> activateBranchAdmin(@PathVariable Integer id) {
-        branchAdminService.updateUserStatus(id, true);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping("/branch-admins/{id}/deactivate")
-    public ResponseEntity<Void> deactivateBranchAdmin(@PathVariable Integer id) {
-        branchAdminService.updateUserStatus(id, false);
-        return ResponseEntity.ok().build();
-    }
+//    @PatchMapping("/branch-admins/{id}/activate")
+//    public ResponseEntity<Void> activateBranchAdmin(@PathVariable Integer id) {
+//        branchAdminService.updateUserStatus(id, true);
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @PatchMapping("/branch-admins/{id}/deactivate")
+//    public ResponseEntity<Void> deactivateBranchAdmin(@PathVariable Integer id) {
+//        branchAdminService.updateUserStatus(id, false);
+//        return ResponseEntity.ok().build();
+//    }
 
 
     // --- ADD THIS NEW ENDPOINT ---
@@ -290,6 +292,87 @@ public class SuperAdminApiController {
     public ResponseEntity<Void> uploadProfilePicture(@RequestParam("file") MultipartFile file) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         superAdminService.updateProfilePicture(username, file);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @GetMapping("/branch-admins")
+    public ResponseEntity<Page<StaffProfileDto>> searchBranchAdmins(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long branchId, // Add this parameter
+            Pageable pageable) {
+        // Pass all parameters to the service
+        return ResponseEntity.ok(branchAdminService.searchBranchAdmins(keyword, branchId, pageable));
+    }
+
+    @GetMapping("/branch-admins/{id}")
+    public ResponseEntity<StaffProfileDto> getBranchAdminById(@PathVariable Integer id) {
+        return ResponseEntity.ok(branchAdminService.findBranchAdminById(id));
+    }
+
+//fefv
+
+
+//    @GetMapping("/branch-admins")
+//    public ResponseEntity<Page<StaffProfileDto>> searchBranchAdmsins(
+//            @RequestParam(required = false) String keyword,
+//            @RequestParam(required = false) Long branchId,
+//            Pageable pageable) {
+//        return ResponseEntity.ok(branchAdminService.searchBranchAdmins(keyword, branchId, pageable));
+//    }
+//
+//    @GetMapping("/branch-admins")
+//    public ResponseEntity<Page<StaffProfileDto>> searchBranchAdmins(
+//            @RequestParam(required = false) String keyword,
+//            @RequestParam(required = false) Long branchId,
+//            Pageable pageable) {
+//        return ResponseEntity.ok(branchAdminService.searchBranchAdmins(keyword, branchId, pageable));
+//    }
+
+
+//
+//    @PostMapping("/branch-admins")
+//    public ResponseEntity<Void> addBranchAdmin(@RequestBody StaffCreationRequestDto dto) {
+//        branchAdminService.addBranchAdmin(dto);
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @PutMapping("/branch-admins/{id}")
+//    public ResponseEntity<Void> updateBranchAdmin(@PathVariable Integer id, @RequestBody AdminUpdateRequestDto dto) {
+//        branchAdminService.updateBranchAdmin(id, dto);
+//        return ResponseEntity.ok().build();
+//    }
+
+    @DeleteMapping("/branch-admins/{id}")
+    public ResponseEntity<Void> deleteBranchAdmin(@PathVariable Integer id) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        branchAdminService.deleteBranchAdmin(id, currentUsername);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/branch-admins/{id}/status")
+    public ResponseEntity<Void> updateBranchAdminStatus(@PathVariable Integer id, @RequestBody Map<String, Boolean> payload) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        branchAdminService.updateUserStatus(id, payload.get("isActive"), currentUsername);
         return ResponseEntity.ok().build();
     }
 
