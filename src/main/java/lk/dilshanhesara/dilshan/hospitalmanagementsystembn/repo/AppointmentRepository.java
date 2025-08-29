@@ -30,8 +30,7 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
     // This JPQL query finds appointments by joining through Patient and UserAccount tables
 
 
-    @Query("SELECT a FROM Appointment a WHERE a.patient.linkedOnlineUser.username = :username")
-    List<Appointment> findAppointmentsByOnlineUsername(String username);
+
 
 
 
@@ -116,4 +115,15 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
 
     Optional<Appointment> findTopByPatientIdOrderByAppointmentDateDesc(Long patientId);
 
+
+    //old
+//    @Query("SELECT a FROM Appointment a WHERE a.patient.linkedOnlineUser.username = :username")
+//    List<Appointment> findAppointmentsByOnlineUsername(String username);
+
+    @Query("SELECT a FROM Appointment a WHERE a.patient.linkedOnlineUser.username = :username ORDER BY a.appointmentDate DESC")
+    List<Appointment> findAppointmentsByOnlineUsername(String username);
+
+
+
 }
+
