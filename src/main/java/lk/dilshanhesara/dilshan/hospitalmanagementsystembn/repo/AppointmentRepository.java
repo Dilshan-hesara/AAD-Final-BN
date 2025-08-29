@@ -128,5 +128,7 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
     List<Appointment> findUpcomingAppointmentsByUsername(String username, LocalDateTime now);
 
 
+    @Query("SELECT a FROM Appointment a WHERE a.patient.linkedOnlineUser.username = :username AND a.appointmentDate < :now ORDER BY a.appointmentDate DESC")
+    List<Appointment> findRecentAppointmentsByUsername(String username, LocalDateTime now);
 }
 
