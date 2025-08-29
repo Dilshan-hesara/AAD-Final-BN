@@ -12,4 +12,6 @@ public class AppointmentRequestDto {
     private LocalDateTime appointmentDate;
     private String reason;
 
+
+
 }
