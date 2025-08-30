@@ -10,7 +10,6 @@ public class OnlineUserRegistrationDto {
     private String email;
     private String contactNumber;
     private String password;
-    // Patient Details
     private LocalDate dateOfBirth;
     private String gender;
     private String address;
