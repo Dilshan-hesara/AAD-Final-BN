@@ -68,4 +68,15 @@ public class OnlineUserApiController {
     }
 
 
+    @PostMapping("/book-appointment")
+    public ResponseEntity<?> bookAppointment(@RequestBody OnlineUserAppointmentRequestDto dto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Appointment newAppointment = appointmentService.createAppointmentForOnlineUser(dto, username);
+
+        return ResponseEntity.ok(Map.of("appointmentId", newAppointment.getId()));
+    }
+
+
+
+
 }
