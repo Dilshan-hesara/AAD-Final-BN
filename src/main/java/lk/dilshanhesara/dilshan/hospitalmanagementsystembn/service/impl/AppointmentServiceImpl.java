@@ -1,9 +1,7 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 import jakarta.persistence.criteria.Join;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentRequestDto;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentResponseDto;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
@@ -86,22 +84,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
-    @Override
-    public List<AppointmentResponseDto> findAppointmentsByUsername(String username) {
-        return appointmentRepository.findAppointmentsByOnlineUsername(username).stream()
-                .map(app -> {
-                    AppointmentResponseDto dto = new AppointmentResponseDto();
-                    dto.setId(app.getId());
-                    dto.setPatientName(app.getPatient().getFullName());
-                    dto.setDoctorName(app.getDoctor().getFullName());
-                    dto.setBranchName(app.getBranch().getName());
-                    dto.setAppointmentDate(app.getAppointmentDate());
-                    dto.setStatus(app.getStatus());
-                    return dto;
-                }).collect(Collectors.toList());
-    }
-
-
 
 
 
@@ -123,13 +105,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setFee(new java.math.BigDecimal("2500.00"));
 
         return appointmentRepository.save(appointment);
-    }
-    @Override
-    public void confirmAppointmentPayment(Long appointmentId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
-        appointment.setStatus("CONFIRMED");
-        appointmentRepository.save(appointment);
     }
 
 
@@ -314,15 +289,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + appointmentId));
 
-        // Entity එක DTO එකක් බවට පත් කිරීම
         AppointmentResponseDto dto = modelMapper.map(appointment, AppointmentResponseDto.class);
-        // අමතරව අවශ්‍ය දත්ත DTO එකට එක් කිරීම
         dto.setPatientName(appointment.getPatient().getFullName());
         dto.setDoctorName(appointment.getDoctor().getFullName());
         dto.setBranchName(appointment.getBranch().getName());
 
         return dto;
     }
+
+
+
+
+
+
 }
 
 
