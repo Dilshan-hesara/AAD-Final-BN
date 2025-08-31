@@ -354,6 +354,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
+    @Override
+    public void confirmAppointmentPayment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        appointment.setStatus("CONFIRMED");
+        appointmentRepository.save(appointment);
+    }
+
+
+
+
 
 
 
