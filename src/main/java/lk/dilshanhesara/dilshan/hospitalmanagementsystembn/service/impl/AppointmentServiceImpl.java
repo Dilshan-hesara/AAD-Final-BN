@@ -301,6 +301,61 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
+    @Override
+    public List<AppointmentResponseDto> findAppointmentsByUsername(String username) {
+        return appointmentRepository.findAppointmentsByOnlineUsername(username).stream()
+                .map(app -> {
+                    AppointmentResponseDto dto = new AppointmentResponseDto();
+                    dto.setId(app.getId());
+                    dto.setDoctorName(app.getDoctor().getFullName());
+                    dto.setBranchName(app.getBranch().getName());
+                    dto.setAppointmentDate(app.getAppointmentDate());
+                    dto.setStatus(app.getStatus());
+                    return dto;
+                }).collect(Collectors.toList());
+    }
+
+
+
+
+
+
+
+
+    @Override
+    @Transactional
+    public Appointment createAppointmentForOnlineUser(OnlineUserAppointmentRequestDto dto, String username) {
+        UserAccount account = userAccountRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User account not found"));
+
+        Patient patient = patientService.getOrCreatePatientForOnlineUser(account.getUserId());
+
+        Doctor doctor = doctorRepository.findById(dto.getDoctorId()).orElseThrow();
+        Branch branch = branchRepository.findById(dto.getBranchId()).orElseThrow();
+
+        Appointment appointment = new Appointment();
+        appointment.setPatient(patient);
+        appointment.setDoctor(doctor);
+        appointment.setBranch(branch);
+        appointment.setAppointmentDate(dto.getAppointmentDate());
+        appointment.setReason(dto.getReason());
+        appointment.setStatus("PENDING_PAYMENT");
+        appointment.setFee(new BigDecimal("2500.00"));
+
+        return appointmentRepository.save(appointment);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
