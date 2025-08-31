@@ -1,8 +1,6 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service;
 
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentRequestDto;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AppointmentResponseDto;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.BranchDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +22,7 @@ public interface AppointmentService {
     List<AppointmentResponseDto> findAppointmentsByUsername(String username);
 
 
-    public Appointment createAppointmentForOnlineUser(AppointmentRequestDto dto, String username);
+//    public Appointment createAppointmentForOnlineUser(AppointmentRequestDto dto, String username);
 
 
     public void confirmAppointmentPayment(Long appointmentId);
@@ -50,4 +48,8 @@ public interface AppointmentService {
 
 
     public AppointmentResponseDto findAppointmentByIdSperAD(Long appointmentId) ;
+
+
+    public Appointment createAppointmentForOnlineUser(OnlineUserAppointmentRequestDto dto, String username) ;
+
     }
