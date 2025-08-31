@@ -3,8 +3,10 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AuthRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.AuthResponseDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.OnlineUserRegistrationDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.RegistrationRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.security.JwtTokenProvider;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.OnlineUserService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -60,10 +62,15 @@ public class AuthApiController {
 //    }
 
 
+        private final OnlineUserService onlineUserService;
+    // ... your other existing fields
+
+    // ... your existing /login endpoint
+
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegistrationRequestDto registrationDto) {
+    public ResponseEntity<?> registerUser(@RequestBody OnlineUserRegistrationDto registrationDto) {
         try {
-            userService.registerOnlineUser(registrationDto);
+            onlineUserService.registerNewOnlineUser(registrationDto);
             return ResponseEntity.ok("User registered successfully!");
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
