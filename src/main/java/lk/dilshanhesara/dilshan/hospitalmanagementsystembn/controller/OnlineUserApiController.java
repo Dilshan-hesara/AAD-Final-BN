@@ -3,10 +3,7 @@ package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.BranchService;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.DoctorService;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.OnlineUserService;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,13 +36,13 @@ public class OnlineUserApiController {
 
 
 
-
-    @PostMapping("/book-appointment")
-    public ResponseEntity<?> bookAppointment(@RequestBody AppointmentRequestDto dto) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Appointment newAppointment = appointmentService.createAppointmentForOnlineUser(dto, username);
-        return ResponseEntity.ok(Map.of("appointmentId", newAppointment.getId()));
-    }
+//
+//    @PostMapping("/book-appointment")
+//    public ResponseEntity<?> bookAppointment(@RequestBody AppointmentRequestDto dto) {
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//        Appointment newAppointment = appointmentService.createAppointmentForOnlineUser(dto, username);
+//        return ResponseEntity.ok(Map.of("appointmentId", newAppointment.getId()));
+//    }
 
     private final BranchService branchService;
     private final DoctorService doctorService;
@@ -58,4 +55,17 @@ public class OnlineUserApiController {
     public ResponseEntity<List<DoctorDto>> getDoctorsByBranch(@PathVariable Long branchId) {
         return ResponseEntity.ok(doctorService.findActiveDoctorsByBranch(branchId));
     }
+
+
+
+
+
+    @GetMapping("/my-appointments")
+    public ResponseEntity<List<AppointmentResponseDto>> getMyAppointments() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<AppointmentResponseDto> appointments = appointmentService.findAppointmentsByUsername(username);
+        return ResponseEntity.ok(appointments);
+    }
+
+
 }
