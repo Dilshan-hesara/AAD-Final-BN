@@ -86,4 +86,12 @@ public class OnlineUserApiController {
 
 
 
+    private final OnlineUserDashboardService onlineUserDashboardService;
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<OnlineUserDashboardDto> getDashboard() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(onlineUserDashboardService.getDashboardData(username));
+    }
+
 }
