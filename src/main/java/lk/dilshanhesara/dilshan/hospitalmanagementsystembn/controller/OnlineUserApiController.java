@@ -77,6 +77,13 @@ public class OnlineUserApiController {
     }
 
 
+    @PostMapping("/confirm-payment")
+    public ResponseEntity<Void> confirmPayment(@RequestBody Map<String, Long> payload) {
+        Long appointmentId = payload.get("appointmentId");
+        appointmentService.confirmAppointmentPayment(appointmentId);
+        return ResponseEntity.ok().build();
+    }
+
 
 
 }
