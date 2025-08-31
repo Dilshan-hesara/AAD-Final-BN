@@ -50,27 +50,6 @@ public class PatientServiceImpl implements PatientService {
 
     private final OnlineUserProfileRepository onlineUserProfileRepository;
 
-//    @Override
-//    @Transactional
-//    public Patient getOrCreatePatientForOnlineUser(Integer onlineUserId) {
-//        // 1. Check if a patient record already exists for this online user
-//        return patientRepository.findByLinkedOnlineUser_UserId(onlineUserId)
-//                .orElseGet(() -> {
-//                    // 2. If not, find their profile
-//                    OnlineUserProfile profile = onlineUserProfileRepository.findById(onlineUserId)
-//                            .orElseThrow(() -> new RuntimeException("Online user profile not found"));
-//
-//                    // 3. Create a new patient record using their profile info
-//                    Patient newPatient = new Patient();
-//                    newPatient.setFullName(profile.getFullName());
-//                    newPatient.setContactNumber(profile.getContactNumber());
-//                    newPatient.setEmail(profile.getEmail());
-//                    newPatient.setLinkedOnlineUser(profile.getUserAccount());
-//
-//                    // 4. Save and return the new patient record
-//                    return patientRepository.save(newPatient);
-//                });
-//    }
 
 
     public Page<PatientDto> findPatientsByBranch(Long branchId, Pageable pageable) {
@@ -85,10 +64,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Page<PatientDto> searchPatientsPage(String keyword, Pageable pageable) {
-        // Create a specification for searching by full name or contact number
         Specification<Patient> spec = (root, query, cb) -> {
             if (keyword == null || keyword.isEmpty()) {
-                return cb.conjunction(); // Return all if no keyword
+                return cb.conjunction();
             }
             String pattern = "%" + keyword.toLowerCase() + "%";
             return cb.or(
@@ -165,7 +143,6 @@ public class PatientServiceImpl implements PatientService {
 
         PatientDto dto = modelMapper.map(patient, PatientDto.class);
 
-        // Add the branch name from the most recent appointment
         appointmentRepository.findTopByPatientIdOrderByAppointmentDateDesc(patient.getId())
                 .ifPresent(latestAppointment -> {
                     if (latestAppointment.getBranch() != null) {
