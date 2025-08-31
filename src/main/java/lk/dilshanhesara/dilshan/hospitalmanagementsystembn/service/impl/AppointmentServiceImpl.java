@@ -296,10 +296,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return dto;
     }
-
-
-
-
+    
 
     @Override
     public List<AppointmentResponseDto> findAppointmentsByUsername(String username) {
@@ -314,11 +311,6 @@ public class AppointmentServiceImpl implements AppointmentService {
                     return dto;
                 }).collect(Collectors.toList());
     }
-
-
-
-
-
 
 
 
@@ -344,14 +336,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return appointmentRepository.save(appointment);
     }
-
-
-
-
-
-
-
-
 
 
     @Override
