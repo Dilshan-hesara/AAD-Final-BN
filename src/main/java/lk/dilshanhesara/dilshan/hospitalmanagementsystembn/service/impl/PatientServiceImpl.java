@@ -182,21 +182,17 @@ public class PatientServiceImpl implements PatientService {
     @Override
     @Transactional
     public Patient getOrCreatePatientForOnlineUser(Integer onlineUserId) {
-        // 1. Check if a patient record already exists for this online user
         return patientRepository.findByLinkedOnlineUser_UserId(onlineUserId)
                 .orElseGet(() -> {
-                    // 2. If not, find their profile from the online_user_profiles table
                     OnlineUserProfile profile = onlineUserProfileRepository.findById(onlineUserId)
                             .orElseThrow(() -> new RuntimeException("Online user profile not found"));
 
-                    // 3. Create a new patient record using their profile info
                     Patient newPatient = new Patient();
                     newPatient.setFullName(profile.getFullName());
                     newPatient.setContactNumber(profile.getContactNumber());
                     newPatient.setEmail(profile.getEmail());
-                    newPatient.setLinkedOnlineUser(profile.getUserAccount()); // Link the account
+                    newPatient.setLinkedOnlineUser(profile.getUserAccount());
 
-                    // 4. Save and return the new patient record
                     return patientRepository.save(newPatient);
                 });
     }
