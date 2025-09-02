@@ -1,13 +1,18 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.OnlineUserRegistrationDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.UserProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.OnlineUserProfile;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Patient;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.OnlineUserProfileRepository;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.PatientRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.OnlineUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +39,40 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         dto.setProfilePictureUrl(profile.getProfilePictureUrl());
 
         return dto;
+    }
+
+    private final PatientRepository patientRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    @Transactional
+    public void registerNewOnlineUser(OnlineUserRegistrationDto dto) {
+        if (userAccountRepository.findByUsername(dto.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        UserAccount account = new UserAccount();
+        account.setUsername(dto.getUsername());
+        account.setPassword(passwordEncoder.encode(dto.getPassword()));
+        account.setRole(UserAccount.Role.ONLINEUSER);
+        account.setActive(true);
+        account = userAccountRepository.save(account);
+
+        OnlineUserProfile profile = new OnlineUserProfile();
+        profile.setUserAccount(account);
+        profile.setFullName(dto.getFullName());
+        profile.setEmail(dto.getEmail());
+        profile.setContactNumber(dto.getContactNumber());
+        onlineUserProfileRepository.save(profile);
+
+        Patient patient = new Patient();
+        patient.setFullName(dto.getFullName());
+        patient.setEmail(dto.getEmail());
+        patient.setContactNumber(dto.getContactNumber());
+        patient.setDateOfBirth(dto.getDateOfBirth());
+        patient.setGender(dto.getGender());
+        patient.setAddress(dto.getAddress());
+        patient.setLinkedOnlineUser(account);
+        patientRepository.save(patient);
     }
 }
