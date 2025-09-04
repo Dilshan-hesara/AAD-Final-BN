@@ -91,5 +91,15 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         profileRepository.save(profile);
     }
 
+    @Override
+    public void changeMyPassword(String username, PasswordChangeDto dto) {
+        UserAccount account = userAccountRepository.findByUsername(username).orElseThrow();
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), account.getPassword())) {
+            throw new RuntimeException("Incorrect current password");
+        }
+        account.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userAccountRepository.save(account);
+    }
+
 
 }
