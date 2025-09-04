@@ -12,4 +12,6 @@ public interface OnlineUserService {
 
     public void updateMyProfile(String username, UserProfileDto dto);
     public void changeMyPassword(String username, PasswordChangeDto dto);
+    public void updateProfilePicture(String username, MultipartFile file) ;
+
 }
