@@ -1,6 +1,7 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.OnlineUserRegistrationDto;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.PasswordChangeDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.UserProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.OnlineUserProfile;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Patient;
@@ -8,11 +9,13 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.OnlineUserProfileRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.PatientRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.FileStorageService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.OnlineUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -75,4 +78,18 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         patient.setLinkedOnlineUser(account);
         patientRepository.save(patient);
     }
+
+
+    private final OnlineUserProfileRepository profileRepository;
+
+    @Override
+    public void updateMyProfile(String username, UserProfileDto dto) {
+        OnlineUserProfile profile = profileRepository.findByUserAccount_Username(username).orElseThrow();
+        profile.setFullName(dto.getFullName());
+        profile.setEmail(dto.getEmail());
+        profile.setContactNumber(dto.getContactNumber());
+        profileRepository.save(profile);
+    }
+
+
 }
