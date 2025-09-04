@@ -101,5 +101,13 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         userAccountRepository.save(account);
     }
 
+    private final FileStorageService fileStorageService;
 
+    @Override
+    public void updateProfilePicture(String username, MultipartFile file) {
+        OnlineUserProfile profile = profileRepository.findByUserAccount_Username(username).orElseThrow();
+        String filePath = fileStorageService.storeFile(file);
+        profile.setProfilePictureUrl(filePath);
+        profileRepository.save(profile);
+    }
 }
