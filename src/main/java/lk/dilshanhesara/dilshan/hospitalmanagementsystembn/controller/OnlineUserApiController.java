@@ -103,17 +103,24 @@ public class OnlineUserApiController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/my-profile/change-password")
-    public ResponseEntity<Void> changeMyPassword(@RequestBody PasswordChangeDto dto) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        onlineUserService.changeMyPassword(username, dto);
-        return ResponseEntity.ok().build();
-    }
 
     @PostMapping("/my-profile/upload-picture")
     public ResponseEntity<Void> uploadProfilePicture(@RequestParam("file") MultipartFile file) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         onlineUserService.updateProfilePicture(username, file);
         return ResponseEntity.ok().build();
+    }
+
+
+
+    @PostMapping("/my-profile/change-password")
+    public ResponseEntity<?> changeMyPassword(@RequestBody PasswordChangeDto dto) {
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            onlineUserService.changeMyPassword(username, dto);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 }
