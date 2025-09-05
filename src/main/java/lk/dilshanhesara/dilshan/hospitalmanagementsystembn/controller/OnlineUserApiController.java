@@ -103,5 +103,12 @@ public class OnlineUserApiController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/my-profile/change-password")
+    public ResponseEntity<Void> changeMyPassword(@RequestBody PasswordChangeDto dto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        onlineUserService.changeMyPassword(username, dto);
+        return ResponseEntity.ok().build();
+    }
+
 
 }
