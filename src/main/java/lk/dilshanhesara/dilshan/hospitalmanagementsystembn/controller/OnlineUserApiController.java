@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -93,5 +94,14 @@ public class OnlineUserApiController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(onlineUserDashboardService.getDashboardData(username));
     }
+
+
+    @PostMapping("/my-profile/update")
+    public ResponseEntity<Void> updateMyProfile(@RequestBody UserProfileDto dto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        onlineUserService.updateMyProfile(username, dto);
+        return ResponseEntity.ok().build();
+    }
+
 
 }
