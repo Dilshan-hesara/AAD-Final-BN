@@ -27,7 +27,6 @@ public class WebConfig implements WebMvcConfigurer {
 
 //    @Override
 //    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        // 'uploads' ෆෝල්ඩරය project එකේ root එකේ තිබේ නම්
 //        registry.addResourceHandler("/uploads/**")
 //                .addResourceLocations("file:uploads/");
 //    }
@@ -36,7 +35,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Map URL /uploads/** to actual file system location
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:" + System.getProperty("user.dir") + "/uploads/");
     }
