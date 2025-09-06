@@ -40,12 +40,25 @@ public class AiAssistantServiceImpl implements AiAssistantService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         String fullUrl = GEMINI_API_URL + "?key=" + apiKey;
-        String systemInstruction = "You are a helpful AI health assistant for HMS. Provide general health advice and information based on user-described symptoms. Do not provide medical diagnoses. Always advise the user to consult a real doctor for serious issues.";
-        Map<String, Object> body = Map.of("contents", Collections.singletonList(Map.of("parts", Collections.singletonList(Map.of("text", systemInstruction + "\n\nUser: " + userMessage)))));
+
+        String systemInstruction = "You are a helpful AI health assistant for HMS. Provide general health advice. " +
+                "Do NOT provide a diagnosis. Always advise the user to consult a real doctor. " +
+                "IMPORTANT: Format your response using simple HTML. Use <b>...</b> tags for headings. Use <ul> and <li> for lists.";
+
+        Map<String, Object> body = Map.of(
+                "contents", Collections.singletonList(
+                        Map.of("parts", Collections.singletonList(
+                                Map.of("text", systemInstruction + "\n\nUser: " + userMessage)
+                        ))
+                )
+        );
+
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
 
         try {
             String jsonResponse = restTemplate.postForObject(fullUrl, entity, String.class);
+
 
             // --- CRITICAL FIX: Safely parse the JSON to get the text ---
             Map<String, Object> responseMap = objectMapper.readValue(jsonResponse, Map.class);
@@ -59,4 +72,6 @@ public class AiAssistantServiceImpl implements AiAssistantService {
             return "Sorry, I am unable to process your request at the moment.";
         }
     }
+
+
 }
