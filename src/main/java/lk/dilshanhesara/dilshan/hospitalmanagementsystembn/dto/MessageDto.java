@@ -9,4 +9,7 @@ public class MessageDto {
     private String senderBranchName;
     private String content;
     private LocalDateTime timestamp;
+
+    private String senderFullName;
+    private String senderRole;
 }
