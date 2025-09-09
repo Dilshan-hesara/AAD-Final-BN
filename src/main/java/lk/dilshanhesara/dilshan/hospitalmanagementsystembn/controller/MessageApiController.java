@@ -20,18 +20,41 @@ public class MessageApiController {
     private final StaffProfileService staffProfileService;
 
     @GetMapping("/conversation/{otherBranchId}")
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
     public ResponseEntity<List<MessageDto>> getConversation(@PathVariable Long otherBranchId) {
         StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-        List<MessageDto> conversation = messageService.getConversation(myProfile.getBranchId(), otherBranchId);
-        return ResponseEntity.ok(conversation);
+        return ResponseEntity.ok(messageService.getConversation(myProfile.getBranchId(), otherBranchId));
     }
 
     @PostMapping("/send")
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
     public ResponseEntity<Void> sendMessage(@RequestBody MessageRequestDto dto) {
         StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-        messageService.sendMessage(myProfile.getBranchId(), dto);
+        messageService.sendMessage(myProfile.getUserId(), dto);
         return ResponseEntity.ok().build();
     }
+
+//    @GetMapping("/conversation/{otherBranchId}")
+//    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
+//    public ResponseEntity<List<MessageDto>> getConversation(@PathVariable Long otherBranchId) {
+//        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+//        List<MessageDto> conversation = messageService.getConversation(myProfile.getBranchId(), otherBranchId);
+//        return ResponseEntity.ok(conversation);
+//    }
+
+    //    @PostMapping("/send")
+    //    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
+    //    public ResponseEntity<Void> sendMessage(@RequestBody MessageRequestDto dto) {
+    //        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+    //        messageService.sendMessage(myProfile.getBranchId(), dto);
+    //        return ResponseEntity.ok().build();
+    //    }
+
+
+
+    // In MessageApiController.java
+//    @PostMapping("/send")
+//    public ResponseEntity<Void> sendMessage(@RequestBody MessageRequestDto dto) {
+//        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+//        messageService.sendMessage(myProfile.getBranchId(), myProfile.getUserId(), dto);
+//        return ResponseEntity.ok().build();
+//    }
 }
