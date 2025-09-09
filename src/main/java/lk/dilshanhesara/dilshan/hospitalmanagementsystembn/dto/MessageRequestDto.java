@@ -1,5 +1,6 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto;
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
 import lombok.Data;
 
 
@@ -7,4 +8,6 @@ import lombok.Data;
 public class MessageRequestDto {
     private Long receiverBranchId;
     private String content;
+
+    private UserAccount.Role recipientRole;
 }
