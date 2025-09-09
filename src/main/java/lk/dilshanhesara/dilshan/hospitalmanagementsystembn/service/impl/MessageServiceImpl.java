@@ -1,5 +1,6 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.ContactDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.MessageDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.MessageRequestDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Branch;
@@ -16,8 +17,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 //... imports
 @Service
@@ -154,27 +157,133 @@ public class MessageServiceImpl implements MessageService {
 
 
 
+//    @Override
+//    @Transactional
+//    public void sendMessage(Integer senderUserId, MessageRequestDto dto) {
+//        // Find the sender's UserAccount and StaffProfile
+//        UserAccount sender = userAccountRepository.findById(senderUserId)
+//                .orElseThrow(() -> new RuntimeException("Sender user not found"));
+//        StaffProfile senderProfile = staffProfileRepository.findById(senderUserId)
+//                .orElseThrow(() -> new RuntimeException("Sender profile not found"));
+//
+//        // --- CRITICAL FIX: Find the receiver's Branch from the database ---
+//        Branch receiverBranch = branchRepository.findById(dto.getReceiverBranchId())
+//                .orElseThrow(() -> new RuntimeException("Receiver branch not found"));
+//
+//        Message message = new Message();
+//        message.setSender(sender);
+//        message.setSenderBranch(senderProfile.getBranch());
+//        message.setReceiverBranch(receiverBranch); // <-- Set the found branch object
+//        message.setRecipientRole(dto.getRecipientRole());
+//        message.setContent(dto.getContent());
+//
+//        messageRepository.save(message);
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public List<ContactDto> getContacts(Long myBranchId) {
+        // 1. Find all Super Admins using the correct method
+        List<ContactDto> superAdmins = userAccountRepository.findAllByRole(UserAccount.Role.SUPER_ADMIN)
+                .stream()
+                .map(ua -> {
+                    ContactDto dto = new ContactDto();
+                    dto.setBranchName("Super Admin");
+                    dto.setRole("SUPER_ADMIN");
+                    return dto;
+                }).collect(Collectors.toList());
+
+        // 2. Find all other branches
+        List<ContactDto> branches = branchRepository.findAll().stream()
+                .filter(branch -> !branch.getId().equals(myBranchId))
+                .flatMap(branch -> Stream.of(
+                        createContactDto(branch.getId(), branch.getName(), "BRANCH_ADMIN"),
+                        createContactDto(branch.getId(), branch.getName(), "RECEPTIONIST")
+                )).collect(Collectors.toList());
+
+        // 3. Combine the lists
+        List<ContactDto> allContacts = new ArrayList<>();
+        allContacts.addAll(superAdmins);
+        allContacts.addAll(branches);
+        return allContacts;
+    }
+
+    // ... your other methods (getConversation, sendMessage, etc.)
+
+    private ContactDto createContactDto(Long branchId, String branchName, String role) {
+        ContactDto dto = new ContactDto();
+        dto.setBranchId(branchId);
+        dto.setBranchName(branchName);
+        dto.setRole(role);
+        return dto;
+    }
+//
+//    @Override
+//    public List<MessageDto> getConversation(Long myBranchId, UserAccount.Role myRole, Long otherBranchId, UserAccount.Role otherRole) {
+//        List<Message> messages = messageRepository.findAdvancedConversation(myBranchId, myRole, otherBranchId, otherRole);
+//        return messages.stream()
+//                .map(this::convertToMessageDto)
+//                .collect(Collectors.toList());
+//    }
+
     @Override
     @Transactional
     public void sendMessage(Integer senderUserId, MessageRequestDto dto) {
-        // Find the sender's UserAccount and StaffProfile
-        UserAccount sender = userAccountRepository.findById(senderUserId)
-                .orElseThrow(() -> new RuntimeException("Sender user not found"));
-        StaffProfile senderProfile = staffProfileRepository.findById(senderUserId)
-                .orElseThrow(() -> new RuntimeException("Sender profile not found"));
-
-        // --- CRITICAL FIX: Find the receiver's Branch from the database ---
-        Branch receiverBranch = branchRepository.findById(dto.getReceiverBranchId())
-                .orElseThrow(() -> new RuntimeException("Receiver branch not found"));
+        UserAccount sender = userAccountRepository.findById(senderUserId).orElseThrow();
+        StaffProfile senderProfile = staffProfileRepository.findById(senderUserId).orElseThrow();
 
         Message message = new Message();
         message.setSender(sender);
         message.setSenderBranch(senderProfile.getBranch());
-        message.setReceiverBranch(receiverBranch); // <-- Set the found branch object
-        message.setRecipientRole(dto.getRecipientRole());
         message.setContent(dto.getContent());
+        message.setRecipientRole(dto.getRecipientRole());
+
+        // Handle sending to a branch vs. Super Admin
+        if (dto.getRecipientRole() == UserAccount.Role.SUPER_ADMIN) {
+            message.setReceiverBranch(null); // No specific branch for Super Admin
+        } else {
+            Branch receiverBranch = branchRepository.findById(dto.getReceiverBranchId()).orElseThrow();
+            message.setReceiverBranch(receiverBranch);
+        }
 
         messageRepository.save(message);
     }
+
+    // ... your other existing methods for notifications ...
+
+
+    @Override
+    public List<MessageDto> getConversation(Long myBranchId, UserAccount.Role myRole, Long otherBranchId, UserAccount.Role otherRole) {
+        // --- Use the new, powerful repository method ---
+        List<Message> messages = messageRepository.findAdvancedConversation(myBranchId, myRole, otherBranchId, otherRole);
+        return messages.stream()
+                .map(this::convertToMessageDto)
+                .collect(Collectors.toList());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
