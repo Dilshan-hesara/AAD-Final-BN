@@ -122,16 +122,16 @@ public class MessageServiceImpl implements MessageService {
 
 
 
-
-    @Override
-    public void sendMessage(Integer senderUserId, MessageRequestDto dto) {
-        // ... find sender, senderProfile, receiverBranch
-
-        Message message = new Message();
-        // ... set sender, senderBranch, receiverBranch, content
-        message.setRecipientRole(dto.getRecipientRole()); // <-- Set the recipient role
-        messageRepository.save(message);
-    }
+//
+//    @Override
+//    public void sendMessage(Integer senderUserId, MessageRequestDto dto) {
+//        // ... find sender, senderProfile, receiverBranch
+//
+//        Message message = new Message();
+//        // ... set sender, senderBranch, receiverBranch, content
+//        message.setRecipientRole(dto.getRecipientRole()); // <-- Set the recipient role
+//        messageRepository.save(message);
+//    }
 
     // --- ADD THESE NEW METHODS for notifications ---
     @Override
@@ -151,4 +151,30 @@ public class MessageServiceImpl implements MessageService {
         });
         messageRepository.saveAll(messages);
     }
+
+
+
+    @Override
+    @Transactional
+    public void sendMessage(Integer senderUserId, MessageRequestDto dto) {
+        // Find the sender's UserAccount and StaffProfile
+        UserAccount sender = userAccountRepository.findById(senderUserId)
+                .orElseThrow(() -> new RuntimeException("Sender user not found"));
+        StaffProfile senderProfile = staffProfileRepository.findById(senderUserId)
+                .orElseThrow(() -> new RuntimeException("Sender profile not found"));
+
+        // --- CRITICAL FIX: Find the receiver's Branch from the database ---
+        Branch receiverBranch = branchRepository.findById(dto.getReceiverBranchId())
+                .orElseThrow(() -> new RuntimeException("Receiver branch not found"));
+
+        Message message = new Message();
+        message.setSender(sender);
+        message.setSenderBranch(senderProfile.getBranch());
+        message.setReceiverBranch(receiverBranch); // <-- Set the found branch object
+        message.setRecipientRole(dto.getRecipientRole());
+        message.setContent(dto.getContent());
+
+        messageRepository.save(message);
+    }
+
 }
