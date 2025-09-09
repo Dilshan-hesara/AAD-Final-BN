@@ -58,4 +58,13 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
 
     @Query("SELECT ua FROM UserAccount ua JOIN ua.staffProfile sp WHERE ua.role = 'BRANCH_ADMIN'")
     Page<UserAccount> findBranchAdmins(Pageable pageable);
+
+
+
+    Page<UserAccount> findByRole(UserAccount.Role role, Pageable pageable);
+    // --- METHOD 1: Pagination සමඟින් user ලැයිස්තුවක් ලබාගැනීමට ---
+
+    // --- METHOD 2: Pagination නොමැතිව, සම්පූර්ණ user ලැයිස්තුවක් ලබාගැනීමට ---
+    List<UserAccount> findAllByRole(UserAccount.Role role);
+    // --- METHOD 2: To count the total number of users with a specific role ---
 }
