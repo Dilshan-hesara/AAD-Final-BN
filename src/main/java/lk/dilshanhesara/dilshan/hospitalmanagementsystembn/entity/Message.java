@@ -36,6 +36,30 @@ public class Message {
 
 
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//
+//    @ManyToOne @JoinColumn(name = "sender_user_id", nullable = false)
+//    private UserAccount sender;
+//
+//    @ManyToOne @JoinColumn(name = "sender_branch_id", nullable = false)
+//    private Branch senderBranch;
+//
+//    @ManyToOne @JoinColumn(name = "receiver_branch_id", nullable = false)
+//    private Branch receiverBranch;
+//
+//    @Enumerated(EnumType.STRING)
+//    private UserAccount.Role recipientRole; // e.g., BRANCH_ADMIN, RECEPTIONIST
+//
+//    @Lob
+//    private String content;
+//
+//    private boolean isRead = false; // For notifications
+//
+//    private LocalDateTime timestamp = LocalDateTime.now();
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,19 +67,17 @@ public class Message {
     @ManyToOne @JoinColumn(name = "sender_user_id", nullable = false)
     private UserAccount sender;
 
-    @ManyToOne @JoinColumn(name = "sender_branch_id", nullable = false)
+    @ManyToOne @JoinColumn(name = "sender_branch_id") // Can be null for Super Admin
     private Branch senderBranch;
 
-    @ManyToOne @JoinColumn(name = "receiver_branch_id", nullable = false)
+    @ManyToOne @JoinColumn(name = "receiver_branch_id") // Can be null for Super Admin
     private Branch receiverBranch;
 
     @Enumerated(EnumType.STRING)
-    private UserAccount.Role recipientRole; // e.g., BRANCH_ADMIN, RECEPTIONIST
+    private UserAccount.Role recipientRole;
 
     @Lob
     private String content;
-
-    private boolean isRead = false; // For notifications
-
+    private boolean isRead = false;
     private LocalDateTime timestamp = LocalDateTime.now();
 }
