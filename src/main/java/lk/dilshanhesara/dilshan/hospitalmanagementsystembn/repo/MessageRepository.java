@@ -15,4 +15,32 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     long countByReceiverBranchIdAndRecipientRoleAndIsReadFalse(Long branchId, UserAccount.Role role);
 
+
+
+//    @Query("SELECT m FROM Message m WHERE " +
+//            // Messages between two branches, targeting specific roles
+//            "((m.senderBranch.id = :branch1Id AND m.receiverBranch.id = :branch2Id AND m.recipientRole = :role2) OR " +
+//            "(m.senderBranch.id = :branch2Id AND m.receiverBranch.id = :branch1Id AND m.recipientRole = :role1)) OR " +
+//            // Messages sent FROM a branch TO the Super Admin
+//            "(m.senderBranch.id = :branch1Id AND m.recipientRole = 'SUPER_ADMIN') OR " +
+//            // Messages sent TO a branch FROM the Super Admin
+//            "(m.receiverBranch.id = :branch1Id AND m.sender.role = 'SUPER_ADMIN' AND m.recipientRole = :role1) " +
+//            "ORDER BY m.timestamp ASC")
+//    List<Message> findAdvancedConversation(Long branch1Id, UserAccount.Role role1, Long branch2Id, UserAccount.Role role2);
+
+
+    // --- REPLACE the old findConversation query with this new one ---
+    @Query("SELECT m FROM Message m WHERE " +
+            // Messages between two branches, targeting specific roles
+            "((m.senderBranch.id = :branch1Id AND m.receiverBranch.id = :branch2Id AND m.recipientRole = :role2 AND m.sender.role = :role1) OR " +
+            "(m.senderBranch.id = :branch2Id AND m.receiverBranch.id = :branch1Id AND m.recipientRole = :role1 AND m.sender.role = :role2)) OR " +
+            // Messages from a branch TO Super Admin
+            "((m.senderBranch.id = :branch1Id AND m.recipientRole = 'SUPER_ADMIN' AND :role2 = 'SUPER_ADMIN') OR " +
+            // Messages TO a branch FROM Super Admin
+            "(m.receiverBranch.id = :branch1Id AND m.sender.role = 'SUPER_ADMIN' AND m.recipientRole = :role1)) " +
+            "ORDER BY m.timestamp ASC")
+    List<Message> findAdvancedConversation(Long branch1Id, UserAccount.Role role1, Long branch2Id, UserAccount.Role role2);
+
+
+
 }
