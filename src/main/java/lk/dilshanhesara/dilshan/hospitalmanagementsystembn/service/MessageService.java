@@ -6,6 +6,12 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.MessageRequestDto
 
 import java.util.List;
 public interface MessageService {
+//    List<MessageDto> getConversation(Long myBranchId, Long otherBranchId);
+//    void sendMessage(Long senderBranchId, MessageRequestDto dto);
+//
+//    public void sendMessage(Long senderBranchId, Integer senderUserId, MessageRequestDto dto) ;
+
+
     List<MessageDto> getConversation(Long myBranchId, Long otherBranchId);
-    void sendMessage(Long senderBranchId, MessageRequestDto dto);
-}
+    void sendMessage(Integer senderUserId, MessageRequestDto dto);
+    }
