@@ -85,20 +85,20 @@ public class MessageServiceImpl implements MessageService {
                 .map(this::convertToMessageDto).collect(Collectors.toList());
     }
 
-    @Override
-    @Transactional
-    public void sendMessage(Integer senderUserId, MessageRequestDto dto) {
-        UserAccount sender = userAccountRepository.findById(senderUserId).orElseThrow();
-        StaffProfile senderProfile = staffProfileRepository.findById(senderUserId).orElseThrow();
-        Branch receiverBranch = branchRepository.findById(dto.getReceiverBranchId()).orElseThrow();
-
-        Message message = new Message();
-        message.setSender(sender);
-        message.setSenderBranch(senderProfile.getBranch());
-        message.setReceiverBranch(receiverBranch);
-        message.setContent(dto.getContent());
-        messageRepository.save(message);
-    }
+//    @Override
+//    @Transactional
+//    public void sendMessage(Integer senderUserId, MessageRequestDto dto) {
+//        UserAccount sender = userAccountRepository.findById(senderUserId).orElseThrow();
+//        StaffProfile senderProfile = staffProfileRepository.findById(senderUserId).orElseThrow();
+//        Branch receiverBranch = branchRepository.findById(dto.getReceiverBranchId()).orElseThrow();
+//
+//        Message message = new Message();
+//        message.setSender(sender);
+//        message.setSenderBranch(senderProfile.getBranch());
+//        message.setReceiverBranch(receiverBranch);
+//        message.setContent(dto.getContent());
+//        messageRepository.save(message);
+//    }
 
     private MessageDto convertToMessageDto(Message message) {
         MessageDto dto = new MessageDto();
@@ -111,5 +111,44 @@ public class MessageServiceImpl implements MessageService {
         dto.setSenderBranchId(message.getSenderBranch().getId());
         dto.setSenderBranchName(message.getSenderBranch().getName());
         return dto;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public void sendMessage(Integer senderUserId, MessageRequestDto dto) {
+        // ... find sender, senderProfile, receiverBranch
+
+        Message message = new Message();
+        // ... set sender, senderBranch, receiverBranch, content
+        message.setRecipientRole(dto.getRecipientRole()); // <-- Set the recipient role
+        messageRepository.save(message);
+    }
+
+    // --- ADD THESE NEW METHODS for notifications ---
+    @Override
+    public long getUnreadMessageCount(Long branchId, UserAccount.Role role) {
+        return messageRepository.countByReceiverBranchIdAndRecipientRoleAndIsReadFalse(branchId, role);
+    }
+
+    @Override
+    @Transactional
+    public void markConversationAsRead(Long myBranchId, Long otherBranchId, UserAccount.Role myRole) {
+        List<Message> messages = messageRepository.findConversation(myBranchId, otherBranchId);
+        messages.forEach(msg -> {
+            // Mark messages as read if I am the recipient
+            if (msg.getReceiverBranch().getId().equals(myBranchId) && msg.getRecipientRole() == myRole) {
+                msg.setRead(true);
+            }
+        });
+        messageRepository.saveAll(messages);
     }
 }
