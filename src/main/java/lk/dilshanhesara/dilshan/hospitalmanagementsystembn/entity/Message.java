@@ -39,16 +39,23 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_branch_id", nullable = false)
+
+    @ManyToOne @JoinColumn(name = "sender_user_id", nullable = false)
+    private UserAccount sender;
+
+    @ManyToOne @JoinColumn(name = "sender_branch_id", nullable = false)
     private Branch senderBranch;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_branch_id", nullable = false)
+
+    @ManyToOne @JoinColumn(name = "receiver_branch_id", nullable = false)
     private Branch receiverBranch;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_user_id", nullable = false)
-    private UserAccount sender; // The user who sent the message
+
+    @Enumerated(EnumType.STRING)
+    private UserAccount.Role recipientRole; // e.g., BRANCH_ADMIN, RECEPTIONIST
+
     @Lob
     private String content;
+
+    private boolean isRead = false; // For notifications
+
     private LocalDateTime timestamp = LocalDateTime.now();
 }
