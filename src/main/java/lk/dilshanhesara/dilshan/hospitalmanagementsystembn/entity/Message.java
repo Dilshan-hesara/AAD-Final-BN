@@ -67,6 +67,11 @@ public class Message {
     @ManyToOne @JoinColumn(name = "sender_user_id", nullable = false)
     private UserAccount sender;
 
+
+    @ManyToOne
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private UserAccount receiver;
+
     @ManyToOne @JoinColumn(name = "sender_branch_id") // Can be null for Super Admin
     private Branch senderBranch;
 
@@ -80,4 +85,12 @@ public class Message {
     private String content;
     private boolean isRead = false;
     private LocalDateTime timestamp = LocalDateTime.now();
+
+
+
+
+
+
+
+
 }
