@@ -67,4 +67,15 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     // --- METHOD 2: Pagination නොමැතිව, සම්පූර්ණ user ලැයිස්තුවක් ලබාගැනීමට ---
     List<UserAccount> findAllByRole(UserAccount.Role role);
     // --- METHOD 2: To count the total number of users with a specific role ---
+
+
+
+    @Query("SELECT ua FROM UserAccount ua JOIN ua.staffProfile sp WHERE sp.branch.id = :branchId AND ua.role = 'BRANCH_ADMIN'")
+    List<UserAccount> findBranchAdminInBranch(Long branchId);
+
+    /**
+     * Finds all Receptionist user accounts in a specific branch, excluding the current user.
+     */
+    @Query("SELECT ua FROM UserAccount ua JOIN ua.staffProfile sp WHERE sp.branch.id = :branchId AND ua.role = 'RECEPTIONIST' AND ua.userId != :myUserId")
+    List<UserAccount> findColleaguesInBranch(Long branchId, Integer myUserId);
 }
