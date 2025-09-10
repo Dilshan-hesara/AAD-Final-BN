@@ -61,27 +61,27 @@ public class MessageApiController {
 //        return ResponseEntity.ok(messageService.getConversation(myProfile.getBranchId(), otherBranchId));
 //    }
 
-    @GetMapping("/conversation") // Changed from /conversation/{id}
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
-    public ResponseEntity<List<MessageDto>> getConversation(
-            @RequestParam Long otherBranchId,
-            @RequestParam UserAccount.Role otherRole) {
+//    @GetMapping("/conversation") // Changed from /conversation/{id}
+//    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
+//    public ResponseEntity<List<MessageDto>> getConversation(
+//            @RequestParam Long otherBranchId,
+//            @RequestParam UserAccount.Role otherRole) {
+//
+//        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+//        UserAccount.Role myRole = UserAccount.Role.valueOf(myProfile.getRole());
+//
+//        List<MessageDto> conversation = messageService.getConversation(myProfile.getBranchId(), myRole, otherBranchId, otherRole);
+//
+//        return ResponseEntity.ok(conversation);
+//    }
 
-        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-        UserAccount.Role myRole = UserAccount.Role.valueOf(myProfile.getRole());
-
-        List<MessageDto> conversation = messageService.getConversation(myProfile.getBranchId(), myRole, otherBranchId, otherRole);
-
-        return ResponseEntity.ok(conversation);
-    }
-
-    @PostMapping("/send")
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')") // <-- ADD THIS
-    public ResponseEntity<Void> sendMessage(@RequestBody MessageRequestDto dto) {
-        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-        messageService.sendMessage(myProfile.getUserId(), dto);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/send")
+//    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')") // <-- ADD THIS
+//    public ResponseEntity<Void> sendMessage(@RequestBody MessageRequestDto dto) {
+//        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+//        messageService.sendMessage(myProfile.getUserId(), dto);
+//        return ResponseEntity.ok().build();
+//    }
 
     @GetMapping("/notifications")
     @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')") // <-- ADD THIS
@@ -102,16 +102,16 @@ public class MessageApiController {
 
 
     // In MessageApiController.java
-
-    @GetMapping("/contacts")
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
-    public ResponseEntity<List<ContactDto>> getContacts() {
-        // 1. Get the profile of the currently logged-in admin
-        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-
-        // 2. Pass their branch ID to the service method
-        return ResponseEntity.ok(messageService.getContacts(myProfile.getBranchId()));
-    }
+//
+//    @GetMapping("/contacts")
+//    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
+//    public ResponseEntity<List<ContactDto>> getContacts() {
+//        // 1. Get the profile of the currently logged-in admin
+//        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+//
+//        // 2. Pass their branch ID to the service method
+//        return ResponseEntity.ok(messageService.getContacts(myProfile.getBranchId()));
+//    }
 
 // Update your other endpoints to match the new service methods
 //    @GetMapping("/conversation/{otherBranchId}")
@@ -139,4 +139,80 @@ public class MessageApiController {
 //        messageService.sendMessage(myProfile.getBranchId(), myProfile.getUserId(), dto);
 //        return ResponseEntity.ok().build();
 //    }
+
+
+
+//    @GetMapping("/receptionist-contacts")
+//    @PreAuthorize("hasAuthority('ROLE_RECEPTIONIST')")
+//    public ResponseEntity<List<ContactDto>> getReceptionistContacts() {
+//        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+//        return ResponseEntity.ok(messageService.getReceptionistContacts(myProfile.getBranchId(), myProfile.getUserId()));
+//    }
+//
+//    @GetMapping("/conversation/{otherUserId}")
+//    public ResponseEntity<List<MessageDto>> getConversation(@PathVariable Integer otherUserId) {
+//        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+//        return ResponseEntity.ok(messageService.getConversation(myProfile.getUserId(), otherUserId));
+//    }
+
+
+
+
+
+
+
+//
+//
+//
+//    @GetMapping("/contacts")
+//    public ResponseEntity<List<ContactDto>> getContacts() {
+//        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+//        return ResponseEntity.ok(messageService.getContacts(myProfile.getBranchId()));
+//    }
+
+    // --- CRITICAL FIX: This method is now corrected ---
+    @GetMapping("/conversation")
+    public ResponseEntity<List<MessageDto>> getConversation(
+            @RequestParam Long otherBranchId,
+            @RequestParam UserAccount.Role otherRole) {
+
+        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        UserAccount.Role myRole = UserAccount.Role.valueOf(myProfile.getRole());
+        List<MessageDto> conversation = messageService.getConversation(myProfile.getBranchId(), myRole, otherBranchId, otherRole);
+        return ResponseEntity.ok(conversation);
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<Void> sendMessage(@RequestBody MessageRequestDto dto) {
+        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        messageService.sendMessage(myProfile.getUserId(), dto);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+    // This method is for getting the contact list for the logged-in user
+    @GetMapping("/contacts")
+    public ResponseEntity<List<ContactDto>> getContacts() {
+        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        return ResponseEntity.ok(messageService.getContacts(myProfile.getUserId(), myProfile.getBranchId()));
+    }
+
+    // --- CORRECTED ENDPOINT ---
+    @GetMapping("/conversation/{otherUserId}")
+    public ResponseEntity<List<MessageDto>> getConversation(@PathVariable Integer otherUserId) {
+        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        return ResponseEntity.ok(messageService.getConversation(myProfile.getUserId(), otherUserId));
+    }
+
+
+
+
+
+
+
+
+
+
 }
