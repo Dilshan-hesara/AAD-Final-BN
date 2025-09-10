@@ -78,4 +78,17 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
      */
     @Query("SELECT ua FROM UserAccount ua JOIN ua.staffProfile sp WHERE sp.branch.id = :branchId AND ua.role = 'RECEPTIONIST' AND ua.userId != :myUserId")
     List<UserAccount> findColleaguesInBranch(Long branchId, Integer myUserId);
+
+
+
+    // Finds all users who are either a BRANCH_ADMIN or a RECEPTIONIST
+    @Query("SELECT ua FROM UserAccount ua WHERE ua.role IN ('BRANCH_ADMIN', 'RECEPTIONIST')")
+    List<UserAccount> findAllStaffUsers();
+
+
+
+
+    @Query("SELECT ua FROM UserAccount ua JOIN ua.staffProfile sp WHERE sp.branch.id = :branchId AND ua.role = :role")
+    List<UserAccount> findUserInBranchByRole(Long branchId, UserAccount.Role role);
+
 }
