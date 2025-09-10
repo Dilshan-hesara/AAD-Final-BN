@@ -43,4 +43,21 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
 
 
+//
+//    @Query("SELECT m FROM Message m WHERE (m.sender.id = :userId1 AND m.receiver.id = :userId2) OR (m.sender.id = :userId2 AND m.receiver.id = :userId1) ORDER BY m.timestamp ASC")
+//    List<Message> findConversation(Integer userId1, Integer userId2);
+//
+//    // --- CORRECTED METHOD NAME ---
+//    // Changed from countByReceiverId... to countByReceiver_UserId...
+//    long countByReceiver_UserIdAndIsReadFalse(Integer receiverId);
+
+
+    // --- CORRECTED QUERY ---
+    @Query("SELECT m FROM Message m WHERE (m.sender.id = :userId1 AND m.receiver.id = :userId2) OR (m.sender.id = :userId2 AND m.receiver.id = :userId1) ORDER BY m.timestamp ASC")
+    List<Message> findConversation(Integer userId1, Integer userId2);
+
+    // This method for notifications is correct
+    long countByReceiver_UserIdAndIsReadFalse(Integer receiverId);
+
+
 }
