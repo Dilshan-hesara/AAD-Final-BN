@@ -12,4 +12,8 @@ public class MessageDto {
 
     private String senderFullName;
     private String senderRole;
+
+
+    private Integer senderId;
+
 }
