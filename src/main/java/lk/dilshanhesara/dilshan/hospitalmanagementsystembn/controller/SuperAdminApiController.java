@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -373,5 +374,33 @@ public class SuperAdminApiController {
         return ResponseEntity.ok().build();
     }
 
+
+
+    private final MessageService messageService;
+    private final StaffProfileService staffProfileService;
+    // ... your other services and endpoints
+
+    // --- ADD THESE NEW ENDPOINTS FOR MESSAGING ---
+
+    @GetMapping("/messages/contacts")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<List<ContactDto>> getContacts() {
+        return ResponseEntity.ok(messageService.getSuperAdminContacts());
+    }
+
+    @GetMapping("/messages/conversation/{otherUserId}")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<List<MessageDto>> getConversation(@PathVariable Integer otherUserId) {
+        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        return ResponseEntity.ok(messageService.getConversation(myProfile.getUserId(), otherUserId));
+    }
+
+    @PostMapping("/messages/send")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<Void> sendMessage(@RequestBody MessageRequestDto dto) {
+        StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
+        messageService.sendMessageSuper(myProfile.getUserId(), dto);
+        return ResponseEntity.ok().build();
+    }
 
 }
