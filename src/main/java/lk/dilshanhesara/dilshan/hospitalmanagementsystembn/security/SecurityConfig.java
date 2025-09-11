@@ -49,42 +49,10 @@ public class SecurityConfig {
                         // ADD THIS RULE: Allow public access to the uploads folder
                         .requestMatchers("/uploads/**").permitAll()
                         // =========================================================
-
-
-//                        .requestMatchers("/api/messages/**").hasAnyAuthority("ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
-//                        .requestMatchers("/api/staff/my-profile").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
-//                        // All other requests must be authenticated
-//                        .anyRequest().authenticated()
-
-
-
-
-
-
-
-                                .requestMatchers("/api/auth/**", "/uploads/**").permitAll()
-
-                                // APIs for ANY logged-in user
-                                .requestMatchers("/api/branches", "/api/doctors/by-branch/**", "/api/patients/search").authenticated()
-
-                                // APIs for Staff (Admins and Receptionists)
-                                .requestMatchers("/api/staff/my-profile").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
-                                .requestMatchers("/api/messages/**").hasAnyAuthority("ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST", "ROLE_SUPER_ADMIN")
-
-                                // APIs for BRANCH_ADMIN role ONLY
-                                .requestMatchers("/api/receptionists/**").hasAuthority("ROLE_BRANCH_ADMIN")
-                                .requestMatchers("/api/doctors/**").hasAuthority("ROLE_BRANCH_ADMIN")
-                                .requestMatchers("/api/patients/**").hasAuthority("ROLE_BRANCH_ADMIN")
-                                .requestMatchers("/api/appointments/**").hasAuthority("ROLE_BRANCH_ADMIN")
-                                .requestMatchers("/api/branch-dashboard/**").hasAuthority("ROLE_BRANCH_ADMIN")
-
-                                // APIs for SUPER_ADMIN role ONLY
-                                .requestMatchers("/api/super-admin/**").hasAuthority("ROLE_SUPER_ADMIN")
-
-                                // APIs for ONLINEUSER role ONLY
-                                .requestMatchers("/api/user/**").hasAuthority("ROLE_ONLINEUSER")
-
-                                .anyRequest().authenticated()
+                        .requestMatchers("/api/messages/**").hasAnyAuthority("ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
+                        .requestMatchers("/api/staff/my-profile").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
+                        // All other requests must be authenticated
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
