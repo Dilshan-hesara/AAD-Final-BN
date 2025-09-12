@@ -9,18 +9,12 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "otp_codes")
 public class OtpCode {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "otp_code", nullable = false)
-    private String otpCode;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserAccount userAccount;
-
-    @Column(name = "expiry_time", nullable = false)
+    private String otpCode;
     private LocalDateTime expiryTime;
 }
