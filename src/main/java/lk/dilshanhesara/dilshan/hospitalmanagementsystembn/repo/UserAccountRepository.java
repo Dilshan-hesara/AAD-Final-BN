@@ -19,6 +19,15 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
 
 
 
+    // --- ADD THIS NEW METHOD ---
+    // This query checks both staff and online user profiles for a matching email
+    @Query("SELECT ua FROM UserAccount ua " +
+            "LEFT JOIN StaffProfile sp ON ua.userId = sp.userId " +
+            "LEFT JOIN OnlineUserProfile oup ON ua.userId = oup.userId " +
+            "WHERE sp.email = :email OR oup.email = :email")
+    Optional<UserAccount> findByEmail(String email);
+
+
     // ... your existing findByUsername method
 
     // NEW METHOD: Finds all user accounts with the role RECEPTIONIST for a given branch ID
@@ -90,5 +99,10 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
 
     @Query("SELECT ua FROM UserAccount ua JOIN ua.staffProfile sp WHERE sp.branch.id = :branchId AND ua.role = :role")
     List<UserAccount> findUserInBranchByRole(Long branchId, UserAccount.Role role);
+
+
+
+
+
 
 }
