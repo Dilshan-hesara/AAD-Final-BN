@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -42,5 +44,28 @@ public class UserServiceImpl implements UserService {
         profile.setEmail(dto.getEmail());
         profile.setContactNumber(dto.getContactNumber());
         onlineUserProfileRepository.save(profile);
+    }
+
+
+    @Override
+    @Transactional
+    public void processOAuthPostLogin(String email, String fullName) {
+        Optional<UserAccount> existUser = userAccountRepository.findByUsername(email);
+
+        if (existUser.isEmpty()) {
+            UserAccount newUser = new UserAccount();
+            newUser.setUsername(email);
+            newUser.setPassword(passwordEncoder.encode("OAUTH_USER_DUMMY_PASSWORD"));
+            newUser.setRole(UserAccount.Role.ONLINEUSER);
+            newUser.setActive(true);
+            newUser = userAccountRepository.save(newUser);
+
+            OnlineUserProfile profile = new OnlineUserProfile();
+            profile.setUserAccount(newUser);
+            profile.setFullName(fullName);
+            profile.setEmail(email);
+            profile.setContactNumber("N/A");
+            onlineUserProfileRepository.save(profile);
+        }
     }
 }
