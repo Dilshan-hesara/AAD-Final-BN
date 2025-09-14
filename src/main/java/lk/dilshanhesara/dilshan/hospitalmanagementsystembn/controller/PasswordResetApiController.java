@@ -15,10 +15,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PasswordResetApiController {
     private final OtpService otpService;
+
     @PostMapping("/request")
     public ResponseEntity<?> requestReset(@RequestBody Map<String, String> payload) {
-        otpService.generateAndSendOtp(payload.get("username"));
-        return ResponseEntity.ok("OTP sent to your registered email.");
+        try {
+            // --- CRITICAL CHANGE: Use the correct key from the frontend ---
+            otpService.generateAndSendOtp(payload.get("identifier"));
+            return ResponseEntity.ok(Map.of("message", "OTP sent successfully."));
+        } catch (RuntimeException e) {
+            // If the user is not found, return a 404 Not Found status
+            return ResponseEntity.status(404).body(Map.of("error", "User not found with the provided identifier."));
+        }
     }
     @PostMapping("/verify")
     public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> payload) {
