@@ -32,53 +32,53 @@ public class OtpServiceImpl implements OtpService {
 
 
 
-//    @Override
-//    @Transactional
-//    public void generateAndSendOtp(String username) {
-//        UserAccount account = userAccountRepository.findByUsername(username)
-//                .orElseThrow(() -> new RuntimeException("User not found with that username"));
-//
-//        // --- Logic to find the user's email ---
-//        String userEmail = findUserEmail(account.getUserId(), account.getRole());
-//        if (userEmail == null) {
-//            throw new RuntimeException("Email not found for the user.");
-//        }
-//
-//        // Generate a 6-digit OTP
-//        String otp = new Random().ints(6, 0, 10)
-//                .mapToObj(String::valueOf)
-//                .collect(Collectors.joining());
-//
-//        OtpCode otpCode = new OtpCode();
-//        otpCode.setUserAccount(account);
-//        otpCode.setOtpCode(otp);
-//        otpCode.setExpiryTime(LocalDateTime.now().plusMinutes(5)); // OTP expires in 5 minutes
-//        otpCodeRepository.save(otpCode);
-//
-//        // Send the OTP via email
-//        emailService.sendOtpEmail(userEmail, otp);
-//    }
-
-
-
-
-
-
     @Override
     @Transactional
-    public void generateAndSendOtp(String identifier) { // The input can be a username or an email
-        // Try to find the user by username first, then by email
-        UserAccount account = userAccountRepository.findByUsername(identifier)
-                .or(() -> userAccountRepository.findByEmail(identifier))
-                .orElseThrow(() -> new RuntimeException("User not found with the provided username or email"));
+    public void generateAndSendOtp(String username) {
+        UserAccount account = userAccountRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with that username"));
 
+        // --- Logic to find the user's email ---
         String userEmail = findUserEmail(account.getUserId(), account.getRole());
         if (userEmail == null) {
             throw new RuntimeException("Email not found for the user.");
         }
 
-        // ... the rest of the OTP generation and sending logic remains the same
+        // Generate a 6-digit OTP
+        String otp = new Random().ints(6, 0, 10)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining());
+
+        OtpCode otpCode = new OtpCode();
+        otpCode.setUserAccount(account);
+        otpCode.setOtpCode(otp);
+        otpCode.setExpiryTime(LocalDateTime.now().plusMinutes(5)); // OTP expires in 5 minutes
+        otpCodeRepository.save(otpCode);
+
+        // Send the OTP via email
+        emailService.sendOtpEmail(userEmail, otp);
     }
+
+
+
+
+
+
+//    @Override
+//    @Transactional
+//    public void generateAndSendOtp(String identifier) { // The input can be a username or an email
+//        // Try to find the user by username first, then by email
+//        UserAccount account = userAccountRepository.findByUsername(identifier)
+//                .or(() -> userAccountRepository.findByEmail(identifier))
+//                .orElseThrow(() -> new RuntimeException("User not found with the provided username or email"));
+//
+//        String userEmail = findUserEmail(account.getUserId(), account.getRole());
+//        if (userEmail == null) {
+//            throw new RuntimeException("Email not found for the user.");
+//        }
+//
+//        // ... the rest of the OTP generation and sending logic remains the same
+//    }
 
     @Override
     public boolean verifyOtp(String username, String code) {
