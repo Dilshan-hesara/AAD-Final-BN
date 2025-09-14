@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/uploads/**", "/api/password-reset/**").permitAll()
 
                         // ADD THIS RULE: Allow public access to the uploads folder
                         .requestMatchers("/uploads/**").permitAll()
@@ -58,6 +59,8 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        http
