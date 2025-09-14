@@ -5,4 +5,6 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.RegistrationReque
 
 public interface UserService {
     void registerOnlineUser(RegistrationRequestDto registrationDto);
-}
+
+    public void processOAuthPostLogin(String email, String fullName) ;
+    }
