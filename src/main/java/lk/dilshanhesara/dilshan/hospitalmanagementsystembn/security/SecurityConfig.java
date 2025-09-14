@@ -25,40 +25,76 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+//
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+//        return authConfig.getAuthenticationManager();
+//    }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .cors(cors -> {})
+//                .csrf(csrf -> csrf.disable())
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/auth/**").permitAll()
+//                        .requestMatchers("/api/auth/**", "/uploads/**", "/api/password-reset/**").permitAll()
+//
+//                        // ADD THIS RULE: Allow public access to the uploads folder
+//                        .requestMatchers("/uploads/**").permitAll()
+//                        // =========================================================
+//                        .requestMatchers("/api/messages/**").hasAnyAuthority("ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
+//                        .requestMatchers("/api/staff/my-profile").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
+//                        // All other requests must be authenticated
+//                        .anyRequest().authenticated()
+//                )
+//                // ... your existing cors, csrf, sessionManagement ...
+//                .authorizeHttpRequests(auth -> auth
+//                                .requestMatchers("/api/auth/**", "/oauth2/**").permitAll() // <-- Allow OAuth2 endpoints
+//                        // ... your other rules
+//                )
+
         http
                 .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/auth/**", "/uploads/**", "/api/password-reset/**").permitAll()
-
-                        // ADD THIS RULE: Allow public access to the uploads folder
-                        .requestMatchers("/uploads/**").permitAll()
-                        // =========================================================
-                        .requestMatchers("/api/messages/**").hasAnyAuthority("ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
-                        .requestMatchers("/api/staff/my-profile").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
-                        // All other requests must be authenticated
+                        .requestMatchers("/api/auth/**", "/oauth2/**", "/uploads/**").permitAll()
                         .anyRequest().authenticated()
+                )
+
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
+
+
+
+
+    // ... your other beans
+
 
 
 //    @Bean
