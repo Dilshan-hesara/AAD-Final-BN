@@ -130,5 +130,10 @@ public interface AppointmentRepository  extends JpaRepository<Appointment, Long>
 
     @Query("SELECT a FROM Appointment a WHERE a.patient.linkedOnlineUser.username = :username AND a.appointmentDate < :now ORDER BY a.appointmentDate DESC")
     List<Appointment> findRecentAppointmentsByUsername(String username, LocalDateTime now);
+
+
+
+    // Finds all appointments scheduled between two dates
+    List<Appointment> findAllByAppointmentDateBetween(LocalDateTime start, LocalDateTime end);
 }
 
