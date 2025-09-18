@@ -23,11 +23,6 @@ public class SuperBranch {
     private final BranchService branchService;
     private final DashboardService dashboardService;
 
-//    @GetMapping("/summary")
-//    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
-//    public ResponseEntity<List<BranchSummaryDto>> getBranchSummaries() {
-//        return ResponseEntity.ok(branchService.getAllBranchSummaries());
-//    }
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
