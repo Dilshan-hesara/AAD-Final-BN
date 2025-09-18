@@ -8,14 +8,9 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
 
 import java.util.List;
 public interface MessageService {
-//    List<MessageDto> getConversation(Long myBranchId, Long otherBranchId);
-//    void sendMessage(Long senderBranchId, MessageRequestDto dto);
-//
-//    public void sendMessage(Long senderBranchId, Integer senderUserId, MessageRequestDto dto) ;
 
 
     List<MessageDto> getConversation(Long myBranchId, Long otherBranchId);
-//    void sendMessage(Integer senderUserId, MessageRequestDto dto);
 
 
 
