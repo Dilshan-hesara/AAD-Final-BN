@@ -6,6 +6,7 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.OnlineUserProf
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.AppointmentRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.NotificationRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.OnlineUserProfileRepository;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -122,84 +123,28 @@ public class NotificationService {
     }
 
 
-    // This method will run automatically every day at 8 AM
-//    @Scheduled(cron = "0 0 8 * * ?")
-//    @Transactional
-//    public void createUpcomingAppointmentNotifications() {
-//        System.out.println("Running scheduled task: Creating appointment notifications...");
-//        LocalDateTime start = LocalDate.now().plusDays(1).atStartOfDay(); // Tomorrow
-//        LocalDateTime end = start.plusDays(1); // The day after tomorrow
-//
-//        // Find all appointments scheduled for tomorrow
-//        List<Appointment> upcomingAppointments = appointmentRepository.findAllByAppointmentDateBetween(start, end);
-//
-//        for (Appointment app : upcomingAppointments) {
-//            if (app.getPatient().getLinkedOnlineUser() != null) {
-//                String message = String.format(
-//                        "Reminder: You have an upcoming appointment with %s tomorrow at %s.",
-//                        app.getDoctor().getFullName(),
-//                        app.getBranch().getName()
-//                );
-//
-//                Notification notification = new Notification();
-//                notification.setUser(app.getPatient().getLinkedOnlineUser());
-//                notification.setMessage(message);
-//                notificationRepository.save(notification);
-//            }
-//        }
-//        System.out.println("Finished creating notifications for " + upcomingAppointments.size() + " appointments.");
-//    }
-//
-//    public List<Notification> getUnreadNotifications(String username) {
-//        return notificationRepository.findByUser_UsernameAndIsReadFalseOrderByCreatedAtDesc(username);
-//    }
-//
-//    @Transactional
-//    public void markNotificationsAsRead(String username) {
-//        List<Notification> unread = getUnreadNotifications(username);
-//        unread.forEach(n -> n.setRead(true));
-//        notificationRepository.saveAll(unread);
-//    }
+
+    // branch addmin notification
 
 
-//
-//    @Scheduled(cron = "0 0 8 * * ?")
-//    @Transactional
-//    public void createUpcomingAppointmentNotifications() {
-//        System.out.println("SCHEDULER: Checking for upcoming appointments...");
-//        LocalDateTime startOfTomorrow = LocalDate.now().plusDays(1).atStartOfDay();
-//        LocalDateTime endOfTomorrow = startOfTomorrow.plusDays(1);
-//
-//        List<Appointment> upcomingAppointments = appointmentRepository.findAllByAppointmentDateBetween(startOfTomorrow, endOfTomorrow);
-//
-//        for (Appointment app : upcomingAppointments) {
-//            if (app.getPatient().getLinkedOnlineUser() != null) {
-//                String message = String.format(
-//                        "Reminder: You have an appointment with %s at %s tomorrow.",
-//                        app.getDoctor().getFullName(),
-//                        app.getBranch().getName()
-//                );
-//
-//                Notification notification = new Notification();
-//                notification.setUser(app.getPatient().getLinkedOnlineUser());
-//                notification.setMessage(message);
-//                notificationRepository.save(notification);
-//            }
-//        }
-//        System.out.println("SCHEDULER: Created " + upcomingAppointments.size() + " new notifications.");
-//    }
-//
-//    public List<Notification> getUnreadNotifications(String username) {
-//        return notificationRepository.findByUser_UsernameAndIsReadFalseOrderByCreatedAtDesc(username);
-//    }
-//
-//    @Transactional
-//    public void markNotificationsAsRead(String username) {
-//        List<Notification> unread = getUnreadNotifications(username);
-//        if (!unread.isEmpty()) {
-//            unread.forEach(n -> n.setRead(true));
-//            notificationRepository.saveAll(unread);
-//        }
-//    }
+    private final UserAccountRepository userAccountRepository;
+
+    // --- ADD THIS NEW METHOD ---
+    @Transactional
+    public void createNewAppointmentNotificationForAdmin(Appointment appointment) {
+        userAccountRepository.findBranchAdminByBranchId(appointment.getBranch().getId())
+                .ifPresent(branchAdmin -> {
+                    String message = String.format(
+                            "New online booking from %s for Dr. %s.",
+                            appointment.getPatient().getFullName(),
+                            appointment.getDoctor().getFullName()
+                    );
+                    Notification notification = new Notification();
+                    notification.setUser(branchAdmin);
+                    notification.setMessage(message);
+                    notification.setAppointment(appointment);
+                    notificationRepository.save(notification);
+                });
+    }
 
 }
