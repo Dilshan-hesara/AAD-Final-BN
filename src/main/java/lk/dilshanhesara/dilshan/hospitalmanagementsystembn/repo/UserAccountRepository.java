@@ -105,4 +105,10 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
 
 
 
+
+    // --- ADD THIS NEW METHOD ---
+    @Query("SELECT ua FROM UserAccount ua JOIN ua.staffProfile sp WHERE sp.branch.id = :branchId AND ua.role = 'BRANCH_ADMIN'")
+    Optional<UserAccount> findBranchAdminByBranchId(Long branchId);
+
+
 }
