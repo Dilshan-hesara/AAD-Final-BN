@@ -18,7 +18,7 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + 86400000); // 1 day
+        Date expiryDate = new Date(now.getTime() + 86400000);
 
         return Jwts.builder()
                 .setSubject(username)
