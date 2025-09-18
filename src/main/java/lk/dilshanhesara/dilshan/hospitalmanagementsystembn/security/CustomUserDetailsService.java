@@ -28,9 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserAccount userAccount = userAccountRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        // =============================================================
-        //  CRITICAL FIX: Add the "ROLE_" prefix to the authority
-        // =============================================================
+
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userAccount.getRole().name());
 
         System.out.println("🔹 Logging in user: " + username + " | Assigning Authority: " + authority.getAuthority());
