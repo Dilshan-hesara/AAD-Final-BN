@@ -28,23 +28,6 @@ public class OnlineUserApiController {
         return ResponseEntity.ok(profile);
     }
 
-//    @GetMapping("/my-appointments")
-//    public ResponseEntity<List<AppointmentResponseDto>> getMyAppointments() {
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//        List<AppointmentResponseDto> appointments = appointmentService.findAppointmentsByUsername(username);
-//        return ResponseEntity.ok(appointments);
-//    }
-
-
-
-//
-//    @PostMapping("/book-appointment")
-//    public ResponseEntity<?> bookAppointment(@RequestBody AppointmentRequestDto dto) {
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//        Appointment newAppointment = appointmentService.createAppointmentForOnlineUser(dto, username);
-//        return ResponseEntity.ok(Map.of("appointmentId", newAppointment.getId()));
-//    }
-
     private final BranchService branchService;
     private final DoctorService doctorService;
     @GetMapping
