@@ -63,9 +63,7 @@ public class AuthApiController {
 
 
         private final OnlineUserService onlineUserService;
-    // ... your other existing fields
 
-    // ... your existing /login endpoint
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody OnlineUserRegistrationDto registrationDto) {
