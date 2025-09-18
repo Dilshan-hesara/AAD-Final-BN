@@ -29,11 +29,6 @@ public class StaffApiController {
     }
 
 
-
-
-
-
-
     @PostMapping("/my-profile/update")
     public ResponseEntity<Void> updateMyProfile(@RequestBody StaffProfileDto profileDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
