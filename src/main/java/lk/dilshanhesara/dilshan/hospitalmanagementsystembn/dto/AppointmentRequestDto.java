@@ -11,6 +11,7 @@ public class AppointmentRequestDto {
     private Integer doctorId;
     private LocalDateTime appointmentDate;
     private String reason;
+    private Long branchId;
 
 
 
