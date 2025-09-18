@@ -28,67 +28,6 @@ public class AppointmentApiController {
     private final StaffProfileService staffProfileService;
     private final ModelMapper modelMapper;
 
-//    @GetMapping
-//    public ResponseEntity<List<AppointmentResponseDto>> getAppointmentsForBranch() {
-//        StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-//        List<AppointmentResponseDto> appointments = appointmentService.findAppointmentsByBranch(adminProfile.getBranchId());
-//        return ResponseEntity.ok(appointments);
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<Void> createAppointment(@RequestBody AppointmentRequestDto dto) {
-//        StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-//        appointmentService.createAppointment(dto, adminProfile.getBranchId());
-//        return ResponseEntity.ok().build();
-//    }
-//
-//
-//
-//    // This PATCH method for updating the status is also correct
-//    @PatchMapping("/{id}/status")
-//    public ResponseEntity<Void> updateStatus(
-//            @PathVariable Long id,
-//            @RequestBody UpdateStatusRequestDto requestDto) {
-//        appointmentService.updateAppointmentStatus(id, requestDto.getStatus());
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    // In AppointmentApiController.java
-//    @GetMapping("/online-bookings/today")
-//    public ResponseEntity<List<AppointmentResponseDto>> getTodaysOnlineBookings() {
-//        StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-//        List<AppointmentResponseDto> appointments = appointmentService.findOnlineUserAppointmentsForToday(adminProfile.getBranchId());
-//        return ResponseEntity.ok(appointments);
-//    }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-////    SERCH
-//
-//
-//    @GetMapping
-//    public ResponseEntity<Page<AppointmentResponseDto>> searchAppointments(
-//            @RequestParam(required = false) String patientName,
-//            @RequestParam(required = false) String status,
-//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-//            Pageable pageable) { // Spring automatically handles page, size, sort
-//
-//        StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-//        Page<AppointmentResponseDto> results = appointmentService.searchAppointments(adminProfile.getBranchId(), patientName, status, date, pageable);
-//        return ResponseEntity.ok(results);
-//    }
-
-
-
-
-
-
 
     @GetMapping
     public ResponseEntity<Page<AppointmentResponseDto>> searchAppointments(
