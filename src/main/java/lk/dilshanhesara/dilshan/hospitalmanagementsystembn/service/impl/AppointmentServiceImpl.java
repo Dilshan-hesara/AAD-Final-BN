@@ -5,6 +5,7 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.NotificationService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.PatientService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.SettingsService;
 import lombok.RequiredArgsConstructor;
@@ -384,6 +385,37 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
 
+
+//
+//
+    private final NotificationService notificationService; // <-- INJECT THE SERVICE
+
+    @Override
+    @Transactional
+    public Appointment createAppointmentForOnlineUserBA(AppointmentRequestDto dto, String username) {
+        UserAccount account = userAccountRepository.findByUsername(username).orElseThrow();
+        Patient patient = patientService.getOrCreatePatientForOnlineUser(account.getUserId());
+        Doctor doctor = doctorRepository.findById(dto.getDoctorId()).orElseThrow();
+        Branch branch = branchRepository.findById(dto.getBranchId()).orElseThrow();
+
+        // --- CRITICAL FIX: Create the Appointment object first ---
+        Appointment newAppointment = new Appointment();
+        newAppointment.setPatient(patient);
+        newAppointment.setDoctor(doctor);
+        newAppointment.setBranch(branch);
+        newAppointment.setAppointmentDate(dto.getAppointmentDate());
+        newAppointment.setReason(dto.getReason());
+        newAppointment.setStatus("PENDING_PAYMENT");
+        newAppointment.setFee(new BigDecimal("2500.00"));
+
+        // Now, save the object you just created
+        Appointment savedAppointment = appointmentRepository.save(newAppointment);
+
+        // Trigger the notification for the admin
+        notificationService.createNewAppointmentNotificationForAdmin(savedAppointment);
+
+        return savedAppointment;
+    }
 
 
 }
