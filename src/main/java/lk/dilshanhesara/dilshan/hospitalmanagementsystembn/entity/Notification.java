@@ -24,7 +24,6 @@ public class Notification {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Link to the appointment to prevent duplicate notifications
     @OneToOne
     @JoinColumn(name = "appointment_id", unique = true)
     private Appointment appointment;
