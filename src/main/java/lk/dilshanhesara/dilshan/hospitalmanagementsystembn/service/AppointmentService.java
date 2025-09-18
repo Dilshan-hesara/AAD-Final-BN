@@ -22,7 +22,6 @@ public interface AppointmentService {
     List<AppointmentResponseDto> findAppointmentsByUsername(String username);
 
 
-//    public Appointment createAppointmentForOnlineUser(AppointmentRequestDto dto, String username);
 
 
     public void confirmAppointmentPayment(Long appointmentId);
