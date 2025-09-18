@@ -53,9 +53,12 @@ public interface AppointmentService {
     public Appointment createAppointmentForOnlineUser(OnlineUserAppointmentRequestDto dto, String username) ;
 
 
-    public Appointment createAppointmentForOnlineUser(AppointmentRequestDto dto, String username) ;
 
 
 
     public OnlineUserDashboardDto getDashboardData(String username);
+
+
+    public Appointment createAppointmentForOnlineUser(AppointmentRequestDto dto, String username) ;
+    public Appointment createAppointmentForOnlineUserBA(AppointmentRequestDto dto, String username) ;
     }
