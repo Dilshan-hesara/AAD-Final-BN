@@ -39,29 +39,7 @@ public class ReceptionistApiController {
         return ResponseEntity.ok().build();
     }
 
-//    @PostMapping
-//    public ResponseEntity<?> addReceptionist(@RequestBody StaffCreationRequestDto dto) {
-//        try {
-//            StaffProfileDto adminProfile = staffProfileService.getCurrentLoggedInStaffProfile();
-//            // Ensure the logged-in admin has a valid profile and branch
-//            if (adminProfile == null || adminProfile.getBranchId() == null) {
-//                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-//                        .body(Map.of("message", "Could not identify your branch. Please re-login."));
-//            }
-//            dto.setBranchId(adminProfile.getBranchId());
-//            receptionistService.addReceptionist(dto);
-//            return ResponseEntity.ok().build();
-//
-//        } catch (DataIntegrityViolationException e) {
-//            // This error happens when a unique field (like username or email) already exists.
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(Map.of("message", "This username or email is already in use."));
-//        } catch (Exception e) {
-//            // This catches all other unexpected errors.
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(Map.of("message", "An unexpected server error occurred."));
-//        }
-//    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateReceptionist(@PathVariable Integer id, @RequestBody StaffProfileDto dto) {
