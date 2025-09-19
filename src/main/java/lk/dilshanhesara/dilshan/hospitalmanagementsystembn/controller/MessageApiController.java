@@ -24,7 +24,7 @@ public class MessageApiController {
 
 
     @GetMapping("/notifications")
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')") // <-- ADD THIS
+    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
     public ResponseEntity<Map<String, Long>> getNotifications() {
         StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
         long count = messageService.getUnreadMessageCount(myProfile.getBranchId(), UserAccount.Role.valueOf(myProfile.getRole()));
@@ -32,7 +32,7 @@ public class MessageApiController {
     }
 
     @PostMapping("/mark-as-read/{otherBranchId}")
-    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')") // <-- ADD THIS
+    @PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
     public ResponseEntity<Void> markAsRead(@PathVariable Long otherBranchId) {
         StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
         messageService.markConversationAsRead(myProfile.getBranchId(), otherBranchId, UserAccount.Role.valueOf(myProfile.getRole()));
