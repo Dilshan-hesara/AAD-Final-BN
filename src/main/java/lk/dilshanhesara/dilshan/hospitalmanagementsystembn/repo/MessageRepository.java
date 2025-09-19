@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 public interface MessageRepository extends JpaRepository<Message, Long> {
-//    @Query("SELECT m FROM Message m WHERE (m.senderBranch.id = :branch1Id AND m.receiverBranch.id = :branch2Id) OR (m.senderBranch.id = :branch2Id AND m.receiverBranch.id = :branch1Id) ORDER BY m.timestamp ASC")
-//    List<Message> findConversation(Long branch1Id, Long branch2Id);
+
 
 
     @Query("SELECT m FROM Message m WHERE (m.senderBranch.id = :branch1Id AND m.receiverBranch.id = :branch2Id) OR (m.senderBranch.id = :branch2Id AND m.receiverBranch.id = :branch1Id) ORDER BY m.timestamp ASC")
@@ -15,21 +14,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     long countByReceiverBranchIdAndRecipientRoleAndIsReadFalse(Long branchId, UserAccount.Role role);
 
-
-
-//    @Query("SELECT m FROM Message m WHERE " +
-//            // Messages between two branches, targeting specific roles
-//            "((m.senderBranch.id = :branch1Id AND m.receiverBranch.id = :branch2Id AND m.recipientRole = :role2) OR " +
-//            "(m.senderBranch.id = :branch2Id AND m.receiverBranch.id = :branch1Id AND m.recipientRole = :role1)) OR " +
-//            // Messages sent FROM a branch TO the Super Admin
-//            "(m.senderBranch.id = :branch1Id AND m.recipientRole = 'SUPER_ADMIN') OR " +
-//            // Messages sent TO a branch FROM the Super Admin
-//            "(m.receiverBranch.id = :branch1Id AND m.sender.role = 'SUPER_ADMIN' AND m.recipientRole = :role1) " +
-//            "ORDER BY m.timestamp ASC")
-//    List<Message> findAdvancedConversation(Long branch1Id, UserAccount.Role role1, Long branch2Id, UserAccount.Role role2);
-
-
-    // --- REPLACE the old findConversation query with this new one ---
     @Query("SELECT m FROM Message m WHERE " +
             // Messages between two branches, targeting specific roles
             "((m.senderBranch.id = :branch1Id AND m.receiverBranch.id = :branch2Id AND m.recipientRole = :role2 AND m.sender.role = :role1) OR " +
@@ -43,20 +27,11 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
 
 
-//
-//    @Query("SELECT m FROM Message m WHERE (m.sender.id = :userId1 AND m.receiver.id = :userId2) OR (m.sender.id = :userId2 AND m.receiver.id = :userId1) ORDER BY m.timestamp ASC")
-//    List<Message> findConversation(Integer userId1, Integer userId2);
-//
-//    // --- CORRECTED METHOD NAME ---
-//    // Changed from countByReceiverId... to countByReceiver_UserId...
-//    long countByReceiver_UserIdAndIsReadFalse(Integer receiverId);
 
 
-    // --- CORRECTED QUERY ---
     @Query("SELECT m FROM Message m WHERE (m.sender.id = :userId1 AND m.receiver.id = :userId2) OR (m.sender.id = :userId2 AND m.receiver.id = :userId1) ORDER BY m.timestamp ASC")
     List<Message> findConversation(Integer userId1, Integer userId2);
 
-    // This method for notifications is correct
     long countByReceiver_UserIdAndIsReadFalse(Integer receiverId);
 
 
