@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         account.setUsername(dto.getUsername());
         account.setPassword(passwordEncoder.encode(dto.getPassword()));
         account.setRole(UserAccount.Role.ONLINEUSER);
-        account.setActive(true); // Or false until OTP verification
+        account.setActive(true);
         account = userAccountRepository.save(account);
 
         OnlineUserProfile profile = new OnlineUserProfile();

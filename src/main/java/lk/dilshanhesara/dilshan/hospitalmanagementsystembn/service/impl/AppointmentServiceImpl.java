@@ -388,7 +388,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 //
 //
-    private final NotificationService notificationService; // <-- INJECT THE SERVICE
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -398,7 +398,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         Doctor doctor = doctorRepository.findById(dto.getDoctorId()).orElseThrow();
         Branch branch = branchRepository.findById(dto.getBranchId()).orElseThrow();
 
-        // --- CRITICAL FIX: Create the Appointment object first ---
         Appointment newAppointment = new Appointment();
         newAppointment.setPatient(patient);
         newAppointment.setDoctor(doctor);
@@ -408,10 +407,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         newAppointment.setStatus("PENDING_PAYMENT");
         newAppointment.setFee(new BigDecimal("2500.00"));
 
-        // Now, save the object you just created
         Appointment savedAppointment = appointmentRepository.save(newAppointment);
 
-        // Trigger the notification for the admin
         notificationService.createNewAppointmentNotificationForAdmin(savedAppointment);
 
         return savedAppointment;

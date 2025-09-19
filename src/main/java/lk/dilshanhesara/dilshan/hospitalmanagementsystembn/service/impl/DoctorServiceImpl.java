@@ -53,7 +53,7 @@ public class DoctorServiceImpl implements DoctorService {
 
 
 @Override
-    public void deactivateDoctor(int id) { // Renamed for clarity
+    public void deactivateDoctor(int id) {
         if (!doctorRepository.existsById(id)) { throw new RuntimeException("Doctor not found"); }
         doctorRepository.updateDoctorStatusToInactive(id);
     }
