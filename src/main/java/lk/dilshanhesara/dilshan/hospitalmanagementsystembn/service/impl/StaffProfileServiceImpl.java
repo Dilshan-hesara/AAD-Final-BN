@@ -15,33 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-//
-//@Service
-//@RequiredArgsConstructor
-//public class StaffProfileServiceImpl implements StaffProfileService {
-//
-//    private final UserAccountRepository userAccountRepository;
-//    private final StaffProfileRepository staffProfileRepository;
-//
-//    @Override
-//    public StaffProfileDto findStaffByUsername(String username) {
-//        UserAccount account = userAccountRepository.findByUsername(username).orElseThrow();
-//        StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElseThrow();
-//
-//        StaffProfileDto dto = new StaffProfileDto();
-//        dto.setFullName(profile.getFullName());
-//
-//
-//        if (profile.getBranch() != null) {
-//            dto.setBranchName(profile.getBranch().getName());
-//        }
-//
-//        return dto;
-//    }
-//}
-//
-
-
 
 @Service
 @RequiredArgsConstructor
@@ -130,22 +103,19 @@ public class StaffProfileServiceImpl implements StaffProfileService {
 
     public StaffProfileDto convertToStaffProfileDto(UserAccount account) {
         StaffProfile profile = staffProfileRepository.findById(account.getUserId())
-                .orElse(new StaffProfile()); // Find the linked profile
+                .orElse(new StaffProfile());
 
         StaffProfileDto dto = new StaffProfileDto();
 
-        // Data from UserAccount
         dto.setUserId(account.getUserId());
         dto.setUsername(account.getUsername());
         dto.setActive(account.isActive());
         dto.setRole(account.getRole().name());
 
-        // Data from StaffProfile
         dto.setFullName(profile.getFullName());
         dto.setEmail(profile.getEmail());
         dto.setContactNumber(profile.getContactNumber());
 
-        // --- CRITICAL FIX: Add the profile picture URL to the DTO ---
         dto.setProfilePictureUrl(profile.getProfilePictureUrl());
 
         if (profile.getBranch() != null) {
