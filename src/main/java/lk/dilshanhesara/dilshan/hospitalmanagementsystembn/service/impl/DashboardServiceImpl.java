@@ -27,48 +27,16 @@ public class DashboardServiceImpl implements DashboardService {
     private final DoctorRepository doctorRepository;
     private final AppointmentRepository appointmentRepository;
 
-//    @Override
-//    public Map<String, Long> getBranchStatistics(Long branchId) {
-//        LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-//        LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-//
-//        long patientCount = patientRepository.count();
-//        long doctorCount = doctorRepository.countByBranch_Id(branchId);
-//        long appointmentsToday = appointmentRepository.countByBranch_IdAndAppointmentDateBetween(branchId, startOfDay, endOfDay);
-//
-//        Map<String, Long> stats = new HashMap<>();
-//        stats.put("patientCount", patientCount);
-//        stats.put("doctorCount", doctorCount);
-//        stats.put("appointmentsToday", appointmentsToday);
-//
-//        return stats;
-//    }
 
     @Autowired
-    private UserAccountRepository userAccountRepository; // Make sure this is injected
+    private UserAccountRepository userAccountRepository;
 
-//
-//    @Override
-//    public Map<String, Long> getBranchStatistics(Long branchId) {
-//        LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-//        LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-//
-//        long receptionistCount = userAccountRepository.countReceptionistsByBranch(branchId);
-//        long activeDoctorCount = doctorRepository.countByBranch_IdAndStatus(branchId, "ACTIVE");
-//        long appointmentsToday = appointmentRepository.countByBranch_IdAndAppointmentDateBetween(branchId, startOfDay, endOfDay);
-//
-//        Map<String, Long> stats = new HashMap<>();
-//        stats.put("receptionistCount", receptionistCount);
-//        stats.put("doctorCount", activeDoctorCount);
-//        stats.put("appointmentsToday", appointmentsToday);
-//        return stats;
-//    }
+
 @Override
 public Map<String, Object> getBranchStatistics(Long branchId) {
     LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
     LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
 
-    // Fetch all statistics
     long receptionistCount = userAccountRepository.countReceptionistsByBranch(branchId);
     long activeDoctorCount = doctorRepository.countByBranch_IdAndStatus(branchId, "ACTIVE");
     long confirmedCount = appointmentRepository.countByBranch_IdAndStatusAndAppointmentDateBetween(branchId, "CONFIRMED", startOfDay, endOfDay);
