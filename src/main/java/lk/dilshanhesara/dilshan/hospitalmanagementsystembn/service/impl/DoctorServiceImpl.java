@@ -77,7 +77,6 @@ public class DoctorServiceImpl implements DoctorService {
 
 
     public Page<DoctorDto> searchDoctors(Long branchId, String name, String specialization, Pageable pageable) {
-        // Build a dynamic query using Specifications
         Specification<Doctor> spec = Specification.where((root, query, cb) -> cb.equal(root.get("branch").get("id"), branchId));
 
         if (name != null && !name.isEmpty()) {
