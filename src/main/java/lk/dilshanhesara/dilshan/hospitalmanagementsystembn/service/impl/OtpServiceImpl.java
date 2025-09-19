@@ -31,40 +31,9 @@ public class OtpServiceImpl implements OtpService {
     private final PasswordEncoder passwordEncoder;
 
 
-////
-//    @Override
-//    @Transactional
-//    public void generateAndSendOtp(String username) {
-//        UserAccount account = userAccountRepository.findByUsername(username)
-//                .orElseThrow(() -> new RuntimeException("User not found with that username"));
-//
-//        // --- Logic to find the user's email ---
-//        String userEmail = findUserEmail(account.getUserId(), account.getRole());
-//        if (userEmail == null) {
-//            throw new RuntimeException("Email not found for the user.");
-//        }
-//
-//        // Generate a 6-digit OTP
-//        String otp = new Random().ints(6, 0, 10)
-//                .mapToObj(String::valueOf)
-//                .collect(Collectors.joining());
-//
-//        OtpCode otpCode = new OtpCode();
-//        otpCode.setUserAccount(account);
-//        otpCode.setOtpCode(otp);
-//        otpCode.setExpiryTime(LocalDateTime.now().plusMinutes(5)); // OTP expires in 5 minutes
-//        otpCodeRepository.save(otpCode);
-//
-//        // Send the OTP via email
-//        emailService.sendOtpEmail(userEmail, otp);
-//    }
-
-
-
     @Override
     @Transactional
-    public void generateAndSendOtp(String identifier) { // The input can now be a username OR an email
-        // Try to find the user by username first, then by email
+    public void generateAndSendOtp(String identifier) {
         UserAccount account = userAccountRepository.findByUsername(identifier)
                 .or(() -> userAccountRepository.findByEmail(identifier))
                 .orElseThrow(() -> new RuntimeException("User not found with the provided identifier"));
@@ -75,7 +44,6 @@ public class OtpServiceImpl implements OtpService {
         }
 
 
-        // Generate a 6-digit OTP
         String otp = new Random().ints(6, 0, 10)
                 .mapToObj(String::valueOf)
                 .collect(Collectors.joining());
@@ -83,47 +51,26 @@ public class OtpServiceImpl implements OtpService {
         OtpCode otpCode = new OtpCode();
         otpCode.setUserAccount(account);
         otpCode.setOtpCode(otp);
-        otpCode.setExpiryTime(LocalDateTime.now().plusMinutes(5)); // OTP expires in 5 minutes
+        otpCode.setExpiryTime(LocalDateTime.now().plusMinutes(5));
         otpCodeRepository.save(otpCode);
 
-        // Send the OTP via email
         emailService.sendOtpEmail(userEmail, otp);
-        // ... the rest of the OTP generation and sending logic remains the same
     }
 
 
 
-//
-//    @Override
-//    @Transactional
-//    public void generateAndSendOtp(String identifier) { // The input can be a username or an email
-//        // Try to find the user by username first, then by email
-//        UserAccount account = userAccountRepository.findByUsername(identifier)
-//                .or(() -> userAccountRepository.findByEmail(identifier))
-//                .orElseThrow(() -> new RuntimeException("User not found with the provided username or email"));
-//
-//        String userEmail = findUserEmail(account.getUserId(), account.getRole());
-//        if (userEmail == null) {
-//            throw new RuntimeException("Email not found for the user.");
-//        }
-//
-//
-//        // ... the rest of the OTP generation and sending logic remains the same
-//    }
 
     @Override
     public boolean verifyOtp(String username, String code) {
         return otpCodeRepository.findByUserAccount_UsernameAndOtpCode(username, code)
                 .map(otpCode -> {
-                    // Check if the OTP has expired
                     if (otpCode.getExpiryTime().isBefore(LocalDateTime.now())) {
-                        return false; // Expired
+                        return false;
                     }
-                    // If valid, delete it so it can't be used again
                     otpCodeRepository.delete(otpCode);
                     return true;
                 })
-                .orElse(false); // Not found
+                .orElse(false);
     }
 
 
@@ -136,7 +83,6 @@ public class OtpServiceImpl implements OtpService {
         UserAccount account = userAccountRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Encode the new password before saving
         account.setPassword(passwordEncoder.encode(newPassword));
         userAccountRepository.save(account);
     }

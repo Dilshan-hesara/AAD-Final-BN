@@ -91,15 +91,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         profileRepository.save(profile);
     }
 
-//    @Override
-//    public void changeMyPassword(String username, PasswordChangeDto dto) {
-//        UserAccount account = userAccountRepository.findByUsername(username).orElseThrow();
-//        if (!passwordEncoder.matches(dto.getCurrentPassword(), account.getPassword())) {
-//            throw new RuntimeException("Incorrect current password");
-//        }
-//        account.setPassword(passwordEncoder.encode(dto.getNewPassword()));
-//        userAccountRepository.save(account);
-//    }
+
 
     private final FileStorageService fileStorageService;
 
@@ -115,19 +107,15 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 
 
 
-    // --- ADD THIS NEW METHOD IMPLEMENTATION ---
     @Override
     public void changeMyPassword(String username, PasswordChangeDto dto) {
-        // Find the user by their username
         UserAccount account = userAccountRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User account not found"));
 
-        // Check if the provided current password matches the one in the database
         if (!passwordEncoder.matches(dto.getCurrentPassword(), account.getPassword())) {
             throw new RuntimeException("Incorrect current password");
         }
 
-        // If it matches, encode and set the new password
         account.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userAccountRepository.save(account);
     }
