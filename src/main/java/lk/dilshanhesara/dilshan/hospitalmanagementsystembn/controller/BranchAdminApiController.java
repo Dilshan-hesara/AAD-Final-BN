@@ -1,18 +1,17 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.StaffProfileDto;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Notification;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.NotificationService;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl.NotificationService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.StaffProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/branch-admin/notifications") // <-- New, dedicated URL
+@RequestMapping("/api/branch-admin/notifications")
 @RequiredArgsConstructor
-//@PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')") // Secures all methods
+//@PreAuthorize("hasAuthority('ROLE_BRANCH_ADMIN')")
 public class BranchAdminApiController {
 
     private final NotificationService notificationService;
