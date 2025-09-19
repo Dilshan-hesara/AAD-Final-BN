@@ -1,4 +1,4 @@
-package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service;
+package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

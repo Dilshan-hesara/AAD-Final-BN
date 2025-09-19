@@ -1,8 +1,9 @@
-package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service;
+package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Notification;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.OnlineUserProfile;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.AppointmentRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.NotificationRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.OnlineUserProfileRepository;
@@ -146,5 +147,20 @@ public class NotificationService {
                     notificationRepository.save(notification);
                 });
     }
+
+
+
+
+    public void createNotificationForSuperAdmins(String message) {
+        List<UserAccount> superAdmins = userAccountRepository.findAllByRole(UserAccount.Role.SUPER_ADMIN);
+
+        for (UserAccount admin : superAdmins) {
+            Notification notification = new Notification();
+            notification.setUser(admin);
+            notification.setMessage(message);
+            notificationRepository.save(notification);
+        }
+    }
+
 
 }

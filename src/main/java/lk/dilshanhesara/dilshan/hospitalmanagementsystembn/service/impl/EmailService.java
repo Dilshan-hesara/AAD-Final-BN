@@ -1,4 +1,4 @@
-package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service;
+package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Appointment;
 import lombok.RequiredArgsConstructor;
