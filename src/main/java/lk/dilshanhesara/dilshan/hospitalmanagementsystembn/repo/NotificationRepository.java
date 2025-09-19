@@ -9,7 +9,6 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
 
-//    List<Notification> findByUser_UsernameAndIsReadFalseOrderByCreatedAtDesc(String username);
     boolean existsByAppointmentId(Long appointmentId);
     List<Notification> findByUser_UsernameAndIsReadFalseOrderByCreatedAtDesc(String username);
 
