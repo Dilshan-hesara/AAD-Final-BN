@@ -33,7 +33,7 @@ public class AiAssistantServiceImpl implements AiAssistantService {
     private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper(); // For safe JSON parsing
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public String getChatResponse(String userMessage) {
@@ -60,7 +60,6 @@ public class AiAssistantServiceImpl implements AiAssistantService {
             String jsonResponse = restTemplate.postForObject(fullUrl, entity, String.class);
 
 
-            // --- CRITICAL FIX: Safely parse the JSON to get the text ---
             Map<String, Object> responseMap = objectMapper.readValue(jsonResponse, Map.class);
             List<Map<String, Object>> candidates = (List<Map<String, Object>>) responseMap.get("candidates");
             Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
