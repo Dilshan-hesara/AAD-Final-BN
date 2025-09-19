@@ -53,34 +53,5 @@ public class SuperAdminDashboardServiceImpl implements SuperAdminDashboardServic
         );
     }
 
-//    @Override
-//    public SuperAdminDashboardDto getDashboardSummary() {
-//        YearMonth currentMonth = YearMonth.now();
-//        LocalDateTime startOfMonth = currentMonth.atDay(1).atStartOfDay();
-//        LocalDateTime endOfMonth = currentMonth.atEndOfMonth().atTime(LocalTime.MAX);
-//
-//        // Calculate all stats
-//        long totalPatients = patientRepository.count();
-//        long totalDoctors = doctorRepository.count();
-//        long activeDoctors = doctorRepository.countByStatus("ACTIVE");
-//        long totalReceptionists = userAccountRepository.countByRole(UserAccount.Role.RECEPTIONIST);
-//        long activeReceptionists = userAccountRepository.countByRoleAndIsActive(UserAccount.Role.RECEPTIONIST, true);
-//        long totalBranchAdmins = userAccountRepository.countByRole(UserAccount.Role.BRANCH_ADMIN);
-//        long activeBranchAdmins = userAccountRepository.countByRoleAndIsActive(UserAccount.Role.BRANCH_ADMIN, true);
-//        long totalSuperAdmins = userAccountRepository.countByRole(UserAccount.Role.SUPER_ADMIN);
-//
-//        long appointmentsThisMonth = appointmentRepository.countByAppointmentDateBetween(startOfMonth, endOfMonth);
-//        long onlineAppointmentsThisMonth = appointmentRepository.countOnlineAppointmentsBetween(startOfMonth, endOfMonth);
-//        long cancelledAppointmentsThisMonth = appointmentRepository.countByStatusAndAppointmentDateBetween("CANCELLED", startOfMonth, endOfMonth);
-//
-//        // This is a placeholder; you would need a proper financial calculation
-//        double revenueThisMonth = appointmentsThisMonth * 2500.00;
-//
-//        return new SuperAdminDashboardDto(
-//                totalPatients, totalDoctors, totalReceptionists, totalBranchAdmins, totalSuperAdmins,
-//                activeDoctors, activeReceptionists, activeBranchAdmins,
-//                appointmentsThisMonth, onlineAppointmentsThisMonth, cancelledAppointmentsThisMonth,
-//                revenueThisMonth
-//        );
-//    }
+
 }
