@@ -30,7 +30,6 @@ public class SuperAdminDashboardServiceImpl implements SuperAdminDashboardServic
         LocalDateTime startOfMonth = currentMonth.atDay(1).atStartOfDay();
         LocalDateTime endOfMonth = currentMonth.atEndOfMonth().atTime(LocalTime.MAX);
 
-        // Calculate all stats
         long totalBranches = branchRepository.count();
         long totalPatients = patientRepository.count();
         long totalDoctors = doctorRepository.count();
@@ -43,7 +42,7 @@ public class SuperAdminDashboardServiceImpl implements SuperAdminDashboardServic
         long appointmentsThisMonth = appointmentRepository.countByAppointmentDateBetween(startOfMonth, endOfMonth);
         long onlineAppointmentsThisMonth = appointmentRepository.countOnlineAppointmentsBetween(startOfMonth, endOfMonth);
         long cancelledAppointmentsThisMonth = appointmentRepository.countByStatusAndAppointmentDateBetween("CANCELLED", startOfMonth, endOfMonth);
-        double revenueThisMonth = 550000.00; // Placeholder for financial calculation
+        double revenueThisMonth = 550000.00;
 
         return new SuperAdminDashboardDto(
                 totalBranches, totalPatients, revenueThisMonth,
