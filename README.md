@@ -12,6 +12,8 @@ The system is divided into four distinct user portals, each with a tailored set 
 
 ### 👨‍💼 Super Admin Portal
 The Super Admin has the highest level of authority with a global overview of the entire hospital network.
+- **Secure Registration & Login:** Users can create an account with a standard form or log in seamlessly using **Google OAuth2**.
+- **Password Reset:** A full-featured "Forgot Password" system with OTP verification via email.
 - **Global Dashboard:** View aggregate statistics for all branches, including total patients, active doctors, and monthly revenue.
 - **Branch Management:** Full CRUD functionality (Create, Read, Update, Delete) for all hospital branches, including the ability to activate and deactivate them.
 - **Staff Management:**
@@ -22,6 +24,8 @@ The Super Admin has the highest level of authority with a global overview of the
 
 ### 🏥 Branch Admin Portal
 Each Branch Admin manages their specific hospital branch.
+- **Secure Registration & Login:** Users can create an account with a standard form or log in seamlessly using **Google OAuth2**.
+- **Password Reset:** A full-featured "Forgot Password" system with OTP verification via email.
 - **Advanced Analytics Dashboard:** A detailed dashboard showing branch-specific statistics like today's earnings, new patient registrations, and appointment status breakdowns.
 - **Staff Management (for their branch):**
     -   **Doctors:** Full CRUD functionality, search with pagination, and the ability to activate/deactivate doctors.
@@ -32,6 +36,8 @@ Each Branch Admin manages their specific hospital branch.
 
 ### 📋 Receptionist Portal
 The Receptionist handles the day-to-day operations of a branch.
+- **Secure Registration & Login:** Users can create an account with a standard form or log in seamlessly using **Google OAuth2**.
+- **Password Reset:** A full-featured "Forgot Password" system with OTP verification via email.
 - **Dashboard:** A simplified dashboard showing today's appointments and key statistics for their branch.
 - **Patient Management:** Ability to search for, add, and edit patient records within their branch.
 - **Appointment Booking:** A dedicated interface to book appointments for patients, with searchable dropdowns for doctors in their branch.
@@ -93,6 +99,8 @@ Watch the full video demonstration of the **Hospital Management System (HMS)**:
 
 ## 📸 Screenshots
 
+Here are a few screenshots of the application's user interface, showcasing the modern design and key functionalities.
+
 
 | Super Admin Dashboard | Branch Admin Dashboard |
 | :---: | :---: |
@@ -104,13 +112,14 @@ Watch the full video demonstration of the **Hospital Management System (HMS)**:
 | :---: | :---: |
 | <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img_3.png" width="950px" height="250px" /> | <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img_4.png" width="950px" height="250px"/> |
 
-Super Admin - Advanced Dashboard
 
+### 🔐 Login & Sign-up Pages
 
-Branch Admin - Advanced Dashboard
+| Login Page | Sign-up Page |
+| :---: | :---: |
+| <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img_5.png" width="300px" height="300px" /> | <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img_6.png" width="300px" height="300px" /> |
 
-
-Branch Receptionist - Dashboard
-
-
-Online User - Dashboard
+| FORGET PASSWOED | Google-Login |
+| :---: | :---: |
+| <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img_7.png" width="300px" height="300px" /> | <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img_8.png" width="300px" height="300px" /> |
+---
