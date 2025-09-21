@@ -13,9 +13,7 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepos
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.BranchAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,98 +29,10 @@ public class BranchAdminServiceImpl implements BranchAdminService {
     private final PasswordEncoder passwordEncoder;
 
 
-//    @Override
-//    public Page<StaffProfileDto> getAllBranchAdmins(Pageable pageable) {
-//        Page<UserAccount> accounts = userAccountRepository.findByRoleWithProfile(UserAccount.Role.BRANCH_ADMIN, pageable);
-//        return accounts.map(this::convertToStaffProfileDto);
-//    }
-//    @Override
-//    @Transactional
-//    public void addBranchAdmin(StaffCreationRequestDto dto) {
-//        Branch branch = branchRepository.findById(dto.getBranchId()).orElseThrow(() -> new RuntimeException("Branch not found"));
-//
-//        UserAccount account = new UserAccount();
-//        account.setUsername(dto.getUsername());
-//        account.setPassword(passwordEncoder.encode(dto.getPassword()));
-//        account.setRole(UserAccount.Role.BRANCH_ADMIN);
-//        account.setActive(true);
-//        account = userAccountRepository.save(account);
-//
-//
-//        StaffProfile profile = new StaffProfile();
-//        profile.setUserAccount(account);
-//        profile.setFullName(dto.getFullName());
-//        profile.setBranch(branch);
-//        profile.setEmail(dto.getEmail());
-//        profile.setContactNumber(dto.getContactNumber());
-//        staffProfileRepository.save(profile);
-//    }
-//
-//    @Override
-//    public Page<StaffProfileDto> getAllBranchAdmins(Pageable pageable) {
-//        // Use the new repository method that supports sorting by name
-//        Page<UserAccount> accounts = userAccountRepository.findBranchAdmins(pageable);
-//        return accounts.map(this::convertToStaffProfileDto);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void updateBranchAdmin(Integer userId, AdminUpdateRequestDto dto) {
-//        UserAccount account = userAccountRepository.findById(userId)
-//                .orElseThrow(() -> new RuntimeException("User account not found"));
-//
-//        StaffProfile profile = staffProfileRepository.findById(userId)
-//                .orElseThrow(() -> new RuntimeException("Staff profile not found"));
-//
-//        // Update details in StaffProfile
-//        profile.setFullName(dto.getFullName());
-//        profile.setEmail(dto.getEmail());
-//        profile.setContactNumber(dto.getContactNumber());
-//
-//        // Update details in UserAccount
-//        account.setUsername(dto.getUsername());
-//
-//        // Only update the password if a new one is provided
-//        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-//            account.setPassword(passwordEncoder.encode(dto.getPassword()));
-//        }
-//
-//        staffProfileRepository.save(profile);
-//        userAccountRepository.save(account);
-//    }
-//
-//
-//    @Override
-//    public void deleteBranchAdmin(Integer userId) {
-//        userAccountRepository.deleteById(userId);
-//    }
-//    @Override
-//    public void updateUserStatus(Integer userId, boolean isActive) {
-//        UserAccount account = userAccountRepository.findById(userId)
-//                .orElseThrow(() -> new RuntimeException("User account not found"));
-//        account.setActive(isActive);
-//        userAccountRepository.save(account);
-//    }
-//
-//    private StaffProfileDto convertToStaffProfileDto(UserAccount account) {
-//        StaffProfile profile = staffProfileRepository.findById(account.getUserId()).orElse(new StaffProfile());
-//        StaffProfileDto dto = new StaffProfileDto();
-//        dto.setUserId(account.getUserId());
-//        dto.setUsername(account.getUsername());
-//        dto.setFullName(profile.getFullName());
-//        dto.setActive(account.isActive());
-//        if (profile.getBranch() != null) {
-//            dto.setBranchName(profile.getBranch().getName());
-//        }
-//        return dto;
-//    }
-//
-//
 
 
     @Override
     public Page<StaffProfileDto> searchBranchAdmins(String keyword, Long branchId, Pageable pageable) {
-        // This implementation is correct
         Specification<UserAccount> spec = (root, query, cb) -> {
             Join<UserAccount, StaffProfile> profileJoin = root.join("staffProfile");
             return cb.equal(root.get("role"), UserAccount.Role.BRANCH_ADMIN);
@@ -176,7 +86,16 @@ public class BranchAdminServiceImpl implements BranchAdminService {
         profile.setContactNumber(dto.getContactNumber());
         profile.setBranch(branch);
         staffProfileRepository.save(profile);
+
+        String message = String.format(
+                "New Branch Admin '%s' has been created for the '%s' branch.",
+                dto.getFullName(),
+                branch.getName()
+        );
+        notificationService.createNotificationForSuperAdmins(message);
     }
+
+
 
     @Override
     @Transactional
@@ -231,5 +150,12 @@ public class BranchAdminServiceImpl implements BranchAdminService {
             dto.setBranchName(profile.getBranch().getName());
         }
         return dto;
+
     }
+
+
+    private final NotificationService notificationService;
+
+
+
 }
