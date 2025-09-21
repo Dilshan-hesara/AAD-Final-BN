@@ -168,8 +168,8 @@ Backend (FN) Project Structure
 
 Hospital-Management-System-FN/
 ├── css/
-│   ├── styles.css             // Main stylesheet for all portals
-│   └── print.css              // Styles specifically for printing reports
+│   ├── styles.css             // Main stylesheet portals
+│   └── print.css              // Styles specifically printing reports
 ├── images/
 │   └── default-avatar.png     // A default placeholder profile picture
 ├── js/
@@ -201,8 +201,8 @@ Hospital-Management-System-FN/
 │   └── ... (all other Online User pages)
 │
 ├── index.html                 // The main public landing page
-├── login.html                 // The central login page for all users
-├── register.html              // Registration page for new Online Users
+├── login.html                 // The central login page all users
+├── register.html              // Registration page  new Online Users
 ├── forgot-password.html
 └── verify-otp.html
 
