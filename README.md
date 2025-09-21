@@ -6,6 +6,12 @@ The system is built with a **Spring Boot REST API** backend and a separate **HTM
 
 ---
 
+[ Hospital Management System (HMS) Backend REPO Click Here to Explore ]()
+
+
+[ Hospital Management System (HMS) Frontend REPO Click Here to Explore ]()
+
+
 ## ✨ Key Features
 
 The system is divided into four distinct user portals, each with a tailored set of features.
