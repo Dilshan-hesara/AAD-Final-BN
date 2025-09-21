@@ -48,6 +48,16 @@ A public-facing portal for patients to interact with the hospital.
 
 ---
 
+## 🎥 Video Demonstration
+
+Watch the full video demonstration of the **Hospital Management System (HMS)**:
+
+📺 [Click Here to Watch ](https://youtu.be/UB0N_QzZHtU)
+
+<a href="https://youtu.be/8iN61XVstGs" target="_blank">
+  <img src="https://github.com/Dilshan-hesara/Complaint-Management-System/blob/master/src/main/webapp/assets/img/08.png" width="400" height="250" alt="Watch on YouTube">
+</a>
+
 ## 🛠️ Technology Stack
 
 | Area          | Technology                                                                          |
