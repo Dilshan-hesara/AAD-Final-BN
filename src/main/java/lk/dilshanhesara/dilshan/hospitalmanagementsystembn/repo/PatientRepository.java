@@ -21,14 +21,12 @@ public interface PatientRepository extends JpaRepository<Patient, Long>, JpaSpec
     Page<Patient> findPatientsByBranch(Long branchId, Pageable pageable);
 
 
-    // Finds patients where the full name contains the search term (case-insensitive)
     Page<Patient> findByFullNameContainingIgnoreCase(String name, Pageable pageable);
 
     @Query("SELECT COUNT(DISTINCT a.patient.id) FROM Appointment a WHERE a.branch.id = :branchId")
     long countByBranchId(Long branchId);
 
 
-    // Add this method to count all patients linked to a branch via appointments
     @Query("SELECT COUNT(DISTINCT a.patient.id) FROM Appointment a WHERE a.branch.id = :branchId")
     long countTotalPatientsByBranch(Long branchId);
 
