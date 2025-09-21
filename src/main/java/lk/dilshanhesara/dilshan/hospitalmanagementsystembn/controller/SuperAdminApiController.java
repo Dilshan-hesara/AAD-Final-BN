@@ -1,9 +1,10 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.*;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Notification;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.*;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +54,6 @@ public class SuperAdminApiController {
     }
 
 
-    // --- ADD THESE NEW ENDPOINTS ---
     @GetMapping("/all-doctors")
     public ResponseEntity<Page<DoctorDto>> getAllDoctors(
             @RequestParam(required = false) String keyword,
@@ -65,7 +65,6 @@ public class SuperAdminApiController {
 
     @GetMapping("/doctors/{id}")
     public ResponseEntity<DoctorDto> getDoctorById(@PathVariable Integer id) {
-        // You will need to create a findDoctorById service method
         DoctorDto doctor = doctorService.findDoctorById(id);
         return ResponseEntity.ok(doctor);
     }
@@ -99,12 +98,7 @@ public class SuperAdminApiController {
 
 
     private final BranchAdminService branchAdminService;
-    // ... your other services
 
-//    @GetMapping("/branch-admins")
-//    public ResponseEntity<Page<StaffProfileDto>> getAllBranchAdmins(Pageable pageable) {
-//        return ResponseEntity.ok(branchAdminService.getAllBranchAdmins(pageable));
-//    }
 
     @PostMapping("/branch-admins")
     public ResponseEntity<Void> addBranchAdmin(@RequestBody StaffCreationRequestDto dto) {
@@ -118,29 +112,6 @@ public class SuperAdminApiController {
         return ResponseEntity.ok().build();
     }
 
-
-//    @DeleteMapping("/branch-admins/{id}")
-//    public ResponseEntity<Void> deleteBranchAdmin(@PathVariable Integer id) {
-//        branchAdminService.deleteBranchAdmin(id);
-//        return ResponseEntity.ok().build();
-//    }
-
-
-    // --- ADD THESE NEW ENDPOINTS ---
-//    @PatchMapping("/branch-admins/{id}/activate")
-//    public ResponseEntity<Void> activateBranchAdmin(@PathVariable Integer id) {
-//        branchAdminService.updateUserStatus(id, true);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @PatchMapping("/branch-admins/{id}/deactivate")
-//    public ResponseEntity<Void> deactivateBranchAdmin(@PathVariable Integer id) {
-//        branchAdminService.updateUserStatus(id, false);
-//        return ResponseEntity.ok().build();
-//    }
-
-
-    // --- ADD THIS NEW ENDPOINT ---
     @GetMapping("/all-receptionists")
     public ResponseEntity<Page<StaffProfileDto>> getAllReceptionists(
             @RequestParam(required = false) String keyword,
@@ -153,14 +124,12 @@ public class SuperAdminApiController {
 
     @GetMapping("/all-receptionists/{id}")
     public ResponseEntity<StaffProfileDto> getReceptionistById(@PathVariable Integer id) {
-        // You'll need a findById method in your service
         StaffProfileDto receptionist = receptionistService.findReceptionistById(id);
         return ResponseEntity.ok(receptionist);
     }
 
     @PatchMapping("/all-receptionists/{id}/activate")
     public ResponseEntity<Void> activateReceptionist(@PathVariable Integer id) {
-        // This reuses the service method we already created
         receptionistService.updateUserStatus(id, true);
         return ResponseEntity.ok().build();
     }
@@ -193,9 +162,7 @@ public class SuperAdminApiController {
 
 
 
-
     private final SuperAdminService superAdminService;
-
 
 
 
@@ -233,46 +200,8 @@ public class SuperAdminApiController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     private final UserAccountRepository userAccountRepository;
-//
-//    @GetMapping("/my-profile")
-//    public ResponseEntity<StaffProfileDto> getMyProfile() {
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//        return ResponseEntity.ok(superAdminService.findSuperAdminByUsername(username)); // You'll need this service method
-//    }
-//    @PostMapping("/my-profile/update")
-//    public ResponseEntity<Void> updateMyProfile(@RequestBody AdminUpdateRequestDto dto) {
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//
-//        // --- 2. FIND THE USER'S ID FROM THE USERNAME ---
-//        UserAccount account = userAccountRepository.findByUsername(username)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//        Integer userId = account.getUserId();
-//
-//        // --- 3. CALL THE SERVICE METHOD CORRECTLY ---
-//        superAdminService.updateSuperAdmin(userId, dto);
-//
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @PostMapping("/my-profile/upload-picture")
-//    public ResponseEntity<Void> uploadProfilePicture(@RequestParam("file") MultipartFile file) {
-//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//        superAdminService.updateProfilePicture(username, file);
-//        return ResponseEntity.ok().build();
-//    }
+
 
 
 
@@ -302,23 +231,11 @@ public class SuperAdminApiController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     @GetMapping("/branch-admins")
     public ResponseEntity<Page<StaffProfileDto>> searchBranchAdmins(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Long branchId, // Add this parameter
             Pageable pageable) {
-        // Pass all parameters to the service
         return ResponseEntity.ok(branchAdminService.searchBranchAdmins(keyword, branchId, pageable));
     }
 
@@ -327,38 +244,7 @@ public class SuperAdminApiController {
         return ResponseEntity.ok(branchAdminService.findBranchAdminById(id));
     }
 
-//fefv
 
-
-//    @GetMapping("/branch-admins")
-//    public ResponseEntity<Page<StaffProfileDto>> searchBranchAdmsins(
-//            @RequestParam(required = false) String keyword,
-//            @RequestParam(required = false) Long branchId,
-//            Pageable pageable) {
-//        return ResponseEntity.ok(branchAdminService.searchBranchAdmins(keyword, branchId, pageable));
-//    }
-//
-//    @GetMapping("/branch-admins")
-//    public ResponseEntity<Page<StaffProfileDto>> searchBranchAdmins(
-//            @RequestParam(required = false) String keyword,
-//            @RequestParam(required = false) Long branchId,
-//            Pageable pageable) {
-//        return ResponseEntity.ok(branchAdminService.searchBranchAdmins(keyword, branchId, pageable));
-//    }
-
-
-//
-//    @PostMapping("/branch-admins")
-//    public ResponseEntity<Void> addBranchAdmin(@RequestBody StaffCreationRequestDto dto) {
-//        branchAdminService.addBranchAdmin(dto);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @PutMapping("/branch-admins/{id}")
-//    public ResponseEntity<Void> updateBranchAdmin(@PathVariable Integer id, @RequestBody AdminUpdateRequestDto dto) {
-//        branchAdminService.updateBranchAdmin(id, dto);
-//        return ResponseEntity.ok().build();
-//    }
 
     @DeleteMapping("/branch-admins/{id}")
     public ResponseEntity<Void> deleteBranchAdmin(@PathVariable Integer id) {
@@ -378,9 +264,6 @@ public class SuperAdminApiController {
 
     private final MessageService messageService;
     private final StaffProfileService staffProfileService;
-    // ... your other services and endpoints
-
-    // --- ADD THESE NEW ENDPOINTS FOR MESSAGING ---
 
     @GetMapping("/messages/contacts")
     @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
@@ -400,6 +283,28 @@ public class SuperAdminApiController {
     public ResponseEntity<Void> sendMessage(@RequestBody MessageRequestDto dto) {
         StaffProfileDto myProfile = staffProfileService.getCurrentLoggedInStaffProfile();
         messageService.sendMessageSuper(myProfile.getUserId(), dto);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
+
+
+
+    private final NotificationService notificationService;
+
+    @GetMapping("/notifications/unread")
+    public ResponseEntity<List<Notification>> getUnread() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(notificationService.getUnreadNotifications(username));
+    }
+
+    @PostMapping("/notifications/mark-as-read")
+    public ResponseEntity<Void> markAsRead() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        notificationService.markNotificationsAsRead(username);
         return ResponseEntity.ok().build();
     }
 
