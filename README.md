@@ -6,10 +6,10 @@ The system is built with a **Spring Boot REST API** backend and a separate **HTM
 
 ---
 
-[ Hospital Management System (HMS) Backend REPO Click Here to Explore ]()
+[ Hospital Management System (HMS) Backend REPO Click Here to Explore ](https://github.com/Dilshan-hesara/AAD-Final-BN)
 
 
-[ Hospital Management System (HMS) Frontend REPO Click Here to Explore ]()
+[ Hospital Management System (HMS) Frontend REPO Click Here to Explore ](https://github.com/Dilshan-hesara/AAD-Final-FN)
 
 
 ## ✨ Key Features
