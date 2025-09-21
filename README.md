@@ -101,6 +101,8 @@ Watch the full video demonstration of the **Hospital Management System (HMS)**:
 
 Here are a few screenshots of the application's user interface, showcasing the modern design and key functionalities.
 
+### 📊 Dashboards
+
 
 | Super Admin Dashboard | Branch Admin Dashboard |
 | :---: | :---: |
@@ -122,4 +124,13 @@ Here are a few screenshots of the application's user interface, showcasing the m
 | FORGET PASSWOED | Google-Login |
 | :---: | :---: |
 | <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img_7.png" width="300px" height="300px" /> | <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img_8.png" width="300px" height="300px" /> |
+
+Watch the full video demonstration of the **Hospital Management System (HMS)**:
+
+📺 [Click Here to Watch ](https://youtu.be/UB0N_QzZHtU)
+
+<a href="https://youtu.be/8iN61XVstGs" target="_blank">
+  <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img.png" width="400" height="250" alt="Watch on YouTube">
+</a>
+
 ---
