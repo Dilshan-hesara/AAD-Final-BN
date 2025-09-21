@@ -108,7 +108,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         }
 
         Page<UserAccount> accounts = userAccountRepository.findAll(spec, pageable);
-        return accounts.map(this::convertToStaffProfileDto); // Helper method to convert
+        return accounts.map(this::convertToStaffProfileDto);
     }
 
     @Override
