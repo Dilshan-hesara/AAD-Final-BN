@@ -8,7 +8,6 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.StaffProfile;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.UserAccount;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.StaffProfileRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.FileStorageService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.SuperAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
