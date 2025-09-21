@@ -173,29 +173,29 @@ Hospital-Management-System-FN/
 ├── images/
 │   └── default-avatar.png     // A default placeholder profile picture
 ├── js/
-│   ├── auth.js                // Protects pages by checking for a login token
-│   └── user-layout-loader.js  // Loads navbar for Online Users
+│   ├── auth.js                // Protects pages by checking login token
+│   └── user-layout-loader.js  // Loads navbar Online Users
 ├── super-admin/
 │   ├── components/
-│   │   └── sidebar.html       // Reusable sidebar for the Super Admin
+│   │   └── sidebar.html       // Reusable sidebar  Super Admin
 │   ├── js/
-│   │   └── layout-loader.js   // Loads sidebar for the Super Admin
+│   │   └── layout-loader.js   // Loads sidebar Super Admin
 │   ├── dashboard.html
 │   ├── manage-branches.html
 │   └── ... (all other Super Admin pages)
 ├── branch-admin/
 │   ├── components/
-│   │   └── sidebar.html       // Reusable sidebar for the Branch Admin
+│   │   └── sidebar.html       // Reusable sidebar Branch Admin
 │   ├── js/
-│   │   └── layout-loader.js   // Loads sidebar for the Branch Admin
+│   │   └── layout-loader.js   // Loads sidebar Branch Admin
 │   ├── dashboard.html
 │   ├── doctors.html
 │   └── ... (all other Branch Admin pages)
 ├── onlineUsers/  (or just 'user/')
 │   ├── components/
-│   │   └── user-nav.html      // Reusable top navbar for patients
+│   │   └── user-nav.html      // Reusable top navbar patients
 │   ├── js/
-│   │   └── layout-loader.js   // Loads navbar for patients
+│   │   └── layout-loader.js   // Loads navbar patients
 │   ├── user-dashboard.html
 │   ├── my-appointments.html
 │   └── ... (all other Online User pages)
