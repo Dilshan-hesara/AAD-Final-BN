@@ -5,7 +5,6 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.dto.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.*;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.AppointmentService;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.NotificationService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.PatientService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.SettingsService;
 import lombok.RequiredArgsConstructor;
