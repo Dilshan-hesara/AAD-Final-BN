@@ -161,7 +161,52 @@ src/main/java/lk/dilshanhesara/dilshan/hospitalmanagementsystembn/
 
 ```
 
+Backend (FN) Project Structure 
 
+```bash
+
+
+Hospital-Management-System-FN/
+├── css/
+│   ├── styles.css             // Main stylesheet for all portals
+│   └── print.css              // Styles specifically for printing reports
+├── images/
+│   └── default-avatar.png     // A default placeholder profile picture
+├── js/
+│   ├── auth.js                // Protects pages by checking for a login token
+│   └── user-layout-loader.js  // Loads navbar for Online Users
+├── super-admin/
+│   ├── components/
+│   │   └── sidebar.html       // Reusable sidebar for the Super Admin
+│   ├── js/
+│   │   └── layout-loader.js   // Loads sidebar for the Super Admin
+│   ├── dashboard.html
+│   ├── manage-branches.html
+│   └── ... (all other Super Admin pages)
+├── branch-admin/
+│   ├── components/
+│   │   └── sidebar.html       // Reusable sidebar for the Branch Admin
+│   ├── js/
+│   │   └── layout-loader.js   // Loads sidebar for the Branch Admin
+│   ├── dashboard.html
+│   ├── doctors.html
+│   └── ... (all other Branch Admin pages)
+├── onlineUsers/  (or just 'user/')
+│   ├── components/
+│   │   └── user-nav.html      // Reusable top navbar for patients
+│   ├── js/
+│   │   └── layout-loader.js   // Loads navbar for patients
+│   ├── user-dashboard.html
+│   ├── my-appointments.html
+│   └── ... (all other Online User pages)
+│
+├── index.html                 // The main public landing page
+├── login.html                 // The central login page for all users
+├── register.html              // Registration page for new Online Users
+├── forgot-password.html
+└── verify-otp.html
+
+```
 
 ✍️ Author
 Dilshan Hesara
