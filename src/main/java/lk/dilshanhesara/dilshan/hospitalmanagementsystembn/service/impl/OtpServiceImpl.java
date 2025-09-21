@@ -8,7 +8,6 @@ import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.OnlineUserProfil
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.OtpCodeRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.StaffProfileRepository;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.repo.UserAccountRepository;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.EmailService;
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.OtpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
