@@ -47,27 +47,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .cors(cors -> {})
-//                .csrf(csrf -> csrf.disable())
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/auth/**").permitAll()
-//                        .requestMatchers("/api/auth/**", "/uploads/**", "/api/password-reset/**").permitAll()
-//
-//                        // ADD THIS RULE: Allow public access to the uploads folder
-//                        .requestMatchers("/uploads/**").permitAll()
-//                        // =========================================================
-//                        .requestMatchers("/api/messages/**").hasAnyAuthority("ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
-//                        .requestMatchers("/api/staff/my-profile").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_BRANCH_ADMIN", "ROLE_RECEPTIONIST")
-//                        // All other requests must be authenticated
-//                        .anyRequest().authenticated()
-//                )
-//                // ... your existing cors, csrf, sessionManagement ...
-//                .authorizeHttpRequests(auth -> auth
-//                                .requestMatchers("/api/auth/**", "/oauth2/**").permitAll() // <-- Allow OAuth2 endpoints
-//                        // ... your other rules
-//                )
 
         http
                 .cors(cors -> {})
@@ -77,7 +56,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**", "/oauth2/**", "/uploads/**").permitAll()
                         .requestMatchers("/api/patients/search").authenticated()
                         .requestMatchers("/api/notifications/**").authenticated()
+                        .requestMatchers("/api/auth/**", "/oauth2/**", "/uploads/**", "/api/password-reset/**").permitAll()
+
                         .anyRequest().authenticated()
+
                 )
 
                 .oauth2Login(oauth2 -> oauth2
@@ -85,8 +67,6 @@ public class SecurityConfig {
                         .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -97,37 +77,5 @@ public class SecurityConfig {
 
 
 
-
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .cors(cors -> {})
-//                .csrf(csrf -> csrf.disable())
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/auth/**").permitAll() // Login/Register
-//                        .anyRequest().authenticated() // All
-//                        // other requests require a valid token
-//                        .requestMatchers("/api/staff/my-profile").authenticated()
-//                        .requestMatchers("/api/branches").authenticated()
-//                        .requestMatchers("/api/doctors/by-branch/**").authenticated()
-//
-//                        // =============================================================
-//                        // ADD THIS RULE: Allow Branch Admins to access the receptionists API
-//                        .requestMatchers("/api/receptionists/**").hasAuthority("ROLE_BRANCH_ADMIN")
-//                        // =============================================================
-//
-//                        .requestMatchers("/api/doctors/**").hasAuthority("ROLE_BRANCH_ADMIN")
-//                        .requestMatchers("/api/patients/**").hasAuthority("ROLE_BRANCH_ADMIN")
-//                        .requestMatchers("/api/appointments/**").hasAuthority("ROLE_BRANCH_ADMIN")
-//                        .requestMatchers("/api/user/**").hasAuthority("ROLE_ONLINEUSER")
-//
-//
-//                )
-//
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//    }
 
 }
