@@ -94,11 +94,23 @@ Watch the full video demonstration of the **Hospital Management System (HMS)**:
 ## 📸 Screenshots
 
 
+| Super Admin Dashboard | Branch Admin Dashboard |
+| :---: | :---: |
+| <img src="https://github.com/Dilshan-hesara/Complaint-Management-System/blob/master/src/main/webapp/assets/img/03.png" width="950px" height="250px" /> | <img src="https://github.com/Dilshan-hesara/Complaint-Management-System/blob/master/src/main/webapp/assets/img/04.png" width="950px" height="250px"/> |
 
-Super Admin - Branch Management
+
+
+| Branch Receptionist Dashboard |  Online User  Dashboard |
+| :---: | :---: |
+| <img src="https://github.com/Dilshan-hesara/Complaint-Management-System/blob/master/src/main/webapp/assets/img/03.png" width="950px" height="250px" /> | <img src="https://github.com/Dilshan-hesara/Complaint-Management-System/blob/master/src/main/webapp/assets/img/04.png" width="950px" height="250px"/> |
+
+Super Admin - Advanced Dashboard
 
 
 Branch Admin - Advanced Dashboard
 
 
-Online User - Appointment Booking
+Branch Receptionist - Dashboard
+
+
+Online User - Dashboard
