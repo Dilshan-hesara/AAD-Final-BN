@@ -1,7 +1,7 @@
 package lk.dilshanhesara.dilshan.hospitalmanagementsystembn.controller;
 
 import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.entity.Notification;
-import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.NotificationService;
+import lk.dilshanhesara.dilshan.hospitalmanagementsystembn.service.impl.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
