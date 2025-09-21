@@ -140,3 +140,29 @@ Watch the full video demonstration of the **Hospital Management System (HMS)**:
 </a>
 
 ---
+
+
+
+
+Main Project Structure (src/main/java)
+
+```bash
+
+src/main/java/lk/dilshanhesara/dilshan/hospitalmanagementsystembn/
+├── config/                  // Spring configuration beans
+├── controller/              // API endpoints (REST controllers)
+│   └── api/
+├── dto/                     // Data Transfer Objects
+├── entity/                  // JPA database entities
+├── repository/              // Spring Data JPA repositories
+├── security/                // JWT, OAuth2, and security configuration
+└── service/                 // Business logic
+    └── impl/                // Service implementations
+
+```
+
+
+
+✍️ Author
+Dilshan Hesara
+🔗 [GitHub - Dilshan-Hesara](https://github.com/Dilshan-hesara)
