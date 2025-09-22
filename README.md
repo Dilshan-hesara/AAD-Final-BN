@@ -66,7 +66,7 @@ Watch the full video demonstration of the **Hospital Management System (HMS)**:
 
 📺 [Click Here to Watch ](https://youtu.be/UB0N_QzZHtU)
 
-<a href="https://youtu.be/8iN61XVstGs" target="_blank">
+<a href="https://youtu.be/UB0N_QzZHtU" target="_blank">
   <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img.png" width="400" height="250" alt="Watch on YouTube">
 </a>
 
@@ -135,7 +135,7 @@ Watch the full video demonstration of the **Hospital Management System (HMS)**:
 
 📺 [Click Here to Watch ](https://youtu.be/UB0N_QzZHtU)
 
-<a href="https://youtu.be/8iN61XVstGs" target="_blank">
+<a href="https://youtu.be/UB0N_QzZHtU" target="_blank">
   <img src="https://github.com/Dilshan-hesara/AAD-Final-FN/blob/master/assets/img.png" width="400" height="250" alt="Watch on YouTube">
 </a>
 
